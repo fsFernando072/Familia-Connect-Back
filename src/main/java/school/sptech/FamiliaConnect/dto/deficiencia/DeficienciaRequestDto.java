@@ -1,40 +1,23 @@
-package school.sptech.FamiliaConnect.model;
+package school.sptech.FamiliaConnect.dto.deficiencia;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
-@Entity
-public class Deficiencia {
+public class DeficienciaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @Id
-    private Integer id;
+    @NotBlank
     private String nome;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Deficiencia() {
-    }
+    public DeficienciaRequestDto(){}
 
-    public Deficiencia(String nome){
-        this.nome = nome;
-    }
-
-    public Deficiencia(Integer id, String nome) {
-        this.id = id;
+    public DeficienciaRequestDto(String nome) {
         this.nome = nome;
     }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;
@@ -43,4 +26,5 @@ public class Deficiencia {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 }

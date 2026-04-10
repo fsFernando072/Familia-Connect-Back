@@ -1,7 +1,6 @@
 package school.sptech.FamiliaConnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Endereco {
@@ -10,24 +9,36 @@ public class Endereco {
 
     @Id
     private Integer id;
-    private String cpf;
+    private String cep;
     private String bairro;
     private String logradouro;
     private Integer numero;
-    private String estado;
     private String complemento;
+
+    @ManyToOne
+    @JoinColumn(name = "estado_id")
+    private Estado estado;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
     public Endereco() {
     }
 
-    public Endereco(String bairro, String complemento, String cpf, String estado, Integer id, String logradouro, Integer numero) {
+    public Endereco(String bairro, String complemento, String cpf, Estado estado, Integer id, String logradouro, Integer numero) {
         this.bairro = bairro;
         this.complemento = complemento;
-        this.cpf = cpf;
+        this.cep = cpf;
         this.estado = estado;
         this.id = id;
+        this.logradouro = logradouro;
+        this.numero = numero;
+    }
+
+    public Endereco(String bairro, String complemento, String cpf, Estado estado, String logradouro, Integer numero) {
+        this.bairro = bairro;
+        this.complemento = complemento;
+        this.cep = cpf;
+        this.estado = estado;
         this.logradouro = logradouro;
         this.numero = numero;
     }
@@ -50,19 +61,19 @@ public class Endereco {
         this.complemento = complemento;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCep() {
+        return cep;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
-    public String getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 

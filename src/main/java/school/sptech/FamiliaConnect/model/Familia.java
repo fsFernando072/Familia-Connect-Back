@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 import java.time.LocalDate;
 
@@ -14,11 +15,18 @@ public class Familia {
     private Integer id;
     private LocalDate dataCadastro;
     private String fotoFamilia;
+
+    @OneToOne
     private Endereco endereco;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
     public Familia() {
+    }
+
+    public Familia(LocalDate dataCadastro, String fotoFamilia){
+        this.dataCadastro = dataCadastro;
+        this.fotoFamilia = fotoFamilia;
     }
 
     public Familia(LocalDate dataCadastro, Endereco endereco, String fotoFamilia, Integer id) {

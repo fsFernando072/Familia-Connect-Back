@@ -1,27 +1,18 @@
-package school.sptech.FamiliaConnect.model;
+package school.sptech.FamiliaConnect.dto.profissao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
-@Entity
-public class Deficiencia {
+public class ProfissaoResponseDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @Id
     private Integer id;
     private String nome;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Deficiencia() {
+    public ProfissaoResponseDto() {
     }
 
-    public Deficiencia(String nome){
-        this.nome = nome;
-    }
-
-    public Deficiencia(Integer id, String nome) {
+    public ProfissaoResponseDto(Integer id, String nome) {
         this.id = id;
         this.nome = nome;
     }

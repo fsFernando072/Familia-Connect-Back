@@ -4,29 +4,27 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Deficiencia {
+public class Estado {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     @Id
     private Integer id;
     private String nome;
+    private String sigla;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Deficiencia() {
+    public Estado() {
     }
 
-    public Deficiencia(String nome){
-        this.nome = nome;
-    }
-
-    public Deficiencia(Integer id, String nome) {
+    public Estado(Integer id, String nome, String sigla) {
         this.id = id;
         this.nome = nome;
+        this.sigla = sigla;
     }
 
-    // Getters e Setters -----------------------------------------------------------------------------------------------
+    // Getters e Setters
 
     public Integer getId() {
         return id;
@@ -42,5 +40,13 @@ public class Deficiencia {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
     }
 }

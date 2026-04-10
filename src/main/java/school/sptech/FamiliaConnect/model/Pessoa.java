@@ -1,7 +1,6 @@
 package school.sptech.FamiliaConnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -17,12 +16,17 @@ public class Pessoa {
     private String cpf;
     private LocalDate dtNascimento;
     private Boolean isTrabalhando;
-    private Boolean possuiFilhos;
     private Boolean isResponsavel;
     private String grauParentesco;
     private String telefone;
+
+    @ManyToOne
     private Deficiencia deficiencia;
+
+    @ManyToOne
     private Profissao profissao;
+
+    @ManyToOne
     private Familia familia;
 
     // Construtores ----------------------------------------------------------------------------------------------------
@@ -30,7 +34,17 @@ public class Pessoa {
     public Pessoa() {
     }
 
-    public Pessoa(String cpf, Deficiencia deficiencia, LocalDate dtNascimento, Familia familia, String grauParentesco, Integer id, Boolean isResponsavel, Boolean isTrabalhando, String nome, Boolean possuiFilhos, Profissao profissao, String rg, String telefone) {
+    public Pessoa(String nome, String rg, String cpf, LocalDate dtNascimento, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco, String telefone) {
+        this.nome = nome;
+        this.rg = rg;
+        this.cpf = cpf;
+        this.dtNascimento = dtNascimento;
+        this.isTrabalhando = isTrabalhando;
+        this.isResponsavel = isResponsavel;
+        this.grauParentesco = grauParentesco;
+    }
+
+    public Pessoa(String cpf, Deficiencia deficiencia, LocalDate dtNascimento, Familia familia, String grauParentesco, Integer id, Boolean isResponsavel, Boolean isTrabalhando, String nome, Profissao profissao, String rg, String telefone) {
         this.cpf = cpf;
         this.deficiencia = deficiencia;
         this.dtNascimento = dtNascimento;
@@ -40,7 +54,6 @@ public class Pessoa {
         this.isResponsavel = isResponsavel;
         this.isTrabalhando = isTrabalhando;
         this.nome = nome;
-        this.possuiFilhos = possuiFilhos;
         this.profissao = profissao;
         this.rg = rg;
         this.telefone = telefone;
@@ -118,14 +131,6 @@ public class Pessoa {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Boolean getPossuiFilhos() {
-        return possuiFilhos;
-    }
-
-    public void setPossuiFilhos(Boolean possuiFilhos) {
-        this.possuiFilhos = possuiFilhos;
     }
 
     public Profissao getProfissao() {

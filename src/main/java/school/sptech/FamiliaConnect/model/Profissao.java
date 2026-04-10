@@ -17,6 +17,10 @@ public class Profissao {
     public Profissao() {
     }
 
+    public Profissao(String nome){
+        this.nome = nome;
+    }
+
     public Profissao(Integer id, String nome) {
         this.id = id;
         this.nome = nome;

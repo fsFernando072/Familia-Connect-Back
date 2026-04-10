@@ -44,4 +44,4 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_TYPE_DDL: ${{ vars.DB_TYPE_DDL }}
-        run: mvn clean test
+        run: mvn -B -q clean test

@@ -1,16 +1,23 @@
 package school.sptech.FamiliaConnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "acesso")
 public class Acesso {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "nome_tela", nullable = false, length = 45)
     private String nomeTela;
+
+    @ManyToOne
+    @JoinColumn(name = "permissao_id")
+    private Permissao permissao;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 

@@ -1,21 +1,33 @@
 package school.sptech.FamiliaConnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "auditoria")
 public class Auditoria {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "tipo_log", length = 45)
     private String tipoLog;
+
+    @Column(name = "dado_antigo", length = 45)
     private String dadoAntigo;
+
+    @Column(name = "dado_novo", length = 45)
     private String dadoNovo;
+
+    @Column(name = "created_at")
     private LocalDate createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 
     // Construtores ----------------------------------------------------------------------------------------------------

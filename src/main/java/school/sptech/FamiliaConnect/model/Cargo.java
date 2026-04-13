@@ -17,7 +17,7 @@ public class Cargo {
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Cargo() {
+    public Cargo(String nome) {
     }
 
     public Cargo(Integer idCargo, String nome) {
@@ -42,4 +42,5 @@ public class Cargo {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 }

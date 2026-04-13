@@ -17,7 +17,7 @@ public class Permissao {
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Permissao() {
+    public Permissao(String nome) {
     }
 
     public Permissao(Integer id, String nome) {

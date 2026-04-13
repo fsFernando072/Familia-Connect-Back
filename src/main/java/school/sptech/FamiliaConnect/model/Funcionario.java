@@ -2,6 +2,8 @@ package school.sptech.FamiliaConnect.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Funcionario {
@@ -14,6 +16,8 @@ public class Funcionario {
     private String cpf;
     private String senha;
     private String foto_funcionario;
+    @ManyToOne
+    @JoinColumn(name = "cargo_id")
     private Cargo cargo;
 
     // Construtores ----------------------------------------------------------------------------------------------------

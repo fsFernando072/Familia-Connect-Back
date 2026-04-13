@@ -21,7 +21,7 @@ public class Acesso {
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Acesso() {
+    public Acesso(String nomeTela) {
     }
 
     public Acesso(Integer id, String nomeTela) {

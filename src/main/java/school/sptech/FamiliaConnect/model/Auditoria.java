@@ -32,7 +32,7 @@ public class Auditoria {
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Auditoria() {
+    public Auditoria(String tipoLog, String acao, String acaoAntigo, String acaoNovo, LocalDate createdAt, Funcionario funcionario) {
     }
 
     public Auditoria(LocalDate createdAt, String dadoAntigo, String dadoNovo, Funcionario funcionario, Integer id, String tipoLog) {

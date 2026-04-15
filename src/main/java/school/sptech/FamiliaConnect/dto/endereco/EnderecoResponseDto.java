@@ -12,28 +12,16 @@ public class EnderecoResponseDto {
     private String logradouro;
     private Integer numero;
     private String complemento;
+    private String cidade;
     private EnderecoEstado enderecoEstado;
-
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public EnderecoResponseDto() {
-    }
-
-    public EnderecoResponseDto(Integer id, String cep, String bairro, String logradouro, Integer numero, String complemento, EnderecoEstado enderecoEstado) {
-        this.id = id;
-        this.cep = cep;
-        this.bairro = bairro;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.enderecoEstado = enderecoEstado;
-    }
 
     // Inner Class -----------------------------------------------------------------------------------------------------
 
     public static class EnderecoEstado{
 
         private Integer id;
+        private String nome;
+        private String sigla;
 
         public Integer getId() {
             return id;
@@ -43,6 +31,21 @@ public class EnderecoResponseDto {
             this.id = id;
         }
 
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public String getSigla() {
+            return sigla;
+        }
+
+        public void setSigla(String sigla) {
+            this.sigla = sigla;
+        }
     }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
@@ -101,5 +104,13 @@ public class EnderecoResponseDto {
 
     public void setEnderecoEstado(EnderecoEstado enderecoEstado) {
         this.enderecoEstado = enderecoEstado;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 }

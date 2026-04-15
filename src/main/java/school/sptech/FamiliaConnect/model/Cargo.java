@@ -10,29 +10,19 @@ public class Cargo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCargo;
+    private Integer id;
 
     @Column(nullable = false, length = 45)
     private String nome;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Cargo(String nome) {
-    }
-
-    public Cargo(Integer idCargo, String nome) {
-        this.idCargo = idCargo;
-        this.nome = nome;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
-    public Integer getIdCargo() {
-        return idCargo;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdCargo(Integer idCargo) {
-        this.idCargo = idCargo;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {

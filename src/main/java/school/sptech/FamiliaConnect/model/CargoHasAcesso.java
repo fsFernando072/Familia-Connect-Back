@@ -22,16 +22,6 @@ public class CargoHasAcesso {
     @JoinColumn(name = "permissao_id")
     private Permissao permissao;
 
-    public CargoHasAcesso(Cargo cargo, Acesso acesso, Permissao permissao) {
-        this.id = id;
-        this.cargo = cargo;
-        this.acesso = acesso;
-        this.permissao = permissao;
-    }
-
-    public CargoHasAcesso() {
-    }
-
     public Integer getId() {
         return id;
     }

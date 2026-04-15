@@ -10,12 +10,9 @@ public class AuditoriaRequestDto {
     @NotBlank
     private String tipoLog;
 
-    @NotBlank
-    private String acao;
+    private String dadoAntigo;
 
-    private String acaoAntigo;
-
-    private String acaoNovo;
+    private String dadoNovo;
 
     @NotNull
     private LocalDate createdAt;
@@ -25,11 +22,10 @@ public class AuditoriaRequestDto {
 
     public AuditoriaRequestDto() {}
 
-    public AuditoriaRequestDto(String tipoLog, String acao, String acaoAntigo, String acaoNovo, LocalDate createdAt, Integer funcionarioId) {
+    public AuditoriaRequestDto(String tipoLog, String dadoAntigo, String dadoNovo, LocalDate createdAt, Integer funcionarioId) {
         this.tipoLog = tipoLog;
-        this.acao = acao;
-        this.acaoAntigo = acaoAntigo;
-        this.acaoNovo = acaoNovo;
+        this.dadoAntigo = dadoAntigo;
+        this.dadoNovo = dadoNovo;
         this.createdAt = createdAt;
         this.funcionarioId = funcionarioId;
     }
@@ -42,28 +38,20 @@ public class AuditoriaRequestDto {
         this.tipoLog = tipoLog;
     }
 
-    public String getAcao() {
-        return acao;
+    public String getDadoAntigo() {
+        return dadoAntigo;
     }
 
-    public void setAcao(String acao) {
-        this.acao = acao;
+    public void setDadoAntigo(String dadoAntigo) {
+        this.dadoAntigo = dadoAntigo;
     }
 
-    public String getAcaoAntigo() {
-        return acaoAntigo;
+    public String getDadoNovo() {
+        return dadoNovo;
     }
 
-    public void setAcaoAntigo(String acaoAntigo) {
-        this.acaoAntigo = acaoAntigo;
-    }
-
-    public String getAcaoNovo() {
-        return acaoNovo;
-    }
-
-    public void setAcaoNovo(String acaoNovo) {
-        this.acaoNovo = acaoNovo;
+    public void setDadoNovo(String dadoNovo) {
+        this.dadoNovo = dadoNovo;
     }
 
     public LocalDate getCreatedAt() {

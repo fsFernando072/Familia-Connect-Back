@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.AuditoriaMapper;
 import school.sptech.FamiliaConnect.model.Auditoria;
 import school.sptech.FamiliaConnect.model.Funcionario;
@@ -9,7 +10,6 @@ import school.sptech.FamiliaConnect.repository.AuditoriaRepository;
 import school.sptech.FamiliaConnect.repository.FuncionarioRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuditoriaService {
@@ -23,54 +23,45 @@ public class AuditoriaService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public Optional<Auditoria> cadastrar(AuditoriaRequestDto dto) {
-        Optional<Funcionario> funcionarioOpt = funcionarioRepository.findById(dto.getFuncionarioId());
+    public Auditoria cadastrar(AuditoriaRequestDto dto) {
+        Funcionario funcionario = funcionarioRepository.findById(dto.getFuncionarioId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrada"));
 
-        if (funcionarioOpt.isEmpty()) {
-            return Optional.empty();
-        }
+        Auditoria auditoria = AuditoriaMapper.toModel(dto);
+        auditoria.setFuncionario(funcionario);
 
-        Auditoria auditoria = AuditoriaMapper.toModel(dto, funcionarioOpt.get());
-        return Optional.of(auditoriaRepository.save(auditoria));
+        return auditoriaRepository.save(auditoria);
     }
 
     public List<Auditoria> listar() {
         return auditoriaRepository.findAll();
     }
 
-    public Optional<Auditoria> buscarPorId(Integer id) {
-        return auditoriaRepository.findById(id);
+    public Auditoria buscarPorId(Integer id) {
+        return auditoriaRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada"));
     }
 
-    public Optional<Auditoria> atualizar(Integer id, AuditoriaRequestDto dto) {
-        Optional<Auditoria> auditoriaOpt = auditoriaRepository.findById(id);
-
-        if (auditoriaOpt.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Optional<Funcionario> funcionarioOpt = funcionarioRepository.findById(dto.getFuncionarioId());
-
-        if (funcionarioOpt.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Auditoria auditoria = auditoriaOpt.get();
-        auditoria.setTipoLog(dto.getTipoLog());
-        auditoria.setDadoAntigo(dto.getAcaoAntigo());
-        auditoria.setDadoNovo(dto.getAcaoNovo());
-        auditoria.setCreatedAt(dto.getCreatedAt());
-        auditoria.setFuncionario(funcionarioOpt.get());
-
-        return Optional.of(auditoriaRepository.save(auditoria));
-    }
-
-    public boolean deletar(Integer id) {
+    public Auditoria atualizar(Integer id, AuditoriaRequestDto dto) {
         if (!auditoriaRepository.existsById(id)) {
-            return false;
+            throw new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada");
+        }
+
+        Funcionario funcionario = funcionarioRepository.findById(dto.getFuncionarioId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrada"));
+
+        Auditoria auditoria = AuditoriaMapper.toModel(dto);
+        auditoria.setId(id);
+        auditoria.setFuncionario(funcionario);
+
+        return auditoriaRepository.save(auditoria);
+    }
+
+    public void deletar(Integer id) {
+        if (!auditoriaRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada");
         }
 
         auditoriaRepository.deleteById(id);
-        return true;
     }
 }

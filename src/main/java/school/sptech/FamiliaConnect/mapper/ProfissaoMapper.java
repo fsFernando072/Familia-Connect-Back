@@ -10,9 +10,8 @@ public class ProfissaoMapper {
 
     public static Profissao toModel(ProfissaoRequestDto profissaoRequestDto){
 
-        Profissao profissao = new Profissao(
-                profissaoRequestDto.getNome()
-        );
+        Profissao profissao = new Profissao();
+        profissao.setNome(profissaoRequestDto.getNome());
 
         return profissao;
 
@@ -20,16 +19,15 @@ public class ProfissaoMapper {
 
     public static ProfissaoResponseDto toResponse(Profissao profissao){
 
-        ProfissaoResponseDto profissaoResponseDto = new ProfissaoResponseDto(
-                profissao.getId(),
-                profissao.getNome()
-        );
+        ProfissaoResponseDto dto = new ProfissaoResponseDto();
+        dto.setId(profissao.getId());
+        dto.setNome(profissao.getNome());
 
-        return profissaoResponseDto;
+        return dto;
 
     }
 
-    public static List<ProfissaoResponseDto> toResponseList(List<Profissao> profissoes){
+    public static List<ProfissaoResponseDto> toResponse(List<Profissao> profissoes){
 
         return profissoes.stream()
                 .map(ProfissaoMapper::toResponse)

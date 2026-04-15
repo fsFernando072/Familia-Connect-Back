@@ -29,13 +29,11 @@ public class DeficienciaController {
     @PostMapping
     public ResponseEntity<DeficienciaResponseDto> cadastrarProfissao(@RequestBody DeficienciaRequestDto deficienciaRequestDto){
 
-        Deficiencia deficiencia = DeficienciaMapper.toModel(deficienciaRequestDto);
+        Deficiencia deficienciaSalva = deficienciaService.salvarDeficiencia(deficienciaRequestDto);
 
-        Deficiencia deficienciaSalva = deficienciaService.salvarDeficiencia(deficiencia);
+        DeficienciaResponseDto responseDto = DeficienciaMapper.toResponse(deficienciaSalva);
 
-        DeficienciaResponseDto deficienciaResponseDto = DeficienciaMapper.toResponse(deficienciaSalva);
-
-        return ResponseEntity.status(201).body(deficienciaResponseDto);
+        return ResponseEntity.status(201).body(responseDto);
     }
 
     @GetMapping
@@ -43,9 +41,11 @@ public class DeficienciaController {
 
         List<Deficiencia> deficiencias = deficienciaService.listarDeficiencias();
 
-        List<DeficienciaResponseDto> deficienciasResponseDto = DeficienciaMapper.toResponseList(deficiencias);
+        if (deficiencias.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
 
-        return ResponseEntity.status(200).body(deficienciasResponseDto);
+        return ResponseEntity.status(200).body(DeficienciaMapper.toResponse(deficiencias));
 
     }
 }

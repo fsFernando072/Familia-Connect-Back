@@ -6,22 +6,20 @@ public class AuditoriaResponseDto {
 
     private Integer id;
     private String tipoLog;
-    private String acao;
-    private String acaoAntigo;
-    private String acaoNovo;
+    private String dadoAntigo;
+    private String dadoNovo;
     private LocalDate createdAt;
     private Integer funcionarioId;
     private String funcionarioNome;
 
-    public AuditoriaResponseDto(Integer id, String tipoLog, String dadoAntigo, String dadoNovo, LocalDate createdAt, Integer integer, String nome) {}
+    public AuditoriaResponseDto() {}
 
-    public AuditoriaResponseDto(Integer id, String tipoLog, String acao, String acaoAntigo, String acaoNovo,
+    public AuditoriaResponseDto(Integer id, String tipoLog, String dadoAntigo, String dadoNovo,
                                 LocalDate createdAt, Integer funcionarioId, String funcionarioNome) {
         this.id = id;
         this.tipoLog = tipoLog;
-        this.acao = acao;
-        this.acaoAntigo = acaoAntigo;
-        this.acaoNovo = acaoNovo;
+        this.dadoAntigo = dadoAntigo;
+        this.dadoNovo = dadoNovo;
         this.createdAt = createdAt;
         this.funcionarioId = funcionarioId;
         this.funcionarioNome = funcionarioNome;
@@ -43,28 +41,20 @@ public class AuditoriaResponseDto {
         this.tipoLog = tipoLog;
     }
 
-    public String getAcao() {
-        return acao;
+    public String getDadoAntigo() {
+        return dadoAntigo;
     }
 
-    public void setAcao(String acao) {
-        this.acao = acao;
+    public void setDadoAntigo(String acaoAntigo) {
+        this.dadoAntigo = acaoAntigo;
     }
 
-    public String getAcaoAntigo() {
-        return acaoAntigo;
+    public String getDadoNovo() {
+        return dadoNovo;
     }
 
-    public void setAcaoAntigo(String acaoAntigo) {
-        this.acaoAntigo = acaoAntigo;
-    }
-
-    public String getAcaoNovo() {
-        return acaoNovo;
-    }
-
-    public void setAcaoNovo(String acaoNovo) {
-        this.acaoNovo = acaoNovo;
+    public void setDadoNovo(String acaoNovo) {
+        this.dadoNovo = acaoNovo;
     }
 
     public LocalDate getCreatedAt() {

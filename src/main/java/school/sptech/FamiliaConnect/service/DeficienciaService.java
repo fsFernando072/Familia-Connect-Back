@@ -26,29 +26,20 @@ public class DeficienciaService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Deficiencia salvarDeficiencia(Deficiencia deficiencia){
+    public Deficiencia salvarDeficiencia(DeficienciaRequestDto dto){
 
-        if(!deficienciaRepository.existsByNome(deficiencia.getNome())){
+        if(!deficienciaRepository.existsByNome(dto.getNome())){
             throw new EntidadeJaCadastradaException("Deficiencia já cadastrada");
         }
 
-        Deficiencia deficienciaCadastrada = deficienciaRepository.save(deficiencia);
+        Deficiencia deficiencia = DeficienciaMapper.toModel(dto);
 
-        return deficienciaCadastrada;
-
+        return deficienciaRepository.save(deficiencia);
     }
 
     public List<Deficiencia> listarDeficiencias(){
 
-        List<Deficiencia> deficiencias = deficienciaRepository.findAll();
-
-        // Arrumar a exception
-        if(deficiencias.isEmpty()){
-            throw new EntidadeNaoEncontradaException("Entidade não encontrada");
-        }
-
-        return deficiencias;
-
+        return deficienciaRepository.findAll();
     }
 
 }

@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.Estado.EstadoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.EstadoMapper;
 import school.sptech.FamiliaConnect.model.Estado;
 import school.sptech.FamiliaConnect.repository.EstadoRepository;
@@ -27,30 +28,27 @@ public class EstadoService {
         return estadoRepository.findAll();
     }
 
-    public Optional<Estado> buscarPorId(Integer id) {
-        return estadoRepository.findById(id);
+    public Estado buscarPorId(Integer id) {
+        return estadoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O estado com o id não foi encontrado"));
     }
 
-    public Optional<Estado> atualizar(Integer id, EstadoRequestDto dto) {
-        Optional<Estado> estadoOpt = estadoRepository.findById(id);
-
-        if (estadoOpt.isEmpty()) {
-            return Optional.empty();
+    public Estado atualizar(Integer id, EstadoRequestDto dto) {
+        if (!estadoRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("O estado com o id não foi encontrado");
         }
 
-        Estado estado = estadoOpt.get();
-        estado.setNome(dto.getNome());
-        estado.setSigla(dto.getSigla());
+        Estado estado = EstadoMapper.toModel(dto);
+        estado.setId(id);
 
-        return Optional.of(estadoRepository.save(estado));
+        return estadoRepository.save(estado);
     }
 
-    public boolean deletar(Integer id) {
+    public void deletar(Integer id) {
         if (!estadoRepository.existsById(id)) {
-            return false;
+            throw new EntidadeNaoEncontradaException("O estado com o id não foi encontrado");
         }
 
         estadoRepository.deleteById(id);
-        return true;
     }
 }

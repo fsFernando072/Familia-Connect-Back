@@ -32,9 +32,9 @@ public class EnderecoController {
 
         Endereco endereco = enderecoService.salvar(enderecoRequestDto);
 
-        EnderecoResponseDto enderecoResponseDto = EnderecoMapper.toResponse(endereco);
+        EnderecoResponseDto responseDto = EnderecoMapper.toResponse(endereco);
 
-        return ResponseEntity.status(201).body(enderecoResponseDto);
+        return ResponseEntity.status(201).body(responseDto);
 
     }
 }

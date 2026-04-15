@@ -3,36 +3,38 @@ package school.sptech.FamiliaConnect.mapper;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaResponseDto;
 import school.sptech.FamiliaConnect.model.Auditoria;
-import school.sptech.FamiliaConnect.model.Funcionario;
 
 import java.util.List;
 
 public class AuditoriaMapper {
 
-    public static Auditoria toModel(AuditoriaRequestDto dto, Funcionario funcionario) {
-        return new Auditoria(
-                dto.getTipoLog(),
-                dto.getAcao(),
-                dto.getAcaoAntigo(),
-                dto.getAcaoNovo(),
-                dto.getCreatedAt(),
-                funcionario
-        );
+    public static Auditoria toModel(AuditoriaRequestDto dto) {
+
+        Auditoria auditoria = new Auditoria();
+        auditoria.setDadoAntigo(dto.getDadoAntigo());
+        auditoria.setDadoNovo(dto.getDadoNovo());
+        auditoria.setCreatedAt(dto.getCreatedAt());
+        auditoria.setTipoLog(dto.getTipoLog());
+
+        return auditoria;
     }
 
     public static AuditoriaResponseDto toResponse(Auditoria auditoria) {
-        return new AuditoriaResponseDto(
-                auditoria.getId(),
-                auditoria.getTipoLog(),
-                auditoria.getDadoAntigo(),
-                auditoria.getDadoNovo(),
-                auditoria.getCreatedAt(),
-                auditoria.getFuncionario().getId(),
-                auditoria.getFuncionario().getNome()
-        );
+
+        AuditoriaResponseDto dto = new AuditoriaResponseDto();
+
+        dto.setId(auditoria.getId());
+        dto.setTipoLog(dto.getTipoLog());
+        dto.setDadoAntigo(dto.getDadoAntigo());
+        dto.setDadoNovo(dto.getDadoNovo());
+        dto.setCreatedAt(dto.getCreatedAt());
+        dto.setFuncionarioId(dto.getFuncionarioId());
+        dto.setFuncionarioNome(dto.getFuncionarioNome());
+
+        return dto;
     }
 
-    public static List<AuditoriaResponseDto> toResponseList(List<Auditoria> auditorias) {
+    public static List<AuditoriaResponseDto> toResponse(List<Auditoria> auditorias) {
         return auditorias.stream()
                 .map(AuditoriaMapper::toResponse)
                 .toList();

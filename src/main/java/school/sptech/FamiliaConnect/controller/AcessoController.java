@@ -25,7 +25,9 @@ public class AcessoController {
     @PostMapping
     public ResponseEntity<AcessoResponseDto> cadastrar(@RequestBody @Valid AcessoRequestDto dto) {
         Acesso acesso = acessoService.cadastrar(dto);
-        return ResponseEntity.status(201).body(AcessoMapper.toResponse(acesso));
+        AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
+
+        return ResponseEntity.status(201).body(responseDto);
     }
 
     @GetMapping
@@ -36,39 +38,29 @@ public class AcessoController {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(AcessoMapper.toResponseList(acessos));
+        return ResponseEntity.status(200).body(AcessoMapper.toResponse(acessos));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AcessoResponseDto> buscarPorId(@PathVariable Integer id) {
-        Optional<Acesso> acessoOpt = acessoService.buscarPorId(id);
+        Acesso acesso = acessoService.buscarPorId(id);
+        AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
 
-        if (acessoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(AcessoMapper.toResponse(acessoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AcessoResponseDto> atualizar(@PathVariable Integer id,
                                                        @RequestBody @Valid AcessoRequestDto dto) {
-        Optional<Acesso> acessoOpt = acessoService.atualizar(id, dto);
+        Acesso acesso = acessoService.atualizar(id, dto);
+        AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
 
-        if (acessoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(AcessoMapper.toResponse(acessoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean deletou = acessoService.deletar(id);
-
-        if (!deletou) {
-            return ResponseEntity.status(404).build();
-        }
+        acessoService.deletar(id);
 
         return ResponseEntity.status(204).build();
     }

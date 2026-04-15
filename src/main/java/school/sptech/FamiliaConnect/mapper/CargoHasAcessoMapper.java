@@ -11,26 +11,41 @@ import java.util.List;
 public class CargoHasAcessoMapper {
 
     public static CargoHasAcesso toModel(Cargo cargo, Acesso acesso, Permissao permissao) {
-        return new CargoHasAcesso(
-                cargo,
-                acesso,
-                permissao
-        );
+         CargoHasAcesso cargoHasAcesso = new CargoHasAcesso();
+         cargoHasAcesso.setCargo(cargo);
+         cargoHasAcesso.setAcesso(acesso);
+         cargoHasAcesso.setPermissao(permissao);
+
+         return cargoHasAcesso;
     }
 
-    public static CargoHasAcessoResponseDto toResponse(CargoHasAcesso cargoHasAcesso) {
-        return new CargoHasAcessoResponseDto(
-                cargoHasAcesso.getId(),
-                cargoHasAcesso.getCargo().getIdCargo(),
-                cargoHasAcesso.getCargo().getNome(),
-                cargoHasAcesso.getAcesso().getId(),
-                cargoHasAcesso.getAcesso().getNomeTela(),
-                cargoHasAcesso.getPermissao().getId(),
-                cargoHasAcesso.getPermissao().getNome()
-        );
+    public static CargoHasAcessoResponseDto toResponse(CargoHasAcesso entity) {
+        Cargo cargoEntidade = entity.getCargo();
+        CargoHasAcessoResponseDto.Cargo cargo = new CargoHasAcessoResponseDto.Cargo();
+        cargo.setId(cargoEntidade.getId());
+        cargo.setNome(cargoEntidade.getNome());
+
+        Acesso acessoEntidade = entity.getAcesso();
+        CargoHasAcessoResponseDto.Acesso acesso = new CargoHasAcessoResponseDto.Acesso();
+        acesso.setId(acessoEntidade.getId());
+        acesso.setNomeTela(acessoEntidade.getNomeTela());
+
+        Permissao permissaoEntidade = entity.getPermissao();
+        CargoHasAcessoResponseDto.Permissao permissao = new CargoHasAcessoResponseDto.Permissao();
+        permissao.setId(permissaoEntidade.getId());
+        permissao.setNome(permissaoEntidade.getNome());
+
+        CargoHasAcessoResponseDto dto = new CargoHasAcessoResponseDto();
+
+        dto.setId(entity.getId());
+        dto.setCargo(cargo);
+        dto.setAcesso(acesso);
+        dto.setPermissao(permissao);
+
+        return dto;
     }
 
-    public static List<CargoHasAcessoResponseDto> toResponseList(List<CargoHasAcesso> cargosHasAcesso) {
+    public static List<CargoHasAcessoResponseDto> toResponse(List<CargoHasAcesso> cargosHasAcesso) {
         return cargosHasAcesso.stream()
                 .map(CargoHasAcessoMapper::toResponse)
                 .toList();

@@ -2,7 +2,6 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.profissao.ProfissaoRequestDto;
-import school.sptech.FamiliaConnect.dto.profissao.ProfissaoResponseDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.ProfissaoMapper;
@@ -26,28 +25,20 @@ public class ProfissaoService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Profissao salvar(Profissao profissao){
+    public Profissao cadastrarProfissao(ProfissaoRequestDto dto){
 
-        if(!profissaoRepository.existsByName(profissao.getNome())){
+        if (profissaoRepository.existsByNome(dto.getNome())){
             throw new EntidadeJaCadastradaException("Profissão já cadastrada");
         }
 
-        Profissao profissaoSalva = profissaoRepository.save(profissao);
+        Profissao profissao = ProfissaoMapper.toModel(dto);
 
-        return profissaoSalva;
+        return profissaoRepository.save(profissao);
 
     }
 
     public List<Profissao> listarProfissoes(){
 
-        List<Profissao> profissoes = profissaoRepository.findAll();
-
-        if(profissoes.isEmpty()){
-            // mudar essa exception
-            throw new EntidadeNaoEncontradaException("");
-        }
-
-        return profissoes;
-
+        return profissaoRepository.findAll();
     }
 }

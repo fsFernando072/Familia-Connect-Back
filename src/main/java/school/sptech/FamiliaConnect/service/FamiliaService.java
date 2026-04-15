@@ -1,7 +1,10 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.mapper.FamiliaMapper;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.repository.EnderecoRepository;
@@ -27,44 +30,27 @@ public class FamiliaService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Familia salvar(Familia familia, Integer idEndereco){
+    public Familia salvar(FamiliaRequestDto dto){
 
-        Optional<Endereco> endereco = enderecoRepository.findById(idEndereco);
+        Endereco endereco = enderecoRepository.findById(dto.getEnderecoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O endereco com o id não foi encontrada"));
 
-        if(endereco.isEmpty()){
-            throw new EntidadeNaoEncontradaException("Entidade não encontrada");
-        }
+        Familia familia = FamiliaMapper.toModel(dto);
+        familia.setEndereco(endereco);
 
-        familia.setEndereco(endereco.get());
-
-        Familia familiaCadastrada = familiaRepository.save(familia);
-
-        return familiaCadastrada;
+        return familiaRepository.save(familia);
 
     }
 
     public List<Familia> listar(){
 
-        List<Familia> familias = familiaRepository.findAll();
-
-        // Arrumar Exception
-        if(familias.isEmpty()){
-            throw new EntidadeNaoEncontradaException("Entidades não encontradas");
-        }
-
-        return familias;
+        return familiaRepository.findAll();
 
     }
 
     public Familia listarPorId(Integer id){
 
-        Optional<Familia> familia = familiaRepository.findById(id);
-
-        if(familia.isEmpty()){
-            throw new EntidadeNaoEncontradaException("Entidade não encontrada");
-        }
-
-        return familia.get();
-
+        return familiaRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com o id não foi encontrada"));
     }
 }

@@ -9,19 +9,21 @@ import java.util.List;
 public class CargoMapper {
 
     public static Cargo toModel(CargoRequestDto dto) {
-        return new Cargo(
-                dto.getNome()
-        );
+        Cargo cargo = new Cargo();
+        cargo.setNome(dto.getNome());
+
+        return cargo;
     }
 
     public static CargoResponseDto toResponse(Cargo cargo) {
-        return new CargoResponseDto(
-                cargo.getNome(),
-                cargo.getIdCargo()
-        );
+        CargoResponseDto dto = new CargoResponseDto();
+        dto.setId(cargo.getId());
+        dto.setNome(cargo.getNome());
+
+        return dto;
     }
 
-    public static List<CargoResponseDto> toResponseList(List<Cargo> cargos) {
+    public static List<CargoResponseDto> toResponse(List<Cargo> cargos) {
         return cargos.stream()
                 .map(CargoMapper::toResponse)
                 .toList();

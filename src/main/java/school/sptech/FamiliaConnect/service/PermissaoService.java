@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.Permissao.PermissaoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.PermissaoMapper;
 import school.sptech.FamiliaConnect.model.Permissao;
 import school.sptech.FamiliaConnect.repository.PermissaoRepository;
@@ -27,30 +28,28 @@ public class PermissaoService {
         return permissaoRepository.findAll();
     }
 
-    public Optional<Permissao> buscarPorId(Integer id) {
-        return permissaoRepository.findById(id);
+    public Permissao buscarPorId(Integer id) {
+        return permissaoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A permissão com o id não foi encontrada"));
     }
 
-    public Optional<Permissao> atualizar(Integer id, PermissaoRequestDto dto) {
-        Optional<Permissao> permissaoOpt = permissaoRepository.findById(id);
-
-        if (permissaoOpt.isEmpty()) {
-            return Optional.empty();
+    public Permissao atualizar(Integer id, PermissaoRequestDto dto) {
+        if (!permissaoRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("A permissão com o id não foi encontrada");
         }
 
-        Permissao permissao = permissaoOpt.get();
-        permissao.setNome(dto.getNome());
+        Permissao permissao = PermissaoMapper.toModel(dto);
+        permissao.setId(id);
 
-        return Optional.of(permissaoRepository.save(permissao));
+        return permissaoRepository.save(permissao);
     }
 
-    public boolean deletar(Integer id) {
+    public void deletar(Integer id) {
         if (!permissaoRepository.existsById(id)) {
-            return false;
+            throw new EntidadeNaoEncontradaException("A permissão com o id não foi encontrada");
         }
 
         permissaoRepository.deleteById(id);
-        return true;
     }
 
 }

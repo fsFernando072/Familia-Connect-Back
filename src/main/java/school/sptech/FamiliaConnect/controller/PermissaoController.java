@@ -10,7 +10,6 @@ import school.sptech.FamiliaConnect.model.Permissao;
 import school.sptech.FamiliaConnect.service.PermissaoService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/permissoes")
@@ -25,7 +24,9 @@ public class PermissaoController {
     @PostMapping
     public ResponseEntity<PermissaoResponseDto> cadastrar(@RequestBody @Valid PermissaoRequestDto dto) {
         Permissao permissao = permissaoService.cadastrar(dto);
-        return ResponseEntity.status(201).body(PermissaoMapper.toResponse(permissao));
+        PermissaoResponseDto responseDto = PermissaoMapper.toResponse(permissao);
+
+        return ResponseEntity.status(201).body(responseDto);
     }
 
     @GetMapping
@@ -36,39 +37,29 @@ public class PermissaoController {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(PermissaoMapper.toResponseList(permissoes));
+        return ResponseEntity.status(200).body(PermissaoMapper.toResponse(permissoes));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PermissaoResponseDto> buscarPorId(@PathVariable Integer id) {
-        Optional<Permissao> permissaoOpt = permissaoService.buscarPorId(id);
+        Permissao permissao = permissaoService.buscarPorId(id);
+        PermissaoResponseDto responseDto = PermissaoMapper.toResponse(permissao);
 
-        if (permissaoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(PermissaoMapper.toResponse(permissaoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PermissaoResponseDto> atualizar(@PathVariable Integer id,
                                                           @RequestBody @Valid PermissaoRequestDto dto) {
-        Optional<Permissao> permissaoOpt = permissaoService.atualizar(id, dto);
+        Permissao permissao = permissaoService.atualizar(id, dto);
+        PermissaoResponseDto responseDto = PermissaoMapper.toResponse(permissao);
 
-        if (permissaoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(PermissaoMapper.toResponse(permissaoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean deletou = permissaoService.deletar(id);
-
-        if (!deletou) {
-            return ResponseEntity.status(404).build();
-        }
+        permissaoService.deletar(id);
 
         return ResponseEntity.status(204).build();
     }

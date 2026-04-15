@@ -12,20 +12,6 @@ public class Deficiencia {
     private Integer id;
     private String nome;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Deficiencia() {
-    }
-
-    public Deficiencia(String nome){
-        this.nome = nome;
-    }
-
-    public Deficiencia(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public Integer getId() {

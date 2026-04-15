@@ -11,53 +11,26 @@ public class FamiliaResponseDto {
     private String fotoFamilia;
     private FamiliaEndereco familiaEndereco;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public FamiliaResponseDto() {
-    }
-
-    public FamiliaResponseDto(Integer id, LocalDate dataCadastro, String fotoFamilia) {
-        this.id = id;
-        this.dataCadastro = dataCadastro;
-        this.fotoFamilia = fotoFamilia;
-    }
-
-    public FamiliaResponseDto(Integer id, LocalDate dataCadastro, String fotoFamilia, FamiliaEndereco familiaEndereco) {
-        this.id = id;
-        this.dataCadastro = dataCadastro;
-        this.fotoFamilia = fotoFamilia;
-        this.familiaEndereco = familiaEndereco;
-    }
-
     // Inner Class -----------------------------------------------------------------------------------------------------
 
     public static class FamiliaEndereco{
 
+        private Integer id;
         private String cep;
         private String bairro;
         private String logradouro;
         private Integer numero;
         private String complemento;
+        private String cidade;
         private EnderecoEstado enderecoEstado;
-
-        public FamiliaEndereco(String cep, String bairro, String logradouro, Integer numero, String complemento, EnderecoEstado enderecoEstado) {
-            this.cep = cep;
-            this.bairro = bairro;
-            this.logradouro = logradouro;
-            this.numero = numero;
-            this.complemento = complemento;
-            this.enderecoEstado = enderecoEstado;
-        }
 
         // Inner Class -----------------
 
         public static class EnderecoEstado{
 
+            private Integer id;
             private String nome;
-
-            public EnderecoEstado(String nome) {
-                this.nome = nome;
-            }
+            private String sigla;
 
             public String getNome() {
                 return nome;
@@ -65,6 +38,22 @@ public class FamiliaResponseDto {
 
             public void setNome(String nome) {
                 this.nome = nome;
+            }
+
+            public String getSigla() {
+                return sigla;
+            }
+
+            public void setSigla(String sigla) {
+                this.sigla = sigla;
+            }
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
             }
         }
 
@@ -114,6 +103,22 @@ public class FamiliaResponseDto {
 
         public void setNumero(Integer numero) {
             this.numero = numero;
+        }
+
+        public String getCidade() {
+            return cidade;
+        }
+
+        public void setCidade(String cidade) {
+            this.cidade = cidade;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
         }
     }
 

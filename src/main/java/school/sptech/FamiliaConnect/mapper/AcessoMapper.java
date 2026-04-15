@@ -10,24 +10,22 @@ public class AcessoMapper {
 
     public static Acesso toModel(AcessoRequestDto acessoRequestDto) {
 
-        Acesso acesso = new Acesso(
-                acessoRequestDto.getNomeTela()
-        );
+        Acesso acesso = new Acesso();
+        acesso.setNomeTela(acessoRequestDto.getNomeTela());
 
         return acesso;
     }
 
     public static AcessoResponseDto toResponse(Acesso acesso) {
 
-        AcessoResponseDto acessoResponseDto = new AcessoResponseDto(
-                acesso.getNomeTela(),
-                acesso.getId()
-        );
+        AcessoResponseDto dto = new AcessoResponseDto();
+        dto.setId(acesso.getId());
+        dto.setNomeTela(acesso.getNomeTela());
 
-        return acessoResponseDto;
+        return dto;
     }
 
-    public static List<AcessoResponseDto> toResponseList(List<Acesso> acessos) {
+    public static List<AcessoResponseDto> toResponse(List<Acesso> acessos) {
 
         return acessos.stream()
                 .map(AcessoMapper::toResponse)

@@ -12,20 +12,6 @@ public class Profissao {
     private Integer id;
     private String nome;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Profissao() {
-    }
-
-    public Profissao(String nome){
-        this.nome = nome;
-    }
-
-    public Profissao(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public Integer getId() {

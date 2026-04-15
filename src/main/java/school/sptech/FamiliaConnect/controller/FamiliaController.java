@@ -29,13 +29,11 @@ public class FamiliaController {
     @PostMapping
     public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody FamiliaRequestDto familiaRequestDto){
 
-        Familia familia = FamiliaMapper.toModel(familiaRequestDto);
+        Familia familiaCadastrada = familiaService.salvar(familiaRequestDto);
 
-        Familia familiaCadastrada = familiaService.salvar(familia, familiaRequestDto.getEnderecoId());
+        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
 
-        FamiliaResponseDto familiaResponseDto = FamiliaMapper.toResponse(familiaCadastrada);
-
-        return ResponseEntity.status(201).body(familiaResponseDto);
+        return ResponseEntity.status(201).body(responseDto);
 
     }
 
@@ -44,9 +42,11 @@ public class FamiliaController {
 
         List<Familia> familias = familiaService.listar();
 
-        List<FamiliaResponseDto> familiasResponseDto = FamiliaMapper.toResponseList(familias);
+        if (familias.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
 
-        return ResponseEntity.status(200).body(familiasResponseDto);
+        return ResponseEntity.status(200).body(FamiliaMapper.toResponse(familias));
 
     }
 
@@ -55,9 +55,9 @@ public class FamiliaController {
 
         Familia familia = familiaService.listarPorId(idFamilia);
 
-        FamiliaResponseDto familiaResponseDto = FamiliaMapper.toResponse(familia);
+        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familia);
 
-        return ResponseEntity.status(200).body(familiaResponseDto);
+        return ResponseEntity.status(200).body(responseDto);
 
     }
 }

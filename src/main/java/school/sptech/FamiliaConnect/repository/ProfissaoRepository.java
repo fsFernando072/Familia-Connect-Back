@@ -5,6 +5,6 @@ import school.sptech.FamiliaConnect.model.Profissao;
 
 public interface ProfissaoRepository extends JpaRepository<Profissao, Integer> {
 
-    public Boolean existsByName(String nome);
+    public Boolean existsByNome(String nome);
 
 }

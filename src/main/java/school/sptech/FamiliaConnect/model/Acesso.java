@@ -15,20 +15,6 @@ public class Acesso {
     @Column(name = "nome_tela", nullable = false, length = 45)
     private String nomeTela;
 
-    @ManyToOne
-    @JoinColumn(name = "permissao_id")
-    private Permissao permissao;
-
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Acesso(String nomeTela) {
-    }
-
-    public Acesso(Integer id, String nomeTela) {
-        this.id = id;
-        this.nomeTela = nomeTela;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public Integer getId() {

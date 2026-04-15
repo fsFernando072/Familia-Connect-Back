@@ -36,39 +36,29 @@ import java.util.Optional;
                 return ResponseEntity.status(204).build();
             }
 
-            return ResponseEntity.status(200).body(EstadoMapper.toResponseList(estados));
+            return ResponseEntity.status(200).body(EstadoMapper.toResponse(estados));
         }
 
         @GetMapping("/{id}")
         public ResponseEntity<EstadoResponseDto> buscarPorId(@PathVariable Integer id) {
-            Optional<Estado> estadoOpt = estadoService.buscarPorId(id);
+            Estado estado = estadoService.buscarPorId(id);
+            EstadoResponseDto responseDto = EstadoMapper.toResponse(estado);
 
-            if (estadoOpt.isEmpty()) {
-                return ResponseEntity.status(404).build();
-            }
-
-            return ResponseEntity.status(200).body(EstadoMapper.toResponse(estadoOpt.get()));
+            return ResponseEntity.status(200).body(responseDto);
         }
 
         @PutMapping("/{id}")
         public ResponseEntity<EstadoResponseDto> atualizar(@PathVariable Integer id,
                                                            @RequestBody @Valid EstadoRequestDto dto) {
-            Optional<Estado> estadoOpt = estadoService.atualizar(id, dto);
+            Estado estado = estadoService.atualizar(id, dto);
+            EstadoResponseDto responseDto = EstadoMapper.toResponse(estado);
 
-            if (estadoOpt.isEmpty()) {
-                return ResponseEntity.status(404).build();
-            }
-
-            return ResponseEntity.status(200).body(EstadoMapper.toResponse(estadoOpt.get()));
+            return ResponseEntity.status(200).body(responseDto);
         }
 
         @DeleteMapping("/{id}")
         public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-            boolean deletou = estadoService.deletar(id);
-
-            if (!deletou) {
-                return ResponseEntity.status(404).build();
-            }
+            estadoService.deletar(id);
 
             return ResponseEntity.status(204).build();
         }

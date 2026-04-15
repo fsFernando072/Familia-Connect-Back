@@ -40,28 +40,23 @@ public class PessoaResponseDto {
 
     public static class PessoaFamilia{
 
-        private LocalDate dataCadastroFamilia;
-        private String fotoFamilia;
+        private LocalDate dataCadastro;
+        private String foto;
 
-        public PessoaFamilia(String fotoFamilia, LocalDate dataCadastroFamilia) {
-            this.fotoFamilia = fotoFamilia;
-            this.dataCadastroFamilia = dataCadastroFamilia;
+        public LocalDate getDataCadastro() {
+            return dataCadastro;
         }
 
-        public LocalDate getDataCadastroFamilia() {
-            return dataCadastroFamilia;
+        public void setDataCadastro(LocalDate dataCadastro) {
+            this.dataCadastro = dataCadastro;
         }
 
-        public void setDataCadastroFamilia(LocalDate dataCadastroFamilia) {
-            this.dataCadastroFamilia = dataCadastroFamilia;
+        public String getFoto() {
+            return foto;
         }
 
-        public String getFotoFamilia() {
-            return fotoFamilia;
-        }
-
-        public void setFotoFamilia(String fotoFamilia) {
-            this.fotoFamilia = fotoFamilia;
+        public void setFoto(String foto) {
+            this.foto = foto;
         }
     }
 
@@ -69,22 +64,18 @@ public class PessoaResponseDto {
 
         private String nome;
 
-        public PessoaProfissao(String nome){
-            this.nome = nome;
-        }
-
         public String getNome() {
             return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
         }
     }
 
     public static class PessoaDeficiencia{
 
         private String nome;
-
-        public PessoaDeficiencia(String nome){
-            this.nome = nome;
-        }
 
         public String getNome() {
             return nome;

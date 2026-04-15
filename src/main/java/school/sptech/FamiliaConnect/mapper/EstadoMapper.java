@@ -9,21 +9,23 @@ import java.util.List;
 public class EstadoMapper {
 
     public static Estado toModel(EstadoRequestDto dto) {
-        return new Estado(
-                dto.getNome(),
-                dto.getSigla()
-        );
+        Estado estado = new Estado();
+        estado.setNome(dto.getNome());
+        estado.setSigla(dto.getSigla());
+
+        return estado;
     }
 
     public static EstadoResponseDto toResponse(Estado estado) {
-        return new EstadoResponseDto(
-                estado.getId(),
-                estado.getNome(),
-                estado.getSigla()
-        );
+        EstadoResponseDto dto = new EstadoResponseDto();
+        dto.setId(estado.getId());
+        dto.setNome(estado.getNome());
+        dto.setSigla(estado.getSigla());
+
+        return dto;
     }
 
-    public static List<EstadoResponseDto> toResponseList(List<Estado> estados) {
+    public static List<EstadoResponseDto> toResponse(List<Estado> estados) {
         return estados.stream()
                 .map(EstadoMapper::toResponse)
                 .toList();

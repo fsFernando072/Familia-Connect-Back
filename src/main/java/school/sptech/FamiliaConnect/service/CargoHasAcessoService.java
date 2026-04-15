@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.CargoHasAcessoMapper;
 import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Cargo;
@@ -13,7 +14,6 @@ import school.sptech.FamiliaConnect.repository.CargoRepository;
 import school.sptech.FamiliaConnect.repository.PermissaoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CargoHasAcessoService {
@@ -33,62 +33,59 @@ public class CargoHasAcessoService {
         this.permissaoRepository = permissaoRepository;
     }
 
-    public Optional<CargoHasAcesso> cadastrar(CargoHasAcessoRequestDto dto) {
-        Optional<Cargo> cargoOpt = cargoRepository.findById(dto.getCargoId());
-        Optional<Acesso> acessoOpt = acessoRepository.findById(dto.getAcessoId());
-        Optional<Permissao> permissaoOpt = permissaoRepository.findById(dto.getPermissaoId());
-
-        if (cargoOpt.isEmpty() || acessoOpt.isEmpty() || permissaoOpt.isEmpty()) {
-            return Optional.empty();
-        }
+    public CargoHasAcesso cadastrar(CargoHasAcessoRequestDto dto) {
+        Cargo cargo = cargoRepository.findById(dto.getCargoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado"));
+        Acesso acesso = acessoRepository.findById(dto.getAcessoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O acesso com o id não foi encontrado"));;
+        Permissao permissao = permissaoRepository.findById(dto.getPermissaoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A permissão com o id não foi encontrada"));
 
         CargoHasAcesso cargoHasAcesso = CargoHasAcessoMapper.toModel(
-                cargoOpt.get(),
-                acessoOpt.get(),
-                permissaoOpt.get()
+                cargo,
+                acesso,
+                permissao
         );
 
-        return Optional.of(cargoHasAcessoRepository.save(cargoHasAcesso));
+        return cargoHasAcessoRepository.save(cargoHasAcesso);
     }
 
     public List<CargoHasAcesso> listar() {
         return cargoHasAcessoRepository.findAll();
     }
 
-    public Optional<CargoHasAcesso> buscarPorId(Integer id) {
-        return cargoHasAcessoRepository.findById(id);
+    public CargoHasAcesso buscarPorId(Integer id) {
+        return cargoHasAcessoRepository.findById(id)
+                .orElseThrow();
     }
 
-    public Optional<CargoHasAcesso> atualizar(Integer id, CargoHasAcessoRequestDto dto) {
-        Optional<CargoHasAcesso> cargoHasAcessoOpt = cargoHasAcessoRepository.findById(id);
-
-        if (cargoHasAcessoOpt.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Optional<Cargo> cargoOpt = cargoRepository.findById(dto.getCargoId());
-        Optional<Acesso> acessoOpt = acessoRepository.findById(dto.getAcessoId());
-        Optional<Permissao> permissaoOpt = permissaoRepository.findById(dto.getPermissaoId());
-
-        if (cargoOpt.isEmpty() || acessoOpt.isEmpty() || permissaoOpt.isEmpty()) {
-            return Optional.empty();
-        }
-
-        CargoHasAcesso cargoHasAcesso = cargoHasAcessoOpt.get();
-        cargoHasAcesso.setCargo(cargoOpt.get());
-        cargoHasAcesso.setAcesso(acessoOpt.get());
-        cargoHasAcesso.setPermissao(permissaoOpt.get());
-
-        return Optional.of(cargoHasAcessoRepository.save(cargoHasAcesso));
-    }
-
-    public boolean deletar(Integer id) {
+    public CargoHasAcesso atualizar(Integer id, CargoHasAcessoRequestDto dto) {
         if (!cargoHasAcessoRepository.existsById(id)) {
-            return false;
+            throw new EntidadeNaoEncontradaException("O CargoHasAcesso com id não foi encontrado");
+        }
+
+        Cargo cargo = cargoRepository.findById(dto.getCargoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com id não foi encontrado"));
+        Acesso acesso = acessoRepository.findById(dto.getAcessoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O acesso com id não foi encontrado"));
+        Permissao permissao = permissaoRepository.findById(dto.getPermissaoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A permissão com id não foi encontrada"));
+
+        CargoHasAcesso cargoHasAcesso = new CargoHasAcesso();
+        cargoHasAcesso.setId(id);
+        cargoHasAcesso.setCargo(cargo);
+        cargoHasAcesso.setAcesso(acesso);
+        cargoHasAcesso.setPermissao(permissao);
+
+        return cargoHasAcessoRepository.save(cargoHasAcesso);
+    }
+
+    public void deletar(Integer id) {
+        if (!cargoHasAcessoRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("O CargoHasAcesso com id não foi encontrado");
         }
 
         cargoHasAcessoRepository.deleteById(id);
-        return true;
     }
 
 }

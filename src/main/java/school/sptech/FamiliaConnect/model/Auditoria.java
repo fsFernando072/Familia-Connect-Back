@@ -30,20 +30,6 @@ public class Auditoria {
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Auditoria(String tipoLog, String acao, String acaoAntigo, String acaoNovo, LocalDate createdAt, Funcionario funcionario) {
-    }
-
-    public Auditoria(LocalDate createdAt, String dadoAntigo, String dadoNovo, Funcionario funcionario, Integer id, String tipoLog) {
-        this.createdAt = createdAt;
-        this.dadoAntigo = dadoAntigo;
-        this.dadoNovo = dadoNovo;
-        this.funcionario = funcionario;
-        this.id = id;
-        this.tipoLog = tipoLog;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public LocalDate getCreatedAt() {

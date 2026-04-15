@@ -2,12 +2,12 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.Cargo.CargoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.repository.CargoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CargoService {
@@ -27,29 +27,27 @@ public class CargoService {
         return cargoRepository.findAll();
     }
 
-    public Optional<Cargo> buscarPorId(Integer id) {
-        return cargoRepository.findById(id);
+    public Cargo buscarPorId(Integer id) {
+        return cargoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado"));
     }
 
-    public Optional<Cargo> atualizar(Integer id, CargoRequestDto dto) {
-        Optional<Cargo> cargoOpt = cargoRepository.findById(id);
-
-        if (cargoOpt.isEmpty()) {
-            return Optional.empty();
+    public Cargo atualizar(Integer id, CargoRequestDto dto) {
+        if (!cargoRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
         }
 
-        Cargo cargo = cargoOpt.get();
-        cargo.setNome(dto.getNome());
+        Cargo cargo = CargoMapper.toModel(dto);
+        cargo.setId(id);
 
-        return Optional.of(cargoRepository.save(cargo));
+        return cargoRepository.save(cargo);
     }
 
-    public boolean deletar(Integer id) {
+    public void deletar(Integer id) {
         if (!cargoRepository.existsById(id)) {
-            return false;
+            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
         }
 
         cargoRepository.deleteById(id);
-        return true;
     }
 }

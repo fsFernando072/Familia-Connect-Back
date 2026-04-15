@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoRequestDto;
 import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoResponseDto;
 import school.sptech.FamiliaConnect.mapper.CargoHasAcessoMapper;
+import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.CargoHasAcesso;
 import school.sptech.FamiliaConnect.service.CargoHasAcessoService;
 
@@ -24,13 +25,10 @@ public class CargoHasAcessoController {
 
     @PostMapping
     public ResponseEntity<CargoHasAcessoResponseDto> cadastrar(@RequestBody @Valid CargoHasAcessoRequestDto dto) {
-        Optional<CargoHasAcesso> cargoHasAcessoOpt = cargoHasAcessoService.cadastrar(dto);
+        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.cadastrar(dto);
+        CargoHasAcessoResponseDto responseDto = CargoHasAcessoMapper.toResponse(cargoHasAcesso);
 
-        if (cargoHasAcessoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(201).body(CargoHasAcessoMapper.toResponse(cargoHasAcessoOpt.get()));
+        return ResponseEntity.status(201).body(responseDto);
     }
 
     @GetMapping
@@ -41,39 +39,29 @@ public class CargoHasAcessoController {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(CargoHasAcessoMapper.toResponseList(cargosHasAcesso));
+        return ResponseEntity.status(200).body(CargoHasAcessoMapper.toResponse(cargosHasAcesso));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CargoHasAcessoResponseDto> buscarPorId(@PathVariable Integer id) {
-        Optional<CargoHasAcesso> cargoHasAcessoOpt = cargoHasAcessoService.buscarPorId(id);
+        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.buscarPorId(id);
+        CargoHasAcessoResponseDto responseDto = CargoHasAcessoMapper.toResponse(cargoHasAcesso);
 
-        if (cargoHasAcessoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(CargoHasAcessoMapper.toResponse(cargoHasAcessoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CargoHasAcessoResponseDto> atualizar(@PathVariable Integer id,
                                                                @RequestBody @Valid CargoHasAcessoRequestDto dto) {
-        Optional<CargoHasAcesso> cargoHasAcessoOpt = cargoHasAcessoService.atualizar(id, dto);
+        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.atualizar(id, dto);
+        CargoHasAcessoResponseDto responseDto = CargoHasAcessoMapper.toResponse(cargoHasAcesso);
 
-        if (cargoHasAcessoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(CargoHasAcessoMapper.toResponse(cargoHasAcessoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean deletou = cargoHasAcessoService.deletar(id);
-
-        if (!deletou) {
-            return ResponseEntity.status(404).build();
-        }
+        cargoHasAcessoService.deletar(id);
 
         return ResponseEntity.status(204).build();
     }

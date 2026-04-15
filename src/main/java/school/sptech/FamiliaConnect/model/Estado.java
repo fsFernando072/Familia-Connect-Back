@@ -18,17 +18,6 @@ public class Estado {
     @Column(nullable = false, length = 45)
     private String sigla;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Estado(String nome, String sigla) {
-    }
-
-    public Estado(Integer id, String nome, String sigla) {
-        this.id = id;
-        this.nome = nome;
-        this.sigla = sigla;
-    }
-
     // Getters e Setters
 
     public Integer getId() {

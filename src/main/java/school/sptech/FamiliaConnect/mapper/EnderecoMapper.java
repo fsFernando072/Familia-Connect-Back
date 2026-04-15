@@ -5,19 +5,19 @@ import school.sptech.FamiliaConnect.dto.endereco.EnderecoResponseDto;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Estado;
 
+import java.util.List;
+
 
 public class EnderecoMapper {
 
-    public static Endereco toModel(EnderecoRequestDto enderecoRequestDto, Estado estado){
+    public static Endereco toModel(EnderecoRequestDto enderecoRequestDto){
 
-        Endereco endereco = new Endereco(
-                enderecoRequestDto.getBairro(),
-                enderecoRequestDto.getComplemento(),
-                enderecoRequestDto.getCep(),
-                estado,
-                enderecoRequestDto.getLogradouro(),
-                enderecoRequestDto.getNumero()
-        );
+        Endereco endereco = new Endereco();
+        endereco.setBairro(enderecoRequestDto.getBairro());
+        endereco.setComplemento(enderecoRequestDto.getComplemento());
+        endereco.setCep(enderecoRequestDto.getCep());
+        endereco.setLogradouro(enderecoRequestDto.getLogradouro());
+        endereco.setNumero(enderecoRequestDto.getNumero());
 
         return endereco;
 
@@ -25,24 +25,32 @@ public class EnderecoMapper {
 
     public static EnderecoResponseDto toResponse(Endereco endereco){
 
-        Estado estado = endereco.getEstado();
+        Estado estadoEntidade = endereco.getEstado();
 
-        EnderecoResponseDto.EnderecoEstado enderecoEstado = new EnderecoResponseDto.EnderecoEstado();
+        EnderecoResponseDto.EnderecoEstado estado = new EnderecoResponseDto.EnderecoEstado();
 
-        enderecoEstado.setId(estado.getId());
+        estado.setId(estadoEntidade.getId());
+        estado.setNome(estadoEntidade.getNome());
+        estado.setSigla(estadoEntidade.getSigla());
 
-        EnderecoResponseDto enderecoResponseDto = new EnderecoResponseDto(
-            endereco.getId(),
-                endereco.getCep(),
-                endereco.getBairro(),
-                endereco.getLogradouro(),
-                endereco.getNumero(),
-                endereco.getComplemento(),
-                enderecoEstado
-        );
+        EnderecoResponseDto dto = new EnderecoResponseDto();
+        dto.setId(endereco.getId());
+        dto.setCep(endereco.getCep());
+        dto.setBairro(endereco.getBairro());
+        dto.setLogradouro(endereco.getLogradouro());
+        dto.setNumero(endereco.getNumero());
+        dto.setComplemento(endereco.getComplemento());
+        dto.setCidade(endereco.getCidade());
+        dto.setEnderecoEstado(estado);
 
-        return enderecoResponseDto;
+        return dto;
 
+    }
+
+    public static List<EnderecoResponseDto> toResponse(List<Endereco> enderecos) {
+        return enderecos.stream()
+                .map(EnderecoMapper::toResponse)
+                .toList();
     }
 
 }

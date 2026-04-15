@@ -2,6 +2,8 @@ package school.sptech.FamiliaConnect.mapper;
 
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
+import school.sptech.FamiliaConnect.model.Endereco;
+import school.sptech.FamiliaConnect.model.Estado;
 import school.sptech.FamiliaConnect.model.Familia;
 
 import java.util.List;
@@ -10,41 +12,42 @@ public class FamiliaMapper {
 
     public static Familia toModel(FamiliaRequestDto familiaRequestDto){
 
-        Familia familia = new Familia(
-            familiaRequestDto.getDataCadastro(),
-                familiaRequestDto.getFotoFamilia()
-        );
+        Familia familia = new Familia();
+        familia.setFotoFamilia(familiaRequestDto.getFotoFamilia());
+        familia.setDataCadastro(familiaRequestDto.getDataCadastro());
 
         return familia;
-
     }
 
     public static FamiliaResponseDto toResponse(Familia familia){
 
-        FamiliaResponseDto.FamiliaEndereco.EnderecoEstado familiaEnderecoEstadoResponse =
-                new FamiliaResponseDto.FamiliaEndereco.EnderecoEstado(familia.getEndereco().getEstado().getNome());
+        Endereco enderecoEntidade = new Endereco();
+        FamiliaResponseDto.FamiliaEndereco familiaEndereco = new FamiliaResponseDto.FamiliaEndereco();
+        familiaEndereco.setCep(enderecoEntidade.getCep());
+        familiaEndereco.setBairro(enderecoEntidade.getBairro());
+        familiaEndereco.setLogradouro(enderecoEntidade.getLogradouro());
+        familiaEndereco.setNumero(enderecoEntidade.getNumero());
+        familiaEndereco.setLogradouro(enderecoEntidade.getLogradouro());
+        familiaEndereco.setCidade(enderecoEntidade.getCidade());
 
-        FamiliaResponseDto.FamiliaEndereco familiaEndereco = new FamiliaResponseDto.FamiliaEndereco(
-                familia.getEndereco().getCep(),
-                familia.getEndereco().getBairro(),
-                familia.getEndereco().getLogradouro(),
-                familia.getEndereco().getNumero(),
-                familia.getEndereco().getComplemento(),
-                familiaEnderecoEstadoResponse
-        );
+        Estado estadoEntidade = new Estado();
+        FamiliaResponseDto.FamiliaEndereco.EnderecoEstado enderecoEstado = new FamiliaResponseDto.FamiliaEndereco.EnderecoEstado();
+        enderecoEstado.setNome(estadoEntidade.getNome());
+        enderecoEstado.setSigla(estadoEntidade.getSigla());
 
-        FamiliaResponseDto familiaResponseDto = new FamiliaResponseDto(
-            familia.getId(),
-                familia.getDataCadastro(),
-                familia.getFotoFamilia(),
-                familiaEndereco
-        );
+        familiaEndereco.setEnderecoEstado(enderecoEstado);
 
-        return familiaResponseDto;
+        FamiliaResponseDto dto = new FamiliaResponseDto();
+        dto.setId(familia.getId());
+        dto.setDataCadastro(familia.getDataCadastro());
+        dto.setFotoFamilia(familia.getFotoFamilia());
+        dto.setFamiliaEndereco(familiaEndereco);
+
+        return dto;
 
     }
 
-    public static List<FamiliaResponseDto> toResponseList(List<Familia> familias){
+    public static List<FamiliaResponseDto> toResponse(List<Familia> familias){
 
         return familias.stream()
                 .map(FamiliaMapper::toResponse)

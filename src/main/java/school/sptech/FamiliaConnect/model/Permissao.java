@@ -15,16 +15,6 @@ public class Permissao {
     @Column(nullable = false, length = 45)
     private String nome;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Permissao(String nome) {
-    }
-
-    public Permissao(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public Integer getId() {

@@ -10,7 +10,6 @@ import school.sptech.FamiliaConnect.model.Auditoria;
 import school.sptech.FamiliaConnect.service.AuditoriaService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auditorias")
@@ -24,13 +23,10 @@ public class AuditoriaController {
 
     @PostMapping
     public ResponseEntity<AuditoriaResponseDto> cadastrar(@RequestBody @Valid AuditoriaRequestDto dto) {
-        Optional<Auditoria> auditoriaOpt = auditoriaService.cadastrar(dto);
+        Auditoria auditoria = auditoriaService.cadastrar(dto);
+        AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
 
-        if (auditoriaOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(201).body(AuditoriaMapper.toResponse(auditoriaOpt.get()));
+        return ResponseEntity.status(201).body(responseDto);
     }
 
     @GetMapping
@@ -41,39 +37,29 @@ public class AuditoriaController {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(AuditoriaMapper.toResponseList(auditorias));
+        return ResponseEntity.status(200).body(AuditoriaMapper.toResponse(auditorias));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AuditoriaResponseDto> buscarPorId(@PathVariable Integer id) {
-        Optional<Auditoria> auditoriaOpt = auditoriaService.buscarPorId(id);
+        Auditoria auditoria = auditoriaService.buscarPorId(id);
+        AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
 
-        if (auditoriaOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(AuditoriaMapper.toResponse(auditoriaOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AuditoriaResponseDto> atualizar(@PathVariable Integer id,
                                                           @RequestBody @Valid AuditoriaRequestDto dto) {
-        Optional<Auditoria> auditoriaOpt = auditoriaService.atualizar(id, dto);
+        Auditoria auditoria = auditoriaService.atualizar(id, dto);
+        AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
 
-        if (auditoriaOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(AuditoriaMapper.toResponse(auditoriaOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean deletou = auditoriaService.deletar(id);
-
-        if (!deletou) {
-            return ResponseEntity.status(404).build();
-        }
+        auditoriaService.deletar(id);
 
         return ResponseEntity.status(204).build();
     }

@@ -19,23 +19,6 @@ public class Familia {
     @OneToOne
     private Endereco endereco;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Familia() {
-    }
-
-    public Familia(LocalDate dataCadastro, String fotoFamilia){
-        this.dataCadastro = dataCadastro;
-        this.fotoFamilia = fotoFamilia;
-    }
-
-    public Familia(LocalDate dataCadastro, Endereco endereco, String fotoFamilia, Integer id) {
-        this.dataCadastro = dataCadastro;
-        this.endereco = endereco;
-        this.fotoFamilia = fotoFamilia;
-        this.id = id;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public LocalDate getDataCadastro() {

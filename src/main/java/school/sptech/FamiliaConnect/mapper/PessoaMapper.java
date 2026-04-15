@@ -2,22 +2,26 @@ package school.sptech.FamiliaConnect.mapper;
 
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaResponseDto;
+import school.sptech.FamiliaConnect.model.Deficiencia;
+import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
+import school.sptech.FamiliaConnect.model.Profissao;
+
+import java.util.List;
 
 public class PessoaMapper {
 
     public static Pessoa toModel(PessoaRequestDto pessoaRequestDto){
 
-        Pessoa pessoa = new Pessoa(
-            pessoaRequestDto.getNome(),
-                pessoaRequestDto.getRg(),
-                pessoaRequestDto.getCpf(),
-                pessoaRequestDto.getDataNascimento(),
-                pessoaRequestDto.getTrabalhando(),
-                pessoaRequestDto.getResponsavel(),
-                pessoaRequestDto.getGrauParentesco(),
-                pessoaRequestDto.getTelefone()
-        );
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome(pessoaRequestDto.getNome());
+        pessoa.setRg(pessoaRequestDto.getRg());
+        pessoa.setCpf(pessoaRequestDto.getCpf());
+        pessoa.setDtNascimento(pessoaRequestDto.getDataNascimento());
+        pessoa.setTrabalhando(pessoaRequestDto.getTrabalhando());
+        pessoa.setResponsavel(pessoaRequestDto.getResponsavel());
+        pessoa.setGrauParentesco(pessoaRequestDto.getGrauParentesco());
+        pessoa.setTelefone(pessoaRequestDto.getTelefone());
 
         return pessoa;
 
@@ -25,42 +29,42 @@ public class PessoaMapper {
 
     public static PessoaResponseDto toResponse(Pessoa pessoa){
 
-        PessoaResponseDto pessoaResponseDto = new PessoaResponseDto(
-            pessoa.getNome(),
-                pessoa.getRg(),
-                pessoa.getCpf(),
-                pessoa.getDtNascimento(),
-                pessoa.getTelefone(),
-                pessoa.getTrabalhando(),
-                pessoa.getResponsavel(),
-                pessoa.getGrauParentesco()
-        );
+        Deficiencia deficienciaEntidade = new Deficiencia();
+        PessoaResponseDto.PessoaDeficiencia deficiencia = new PessoaResponseDto.PessoaDeficiencia();
+        deficiencia.setNome(deficienciaEntidade.getNome());
 
-        if(pessoa.getProfissao() != null){
-            PessoaResponseDto.PessoaProfissao pessoaProfissao = new PessoaResponseDto.PessoaProfissao(
-                    pessoa.getProfissao().getNome()
-            );
+        Familia familiaEntidade = new Familia();
+        PessoaResponseDto.PessoaFamilia familia = new PessoaResponseDto.PessoaFamilia();
+        familia.setDataCadastro(familiaEntidade.getDataCadastro());
+        familia.setFoto(familiaEntidade.getFotoFamilia());
 
-            pessoaResponseDto.setPessoaProfissao(pessoaProfissao);
-        }
+        Profissao profissaoEntidade = new Profissao();
+        PessoaResponseDto.PessoaProfissao profissao = new PessoaResponseDto.PessoaProfissao();
+        profissao.setNome(profissaoEntidade.getNome());
 
-        if(pessoa.getDeficiencia() != null){
-            PessoaResponseDto.PessoaDeficiencia pessoaDeficiencia = new PessoaResponseDto.PessoaDeficiencia(
-                    pessoa.getDeficiencia().getNome()
-            );
+        PessoaResponseDto dto = new PessoaResponseDto();
 
-            pessoaResponseDto.setPessoaDeficiencia(pessoaDeficiencia);
-        }
+        dto.setNome(pessoa.getNome());
+        dto.setRg(pessoa.getRg());
+        dto.setCpf(pessoa.getCpf());
+        dto.setDataNascimento(pessoa.getDtNascimento());
+        dto.setTrabalhando(pessoa.getTrabalhando());
+        dto.setResponsavel(pessoa.getResponsavel());
+        dto.setGrauParentesco(pessoa.getGrauParentesco());
+        dto.setTelefone(pessoa.getTelefone());
 
-        PessoaResponseDto.PessoaFamilia pessoaFamilia = new PessoaResponseDto.PessoaFamilia(
-                pessoa.getFamilia().getFotoFamilia(),
-                pessoa.getFamilia().getDataCadastro()
-        );
+        dto.setPessoaDeficiencia(deficiencia);
+        dto.setPessoaFamilia(familia);
+        dto.setPessoaProfissao(profissao);
 
-        pessoaResponseDto.setPessoaFamilia(pessoaFamilia);
+        return dto;
 
-        return pessoaResponseDto;
+    }
 
+    public static List<PessoaResponseDto> toResponse(List<Pessoa> pessoas) {
+        return pessoas.stream()
+                .map(PessoaMapper::toResponse)
+                .toList();
     }
 
 }

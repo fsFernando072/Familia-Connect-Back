@@ -10,24 +10,22 @@ public class PermissaoMapper {
 
     public static Permissao toModel(PermissaoRequestDto permissaoRequestDto) {
 
-        Permissao permissao = new Permissao(
-                permissaoRequestDto.getNome()
-        );
+        Permissao permissao = new Permissao();
+        permissao.setNome(permissaoRequestDto.getNome());
 
         return permissao;
     }
 
     public static PermissaoResponseDto toResponse(Permissao permissao) {
 
-        PermissaoResponseDto permissaoResponseDto = new PermissaoResponseDto(
-                permissao.getNome(),
-                permissao.getId()
-        );
+        PermissaoResponseDto dto = new PermissaoResponseDto();
+        dto.setId(permissao.getId());
+        dto.setNome(permissao.getNome());
 
-        return permissaoResponseDto;
+        return dto;
     }
 
-    public static List<PermissaoResponseDto> toResponseList(List<Permissao> permissoes) {
+    public static List<PermissaoResponseDto> toResponse(List<Permissao> permissoes) {
 
         return permissoes.stream()
                 .map(PermissaoMapper::toResponse)

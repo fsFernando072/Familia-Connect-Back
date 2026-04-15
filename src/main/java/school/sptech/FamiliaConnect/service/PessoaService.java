@@ -1,7 +1,10 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
+import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
+import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.mapper.PessoaMapper;
 import school.sptech.FamiliaConnect.model.Deficiencia;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
@@ -35,29 +38,31 @@ public class PessoaService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Pessoa salvar(Pessoa pessoa, Integer idDeficiencia, Integer idFamilia, Integer idProfissao){
+    public Pessoa salvar(PessoaRequestDto dto){
 
-        if(pessoaRepository.existsByCpf(pessoa.getCpf())){
-           throw new EntidadeJaCadastradaException("Entidade já cadastrada");
+        if (pessoaRepository.existsByCpf(dto.getCpf())){
+           throw new EntidadeJaCadastradaException("Pessoa já cadastrada");
         }
 
-        Optional<Familia> familia = familiaRepository.findById(idFamilia);
-        pessoa.setFamilia(familia.get());
+        Familia familia = familiaRepository.findById(dto.getIdFamilia())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A família não foi encontrada"));
 
-        if(idDeficiencia != null){
-            Optional<Deficiencia> deficiencia = deficienciaRepository.findById(idDeficiencia);
+
+
+        Pessoa pessoa = PessoaMapper.toModel(dto);
+        pessoa.setFamilia(familia);
+
+        if(dto.getIdDeficiencia() != null){
+            Optional<Deficiencia> deficiencia = deficienciaRepository.findById(dto.getIdDeficiencia());
             pessoa.setDeficiencia(deficiencia.get());
         }
 
-        if(idProfissao != null){
-            Optional<Profissao> profissao = profissaoRepository.findById(idProfissao);
+        if(dto.getIdProfissao() != null){
+            Optional<Profissao> profissao = profissaoRepository.findById(dto.getIdProfissao());
             pessoa.setProfissao(profissao.get());
         }
 
-        Pessoa pessoaCadastrada = pessoaRepository.save(pessoa);
-
-        return pessoaCadastrada;
-
+        return pessoaRepository.save(pessoa);
     }
 
 }

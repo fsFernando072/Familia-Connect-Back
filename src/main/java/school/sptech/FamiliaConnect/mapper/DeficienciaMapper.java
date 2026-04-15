@@ -10,9 +10,8 @@ public class DeficienciaMapper {
 
     public static Deficiencia toModel(DeficienciaRequestDto deficienciaRequestDto){
 
-        Deficiencia deficiencia = new Deficiencia(
-                deficienciaRequestDto.getNome()
-        );
+        Deficiencia deficiencia = new Deficiencia();
+        deficiencia.setNome(deficienciaRequestDto.getNome());
 
         return deficiencia;
 
@@ -20,16 +19,15 @@ public class DeficienciaMapper {
 
     public static DeficienciaResponseDto toResponse(Deficiencia deficiencia){
 
-        DeficienciaResponseDto deficienciaResponseDto = new DeficienciaResponseDto(
-                deficiencia.getNome(),
-                deficiencia.getId()
-        );
+        DeficienciaResponseDto dto = new DeficienciaResponseDto();
+        dto.setId(deficiencia.getId());
+        dto.setNome(deficiencia.getNome());
 
-        return deficienciaResponseDto;
+        return dto;
 
     }
 
-    public static List<DeficienciaResponseDto> toResponseList(List<Deficiencia> deficiencias){
+    public static List<DeficienciaResponseDto> toResponse(List<Deficiencia> deficiencias){
 
         return deficiencias.stream()
                 .map(DeficienciaMapper::toResponse)

@@ -10,7 +10,6 @@ import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.service.CargoService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cargos")
@@ -25,7 +24,9 @@ public class CargoController {
     @PostMapping
     public ResponseEntity<CargoResponseDto> cadastrar(@RequestBody @Valid CargoRequestDto dto) {
         Cargo cargo = cargoService.cadastrar(dto);
-        return ResponseEntity.status(201).body(CargoMapper.toResponse(cargo));
+        CargoResponseDto responseDto = CargoMapper.toResponse(cargo);
+
+        return ResponseEntity.status(201).body(responseDto);
     }
 
     @GetMapping
@@ -36,39 +37,29 @@ public class CargoController {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(CargoMapper.toResponseList(cargos));
+        return ResponseEntity.status(200).body(CargoMapper.toResponse(cargos));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CargoResponseDto> buscarPorId(@PathVariable Integer id) {
-        Optional<Cargo> cargoOpt = cargoService.buscarPorId(id);
+        Cargo cargo = cargoService.buscarPorId(id);
+        CargoResponseDto responseDto = CargoMapper.toResponse(cargo);
 
-        if (cargoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(CargoMapper.toResponse(cargoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CargoResponseDto> atualizar(@PathVariable Integer id,
                                                       @RequestBody @Valid CargoRequestDto dto) {
-        Optional<Cargo> cargoOpt = cargoService.atualizar(id, dto);
+        Cargo cargo = cargoService.atualizar(id, dto);
+        CargoResponseDto responseDto = CargoMapper.toResponse(cargo);
 
-        if (cargoOpt.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.status(200).body(CargoMapper.toResponse(cargoOpt.get()));
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean deletou = cargoService.deletar(id);
-
-        if (!deletou) {
-            return ResponseEntity.status(404).build();
-        }
+        cargoService.deletar(id);
 
         return ResponseEntity.status(204).build();
     }

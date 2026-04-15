@@ -29,36 +29,6 @@ public class Pessoa {
     @ManyToOne
     private Familia familia;
 
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Pessoa() {
-    }
-
-    public Pessoa(String nome, String rg, String cpf, LocalDate dtNascimento, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco, String telefone) {
-        this.nome = nome;
-        this.rg = rg;
-        this.cpf = cpf;
-        this.dtNascimento = dtNascimento;
-        this.isTrabalhando = isTrabalhando;
-        this.isResponsavel = isResponsavel;
-        this.grauParentesco = grauParentesco;
-    }
-
-    public Pessoa(String cpf, Deficiencia deficiencia, LocalDate dtNascimento, Familia familia, String grauParentesco, Integer id, Boolean isResponsavel, Boolean isTrabalhando, String nome, Profissao profissao, String rg, String telefone) {
-        this.cpf = cpf;
-        this.deficiencia = deficiencia;
-        this.dtNascimento = dtNascimento;
-        this.familia = familia;
-        this.grauParentesco = grauParentesco;
-        this.id = id;
-        this.isResponsavel = isResponsavel;
-        this.isTrabalhando = isTrabalhando;
-        this.nome = nome;
-        this.profissao = profissao;
-        this.rg = rg;
-        this.telefone = telefone;
-    }
-
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public String getCpf() {

@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
 
@@ -13,20 +14,12 @@ public class Entrega {
     @Id
     private Integer id;
     private LocalDate dataEntrega;
+
+    @ManyToOne
     private Funcionario funcionario;
+
+    @ManyToOne
     private Pessoa pessoa;
-
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Entrega() {
-    }
-
-    public Entrega(LocalDate dataEntrega, Funcionario funcionario, Integer id, Pessoa pessoa) {
-        this.dataEntrega = dataEntrega;
-        this.funcionario = funcionario;
-        this.id = id;
-        this.pessoa = pessoa;
-    }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
 

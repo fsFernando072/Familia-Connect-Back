@@ -29,9 +29,7 @@ public class ProfissaoController {
     @PostMapping
     public ResponseEntity<ProfissaoResponseDto> cadastrarProfissao(@RequestBody ProfissaoRequestDto profissaoRequestDto){
 
-        Profissao profissao = ProfissaoMapper.toModel(profissaoRequestDto);
-
-        Profissao profissaoSalva = profissaoService.salvar(profissao);
+        Profissao profissaoSalva = profissaoService.cadastrarProfissao(profissaoRequestDto);
 
         ProfissaoResponseDto profissaoResponseDto = ProfissaoMapper.toResponse(profissaoSalva);
 
@@ -43,9 +41,11 @@ public class ProfissaoController {
 
         List<Profissao> profissoes = profissaoService.listarProfissoes();
 
-        List<ProfissaoResponseDto> profissoesResponseDto = ProfissaoMapper.toResponseList(profissoes);
+        if (profissoes.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
 
-        return ResponseEntity.status(200).body(profissoesResponseDto);
+        return ResponseEntity.status(200).body(ProfissaoMapper.toResponse(profissoes));
 
     }
 

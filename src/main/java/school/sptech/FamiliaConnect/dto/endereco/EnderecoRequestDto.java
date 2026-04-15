@@ -26,8 +26,11 @@ public class EnderecoRequestDto {
     @NotBlank
     private String complemento;
 
+    @NotBlank
+    private String cidade;
+
     @NotNull
-    private String nomeEstado;
+    private Integer estadoId;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
@@ -71,11 +74,19 @@ public class EnderecoRequestDto {
         this.complemento = complemento;
     }
 
-    public String getNomeEstado() {
-        return nomeEstado;
+    public Integer getEstadoId() {
+        return estadoId;
     }
 
-    public void setNomeEstado(String nomeEstado) {
-        this.nomeEstado = nomeEstado;
+    public void setEstadoId(Integer estadoId) {
+        this.estadoId = estadoId;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 }

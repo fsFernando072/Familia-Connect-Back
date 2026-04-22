@@ -18,7 +18,6 @@ public class PessoaResponseDto {
     private String grauParentesco;
     private PessoaFamilia pessoaFamilia;
     private PessoaProfissao pessoaProfissao;
-    private PessoaDeficiencia pessoaDeficiencia;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
@@ -61,19 +60,6 @@ public class PessoaResponseDto {
     }
 
     public static class PessoaProfissao{
-
-        private String nome;
-
-        public String getNome() {
-            return nome;
-        }
-
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
-    }
-
-    public static class PessoaDeficiencia{
 
         private String nome;
 
@@ -166,13 +152,5 @@ public class PessoaResponseDto {
 
     public void setPessoaProfissao(PessoaProfissao pessoaProfissao) {
         this.pessoaProfissao = pessoaProfissao;
-    }
-
-    public PessoaDeficiencia getPessoaDeficiencia() {
-        return pessoaDeficiencia;
-    }
-
-    public void setPessoaDeficiencia(PessoaDeficiencia pessoaDeficiencia) {
-        this.pessoaDeficiencia = pessoaDeficiencia;
     }
 }

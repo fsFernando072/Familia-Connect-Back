@@ -15,6 +15,7 @@ public class Familia {
     private Integer id;
     private LocalDate dataCadastro;
     private String fotoFamilia;
+    private Boolean possuiPrioridade;
 
     @OneToOne
     private Endereco endereco;
@@ -51,5 +52,13 @@ public class Familia {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getPossuiPrioridade() {
+        return possuiPrioridade;
+    }
+
+    public void setPossuiPrioridade(Boolean possuiPrioridade) {
+        this.possuiPrioridade = possuiPrioridade;
     }
 }

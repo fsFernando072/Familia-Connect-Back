@@ -5,11 +5,9 @@ import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.PessoaMapper;
-import school.sptech.FamiliaConnect.model.Deficiencia;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.model.Profissao;
-import school.sptech.FamiliaConnect.repository.DeficienciaRepository;
 import school.sptech.FamiliaConnect.repository.FamiliaRepository;
 import school.sptech.FamiliaConnect.repository.PessoaRepository;
 import school.sptech.FamiliaConnect.repository.ProfissaoRepository;
@@ -22,15 +20,13 @@ public class PessoaService {
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     private final PessoaRepository pessoaRepository;
-    private final DeficienciaRepository deficienciaRepository;
     private final FamiliaRepository familiaRepository;
     private final ProfissaoRepository profissaoRepository;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public PessoaService(PessoaRepository pessoaRepository, DeficienciaRepository deficienciaRepository, FamiliaRepository familiaRepository, ProfissaoRepository profissaoRepository) {
+    public PessoaService(PessoaRepository pessoaRepository, FamiliaRepository familiaRepository, ProfissaoRepository profissaoRepository) {
         this.pessoaRepository = pessoaRepository;
-        this.deficienciaRepository = deficienciaRepository;
         this.familiaRepository = familiaRepository;
         this.profissaoRepository = profissaoRepository;
     }
@@ -51,11 +47,6 @@ public class PessoaService {
 
         Pessoa pessoa = PessoaMapper.toModel(dto);
         pessoa.setFamilia(familia);
-
-        if(dto.getIdDeficiencia() != null){
-            Optional<Deficiencia> deficiencia = deficienciaRepository.findById(dto.getIdDeficiencia());
-            pessoa.setDeficiencia(deficiencia.get());
-        }
 
         if(dto.getIdProfissao() != null){
             Optional<Profissao> profissao = profissaoRepository.findById(dto.getIdProfissao());

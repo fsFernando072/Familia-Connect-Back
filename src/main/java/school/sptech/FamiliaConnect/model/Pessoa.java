@@ -21,9 +21,6 @@ public class Pessoa {
     private String telefone;
 
     @ManyToOne
-    private Deficiencia deficiencia;
-
-    @ManyToOne
     private Profissao profissao;
 
     @ManyToOne
@@ -37,14 +34,6 @@ public class Pessoa {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public Deficiencia getDeficiencia() {
-        return deficiencia;
-    }
-
-    public void setDeficiencia(Deficiencia deficiencia) {
-        this.deficiencia = deficiencia;
     }
 
     public LocalDate getDtNascimento() {

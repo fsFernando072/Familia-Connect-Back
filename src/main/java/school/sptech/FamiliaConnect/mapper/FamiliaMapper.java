@@ -15,6 +15,7 @@ public class FamiliaMapper {
         Familia familia = new Familia();
         familia.setFotoFamilia(familiaRequestDto.getFotoFamilia());
         familia.setDataCadastro(familiaRequestDto.getDataCadastro());
+        familia.setPossuiPrioridade(familiaRequestDto.getPossuiPrioridade());
 
         return familia;
     }
@@ -41,6 +42,7 @@ public class FamiliaMapper {
         dto.setId(familia.getId());
         dto.setDataCadastro(familia.getDataCadastro());
         dto.setFotoFamilia(familia.getFotoFamilia());
+        dto.setPossuiPrioridade(familia.getPossuiPrioridade());
         dto.setFamiliaEndereco(familiaEndereco);
 
         return dto;

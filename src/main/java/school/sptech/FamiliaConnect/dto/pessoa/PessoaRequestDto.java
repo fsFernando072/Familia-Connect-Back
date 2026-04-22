@@ -34,9 +34,6 @@ public class PessoaRequestDto {
     @NotNull
     private Integer idFamilia;
 
-    @Positive
-    private Integer idDeficiencia;
-
     @NotBlank
     @Size(min = 11, max = 11)
     private String telefone;
@@ -55,14 +52,13 @@ public class PessoaRequestDto {
     public PessoaRequestDto() {
     }
 
-    public PessoaRequestDto(String nome, String rg, String cpf, LocalDate dataNascimento, Integer idProfissao, Integer idFamilia, Integer idDeficiencia, String telefone, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco) {
+    public PessoaRequestDto(String nome, String rg, String cpf, LocalDate dataNascimento, Integer idProfissao, Integer idFamilia, String telefone, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco) {
         this.nome = nome;
         this.rg = rg;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.idProfissao = idProfissao;
         this.idFamilia = idFamilia;
-        this.idDeficiencia = idDeficiencia;
         this.telefone = telefone;
         this.isTrabalhando = isTrabalhando;
         this.isResponsavel = isResponsavel;
@@ -117,14 +113,6 @@ public class PessoaRequestDto {
 
     public void setIdFamilia(Integer idFamilia) {
         this.idFamilia = idFamilia;
-    }
-
-    public Integer getIdDeficiencia() {
-        return idDeficiencia;
-    }
-
-    public void setIdDeficiencia(Integer idDeficiencia) {
-        this.idDeficiencia = idDeficiencia;
     }
 
     public String getTelefone() {

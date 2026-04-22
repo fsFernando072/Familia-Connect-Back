@@ -10,6 +10,7 @@ public class FamiliaResponseDto {
     private LocalDate dataCadastro;
     private String fotoFamilia;
     private FamiliaEndereco familiaEndereco;
+    private Boolean possuiPrioridade;
 
     // Inner Class -----------------------------------------------------------------------------------------------------
 
@@ -154,5 +155,13 @@ public class FamiliaResponseDto {
 
     public void setFamiliaEndereco(FamiliaEndereco familiaEndereco) {
         this.familiaEndereco = familiaEndereco;
+    }
+
+    public Boolean getPossuiPrioridade() {
+        return possuiPrioridade;
+    }
+
+    public void setPossuiPrioridade(Boolean possuiPrioridade) {
+        this.possuiPrioridade = possuiPrioridade;
     }
 }

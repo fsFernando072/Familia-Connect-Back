@@ -11,16 +11,18 @@ public class FamiliaRequestDto {
     private LocalDate dataCadastro;
     private String fotoFamilia;
     private Integer enderecoId;
+    private Boolean possuiPrioridade;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
     public FamiliaRequestDto() {
     }
 
-    public FamiliaRequestDto(LocalDate dataCadastro, String fotoFamilia, Integer enderecoId) {
+    public FamiliaRequestDto(LocalDate dataCadastro, String fotoFamilia, Integer enderecoId, Boolean possuiPrioridade) {
         this.dataCadastro = dataCadastro;
         this.fotoFamilia = fotoFamilia;
         this.enderecoId = enderecoId;
+        this.possuiPrioridade = possuiPrioridade;
     }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
@@ -47,5 +49,13 @@ public class FamiliaRequestDto {
 
     public void setEnderecoId(Integer enderecoId) {
         this.enderecoId = enderecoId;
+    }
+
+    public Boolean getPossuiPrioridade() {
+        return possuiPrioridade;
+    }
+
+    public void setPossuiPrioridade(Boolean possuiPrioridade) {
+        this.possuiPrioridade = possuiPrioridade;
     }
 }

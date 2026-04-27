@@ -1,17 +1,13 @@
-package school.sptech.FamiliaConnect.dto.categoria;
+package school.sptech.FamiliaConnect.dto.funcionario;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
-@Schema(description = "Dados retornados da categoria")
-public class CategoriaResponseDto {
+public class FuncionarioTokenDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @Schema(description = "Id da categoria")
     private Integer id;
-
-    @Schema(description = "Nome da categoria")
     private String nome;
+    private String cpf;
+    private String token;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
@@ -29,5 +25,21 @@ public class CategoriaResponseDto {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

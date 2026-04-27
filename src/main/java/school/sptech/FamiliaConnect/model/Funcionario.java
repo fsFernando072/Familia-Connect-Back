@@ -20,7 +20,21 @@ public class Funcionario {
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;
 
-    // Getters e Setters -----------------------------------------------------------------------------------------------
+    // Construtores ----------------------------------------------------------------------------------------------------
+
+    public Funcionario(String nome, String cpf, String senha, String foto_funcionario) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.foto_funcionario = foto_funcionario;
+    }
+
+    public Funcionario(String cpf, String senha) {
+        this.cpf = cpf;
+        this.senha = senha;
+    }
+
+// Getters e Setters -----------------------------------------------------------------------------------------------
 
     public String getFoto_funcionario() {
         return foto_funcionario;

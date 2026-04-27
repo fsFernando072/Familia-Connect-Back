@@ -1,5 +1,8 @@
 package school.sptech.FamiliaConnect.dto.familia;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
@@ -8,22 +11,20 @@ public class FamiliaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "Data de cadastro da família")
     private LocalDate dataCadastro;
+
+    @Schema(description = "Endereço de armazenamento da foto da família")
     private String fotoFamilia;
+
+    @Schema(description = "ID do endereço da família")
+    @NotNull(message = "ID do endereço é obrigatório")
+    @Positive(message = "ID do endereço tem que ser positivo")
     private Integer enderecoId;
+
+    @Schema(description = "Se a família possui integrante PNE")
+    @NotBlank(message = "PNE é obrigatório")
     private Boolean possuiPrioridade;
-
-    // Construtores ----------------------------------------------------------------------------------------------------
-
-    public FamiliaRequestDto() {
-    }
-
-    public FamiliaRequestDto(LocalDate dataCadastro, String fotoFamilia, Integer enderecoId, Boolean possuiPrioridade) {
-        this.dataCadastro = dataCadastro;
-        this.fotoFamilia = fotoFamilia;
-        this.enderecoId = enderecoId;
-        this.possuiPrioridade = possuiPrioridade;
-    }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
 

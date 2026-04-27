@@ -1,10 +1,12 @@
 package school.sptech.FamiliaConnect.dto.Permissao;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public class PermissaoRequestDto {
 
-    @NotBlank
+    @Schema(description = "Nome da permissão")
+    @NotBlank(message = "Nome da permissão é obrigatório")
     private String nome;
 
     public PermissaoRequestDto() {}

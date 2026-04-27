@@ -1,18 +1,35 @@
 package school.sptech.FamiliaConnect.dto.endereco;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import school.sptech.FamiliaConnect.model.Estado;
 
+@Schema(description = "Dados retornados do endereço")
 public class EnderecoResponseDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "ID do endereço")
     private Integer id;
+
+    @Schema(description = "CEP do endereço")
     private String cep;
+
+    @Schema(description = "Nome do bairro do endereço")
     private String bairro;
+
+    @Schema(description = "Nome do logradouro do endereço")
     private String logradouro;
+
+    @Schema(description = "Número do endereço")
     private Integer numero;
+
+    @Schema(description = "Complemento do endereço")
     private String complemento;
+
+    @Schema(description = "Nome da cidade do endereço")
     private String cidade;
+
+    @Schema(description = "Estado do endereço")
     private EnderecoEstado enderecoEstado;
 
     // Inner Class -----------------------------------------------------------------------------------------------------

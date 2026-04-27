@@ -1,5 +1,6 @@
 package school.sptech.FamiliaConnect.dto.pessoa;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -12,39 +13,49 @@ public class PessoaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @NotBlank
-    @Size(min = 2, max = 150)
+    @Schema(description = "Nome da pessoa")
+    @NotBlank(message = "Nome da pessoa é obrigatório")
     private String nome;
 
-    @NotBlank
-    @Size(min = 7, max = 9)
+    @Schema(description = "RG da pessoa")
+    @NotBlank(message = "RG da pessoa é obrigatório")
+    @Size(min = 7, max = 9, message = "RG da pessoa tem que ser válido")
     private String rg;
 
-    @NotBlank
-    @CPF
+    @Schema(description = "CPF da pessoa")
+    @NotBlank(message = "CPF da pessoa é obrigatório")
+    @CPF(message = "CPF da pessoa tem que ser válido")
     private String cpf;
 
-    @NotBlank
+    @Schema(description = "Data de nascimento da pessoa")
+    @NotBlank(message = "Data de nascimento da pessoa é obrigatório")
     private LocalDate dataNascimento;
 
-    @Positive
+    @Schema(description = "ID da profissão da pessoa")
+    @NotNull(message = "ID da profissão da pessoa é obrigatório")
+    @Positive(message = "ID da profissão da pessoa tem que ser positivo")
     private Integer idProfissao;
 
-    @Positive
-    @NotNull
+    @Schema(description = "ID da família da pessoa")
+    @Positive(message = "ID da família da pessoa tem que ser positivo")
+    @NotNull(message = "ID da família da pessoa é obrigatório")
     private Integer idFamilia;
 
-    @NotBlank
-    @Size(min = 11, max = 11)
+    @Schema(description = "Telefone da pessoa")
+    @NotBlank(message = "Telefone da pessoa é obrigatório")
+    @Size(min = 11, max = 11, message = "Telefone da pessoa tem que ser válido")
     private String telefone;
 
-    @NotNull
+    @Schema(description = "Se a pessoa trabalha")
+    @NotNull(message = "Se a pessoa trabalha é obrigatório")
     private Boolean isTrabalhando;
 
-    @NotNull
+    @Schema(description = "Se a pessoa é a responsável da família")
+    @NotNull(message = "Se a pessoa é responsável é obrigatório")
     private Boolean isResponsavel;
 
-    @NotBlank
+    @Schema(description = "Grau de parentesco da pessoa")
+    @NotBlank(message = "Grau de parentesco da pessoa é obrigatório")
     private String grauParentesco;
 
     // Construtores ----------------------------------------------------------------------------------------------------

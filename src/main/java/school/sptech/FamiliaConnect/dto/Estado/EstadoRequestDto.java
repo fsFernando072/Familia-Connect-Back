@@ -1,13 +1,16 @@
 package school.sptech.FamiliaConnect.dto.Estado;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public class EstadoRequestDto {
 
-    @NotBlank
+    @Schema(description = "Nome do estado")
+    @NotBlank(message = "Nome do estado tem que ser obrigatório")
     private String nome;
 
-    @NotBlank
+    @Schema(description = "Sigla do estado")
+    @NotBlank(message = "Sigla do estado tem que ser obrigatório")
     private String sigla;
 
     public EstadoRequestDto() {}

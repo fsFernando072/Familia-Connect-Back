@@ -1,15 +1,27 @@
 package school.sptech.FamiliaConnect.dto.familia;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 
+@Schema(description = "Dados retornados da família")
 public class FamiliaResponseDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "ID da família")
     private Integer id;
+
+    @Schema(description = "Data de cadastro da família")
     private LocalDate dataCadastro;
+
+    @Schema(description = "Endereço de armazenamento da foto da família")
     private String fotoFamilia;
+
+    @Schema(description = "ID do endereço da família")
     private FamiliaEndereco familiaEndereco;
+
+    @Schema(description = "Se a família possui integrante PNE")
     private Boolean possuiPrioridade;
 
     // Inner Class -----------------------------------------------------------------------------------------------------

@@ -1,8 +1,14 @@
 package school.sptech.FamiliaConnect.dto.Permissao;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Dados retornados da permissão")
 public class PermissaoResponseDto {
 
+    @Schema(description = "ID da permissão")
     private Integer id;
+
+    @Schema(description = "Nome da permissão")
     private String nome;
 
     public PermissaoResponseDto() {}

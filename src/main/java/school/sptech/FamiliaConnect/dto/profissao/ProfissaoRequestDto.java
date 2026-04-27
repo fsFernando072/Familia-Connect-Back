@@ -1,12 +1,14 @@
 package school.sptech.FamiliaConnect.dto.profissao;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public class ProfissaoRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @NotBlank
+    @Schema(description = "Nome da profissão")
+    @NotBlank(message = "Nome da profissão é obrigatório")
     private String nome;
 
     // Construtores ----------------------------------------------------------------------------------------------------

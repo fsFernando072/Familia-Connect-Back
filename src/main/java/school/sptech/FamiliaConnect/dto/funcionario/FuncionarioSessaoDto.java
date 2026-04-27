@@ -1,17 +1,22 @@
-package school.sptech.FamiliaConnect.dto.categoria;
+package school.sptech.FamiliaConnect.dto.funcionario;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-
-public class CategoriaRequestDto {
+public class FuncionarioSessaoDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @Schema(description = "Nome da categoria")
-    @NotBlank(message = "Nome da categoria é obrigatório")
+    private Integer id;
     private String nome;
+    private String cpf;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -19,5 +24,13 @@ public class CategoriaRequestDto {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 }

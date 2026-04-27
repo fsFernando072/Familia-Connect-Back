@@ -1,5 +1,6 @@
 package school.sptech.FamiliaConnect.dto.endereco;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -9,27 +10,35 @@ public class EnderecoRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @NotBlank
-    @Size(min = 8, max = 8)
+    @Schema(description = "CEP do endereço")
+    @NotBlank(message = "CEP do endereço é obrigatório")
+    @Size(min = 8, max = 8, message = "Tem que ter obrigatoriamente 8 caracteres")
     private String cep;
 
-    @NotBlank
+    @Schema(description = "Nome do bairro do endereço")
+    @NotBlank(message = "Nome do bairro é obrigatório")
     private String bairro;
 
-    @NotBlank
+    @Schema(description = "Nome do logradouro do endereço")
+    @NotBlank(message = "Nome do logradouro é obrigatório")
     private String logradouro;
 
-    @NotBlank
-    @Positive
+    @Schema(description = "Número do endereço")
+    @NotBlank(message = "Número do endereço é obrigatório")
+    @Positive(message = "Númeto do endereço tem que ser positivo")
     private Integer numero;
 
-    @NotBlank
+    @Schema(description = "Complemento do endereço")
+    @NotBlank(message = "Nome do complemento é obrigatório")
     private String complemento;
 
-    @NotBlank
+    @Schema(description = "Nome da cidade do endereço")
+    @NotBlank(message = "Nome da cidade é obrigatório")
     private String cidade;
 
-    @NotNull
+    @Schema(description = "ID do estado do endereço")
+    @NotNull(message = "ID do estado é obrigatório")
+    @Positive(message = "ID do estado tem que ser positivo")
     private Integer estadoId;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------

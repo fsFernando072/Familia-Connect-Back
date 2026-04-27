@@ -1,7 +1,10 @@
 package school.sptech.FamiliaConnect.dto.Auditoria;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 
+@Schema(description = "Dados retornados da auditoria")
 public class AuditoriaResponseDto {
 
     private Integer id;

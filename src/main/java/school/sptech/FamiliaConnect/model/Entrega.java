@@ -21,6 +21,15 @@ public class Entrega {
     @ManyToOne
     private Pessoa pessoa;
 
+    @ManyToOne
+    private Produto produto;
+
+    // Construtores ----------------------------------------------------------------------------------------------------
+
+    public Entrega(LocalDate dataEntrega) {
+        this.dataEntrega = dataEntrega;
+    }
+
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public LocalDate getDataEntrega() {
@@ -53,5 +62,13 @@ public class Entrega {
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 }

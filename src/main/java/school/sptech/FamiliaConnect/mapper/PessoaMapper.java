@@ -39,6 +39,7 @@ public class PessoaMapper {
 
         PessoaResponseDto dto = new PessoaResponseDto();
 
+        dto.setId(pessoa.getId());
         dto.setNome(pessoa.getNome());
         dto.setRg(pessoa.getRg());
         dto.setCpf(pessoa.getCpf());

@@ -19,11 +19,6 @@ public class EstadoService {
         this.estadoRepository = estadoRepository;
     }
 
-    public Estado cadastrar(EstadoRequestDto dto) {
-        Estado estado = EstadoMapper.toModel(dto);
-        return estadoRepository.save(estado);
-    }
-
     public List<Estado> listar() {
         return estadoRepository.findAll();
     }
@@ -31,24 +26,5 @@ public class EstadoService {
     public Estado buscarPorId(Integer id) {
         return estadoRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O estado com o id não foi encontrado"));
-    }
-
-    public Estado atualizar(Integer id, EstadoRequestDto dto) {
-        if (!estadoRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("O estado com o id não foi encontrado");
-        }
-
-        Estado estado = EstadoMapper.toModel(dto);
-        estado.setId(id);
-
-        return estadoRepository.save(estado);
-    }
-
-    public void deletar(Integer id) {
-        if (!estadoRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("O estado com o id não foi encontrado");
-        }
-
-        estadoRepository.deleteById(id);
     }
 }

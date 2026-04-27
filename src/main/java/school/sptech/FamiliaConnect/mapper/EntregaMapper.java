@@ -10,25 +10,43 @@ import java.util.List;
 
 public class EntregaMapper {
 
-    public static Entrega toModel(EntregaRequestDto dto, Funcionario funcionario, Pessoa pessoa) {
+    public static Entrega toModel(EntregaRequestDto requestDto) {
 
-        Entrega entrega = new Entrega();
-        entrega.setFuncionario(funcionario);
-        entrega.setPessoa(pessoa);
+        Entrega entrega = new Entrega(
+            requestDto.getDataEntrega()
+        );
 
         return entrega;
+
     }
 
     public static EntregaResponseDto toResponse(Entrega entrega) {
 
-        EntregaResponseDto dto = new EntregaResponseDto();
+        EntregaResponseDto.EntregaFuncionario entregaFuncionario = new EntregaResponseDto.EntregaFuncionario(
+                entrega.getFuncionario().getId(),
+                entrega.getFuncionario().getNome()
+        );
 
-        dto.setId(entrega.getId());
-        dto.setDataEntrega(dto.getDataEntrega());
-        dto.setFuncionarioId(dto.getFuncionarioId());
-        dto.setPessoaId(dto.getPessoaId());
+        EntregaResponseDto.EntregaPessoa entregaPessoa = new EntregaResponseDto.EntregaPessoa(
+          entrega.getPessoa().getId(),
+                entrega.getPessoa().getNome()
+        );
 
-        return dto;
+        EntregaResponseDto.EntregaProduto entregaProduto = new EntregaResponseDto.EntregaProduto(
+                entrega.getProduto().getId(),
+                entrega.getProduto().getNome()
+        );
+
+        EntregaResponseDto entregaResponseDto = new EntregaResponseDto(
+                entrega.getId(),
+                entrega.getDataEntrega(),
+                entregaFuncionario,
+                entregaPessoa,
+                entregaProduto
+        );
+
+        return entregaResponseDto;
+
     }
 
     public static List<EntregaResponseDto> toResponse(List<Entrega> entregas) {

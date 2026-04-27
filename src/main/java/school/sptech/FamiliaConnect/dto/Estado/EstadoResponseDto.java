@@ -1,9 +1,17 @@
 package school.sptech.FamiliaConnect.dto.Estado;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Dados retornados do estado")
 public class EstadoResponseDto {
 
+    @Schema(description = "ID do estado")
     private Integer id;
+
+    @Schema(description = "Nome do estado")
     private String nome;
+
+    @Schema(description = "Sigla do estado")
     private String sigla;
 
     public EstadoResponseDto() {}

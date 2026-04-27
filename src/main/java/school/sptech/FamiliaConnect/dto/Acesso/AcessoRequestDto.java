@@ -1,9 +1,12 @@
 package school.sptech.FamiliaConnect.dto.Acesso;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public class AcessoRequestDto {
-    @NotBlank
+
+    @Schema(description = "Nome da tela")
+    @NotBlank(message = "Nome da tela é obrigatória")
     private String nomeTela;
 
     public AcessoRequestDto() {}

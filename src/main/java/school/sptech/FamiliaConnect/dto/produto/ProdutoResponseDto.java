@@ -1,13 +1,25 @@
 package school.sptech.FamiliaConnect.dto.produto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Dados retornados do produto")
 public class ProdutoResponseDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "ID do produto")
     private Integer id;
+
+    @Schema(description = "Nome do produto")
     private String nome;
+
+    @Schema(description = "Quantidade do produto em estoque")
     private Integer quantidade;
+
+    @Schema(description = "Descrição do produto")
     private String descricao;
+
+    @Schema(description = "Categoria do produto")
     private ProdutoCategoria produtoCategoria;
 
     // Inner Class -----------------------------------------------------------------------------------------------------

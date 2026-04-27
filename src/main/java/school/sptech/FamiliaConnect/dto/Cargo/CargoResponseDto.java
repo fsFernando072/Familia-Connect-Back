@@ -1,8 +1,14 @@
 package school.sptech.FamiliaConnect.dto.Cargo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Dados retornados do cargo")
 public class CargoResponseDto {
 
+    @Schema(description = "Id do cargo")
     private Integer id;
+
+    @Schema(description = "Nome do cargo")
     private String nome;
 
     public CargoResponseDto() {}

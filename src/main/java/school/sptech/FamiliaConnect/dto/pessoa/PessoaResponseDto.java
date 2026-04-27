@@ -1,22 +1,46 @@
 package school.sptech.FamiliaConnect.dto.pessoa;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import school.sptech.FamiliaConnect.model.Pessoa;
 
 import java.time.LocalDate;
 
+@Schema(description = "Dados retornados da pessoa")
 public class PessoaResponseDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "ID da pessoa")
+    private Integer id;
+
+    @Schema(description = "Nome da pessoa")
     private String nome;
+
+    @Schema(description = "RG da pessoa")
     private String rg;
+
+    @Schema(description = "CPF da pessoa")
     private String cpf;
+
+    @Schema(description = "Data de nascimento da pessoa")
     private LocalDate dataNascimento;
+
+    @Schema(description = "Telefone da pessoa")
     private String telefone;
+
+    @Schema(description = "Se a pessoa está trabalhando")
     private Boolean isTrabalhando;
+
+    @Schema(description = "Se a pessoa é a responsável da família")
     private Boolean isResponsavel;
+
+    @Schema(description = "Grau de parentesco da pessoa")
     private String grauParentesco;
+
+    @Schema(description = "Família da pessoa")
     private PessoaFamilia pessoaFamilia;
+
+    @Schema(description = "Profissão da pessoa")
     private PessoaProfissao pessoaProfissao;
 
     // Construtores ----------------------------------------------------------------------------------------------------
@@ -24,7 +48,8 @@ public class PessoaResponseDto {
     public PessoaResponseDto() {
     }
 
-    public PessoaResponseDto(String nome, String rg, String cpf, LocalDate dataNascimento, String telefone, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco) {
+    public PessoaResponseDto(Integer id, String nome, String rg, String cpf, LocalDate dataNascimento, String telefone, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco) {
+        this.id = id;
         this.nome = nome;
         this.rg = rg;
         this.cpf = cpf;
@@ -73,6 +98,14 @@ public class PessoaResponseDto {
     }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

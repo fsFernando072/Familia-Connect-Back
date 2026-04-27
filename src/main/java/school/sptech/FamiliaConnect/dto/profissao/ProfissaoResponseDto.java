@@ -1,10 +1,16 @@
 package school.sptech.FamiliaConnect.dto.profissao;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Dados retornados da profissão")
 public class ProfissaoResponseDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "ID da profissão")
     private Integer id;
+
+    @Schema(description = "Nome da profissão")
     private String nome;
 
     // Construtores ----------------------------------------------------------------------------------------------------

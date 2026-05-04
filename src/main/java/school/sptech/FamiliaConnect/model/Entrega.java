@@ -30,7 +30,10 @@ public class Entrega {
         this.dataEntrega = dataEntrega;
     }
 
-    // Getters e Setters -----------------------------------------------------------------------------------------------
+    public Entrega() {
+    }
+
+// Getters e Setters -----------------------------------------------------------------------------------------------
 
     public LocalDate getDataEntrega() {
         return dataEntrega;

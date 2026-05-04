@@ -100,14 +100,14 @@ public class FuncionarioService {
     public FuncionarioTokenDto autenticar(Funcionario usuario) {
 
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                usuario.getCargo(), usuario.getSenha());
+                usuario.getCpf(), usuario.getSenha());
 
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
         Funcionario usuarioAutenticado =
                 funcionarioRepository.findByCpf(usuario.getCpf())
                         .orElseThrow(
-                                () -> new ResponseStatusException(404, "Email do usuário não cadastrado", null)
+                                () -> new ResponseStatusException(404, "CPF do usuário não cadastrado", null)
                         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

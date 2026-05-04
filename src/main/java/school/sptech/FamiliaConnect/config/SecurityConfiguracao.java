@@ -50,8 +50,8 @@ public class SecurityConfiguracao {
             "/webjars/**",
             "/v3/api-docs/**",
             "/actuator/*",
-            "/usuarios/login/**",
-            "/usuarios/logout/**",
+            "/funcionarios/login/**",
+            "/funcionarios/logout/**",
             "/h2-console/**",
             "/h2-console/*/**",
             "/error/**"

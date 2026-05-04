@@ -34,7 +34,10 @@ public class Funcionario {
         this.senha = senha;
     }
 
-// Getters e Setters -----------------------------------------------------------------------------------------------
+    public Funcionario() {
+    }
+
+    // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public String getFoto_funcionario() {
         return foto_funcionario;

@@ -8,14 +8,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.funcionario.*;
 import school.sptech.FamiliaConnect.mapper.FuncionarioMapper;
 import school.sptech.FamiliaConnect.model.Funcionario;
+import school.sptech.FamiliaConnect.repository.FuncionarioRepository;
 import school.sptech.FamiliaConnect.service.FuncionarioService;
 
 import java.time.Duration;
@@ -118,7 +121,7 @@ public class FuncionarioController {
 
     @PostMapping("/login")
     public ResponseEntity<FuncionarioSessaoDto> login(
-            @RequestBody FuncionarioLoginDto usuarioLoginDto,
+            @Valid @RequestBody FuncionarioLoginDto usuarioLoginDto,
             HttpServletResponse response) {
 
         final Funcionario usuario = FuncionarioMapper.of(usuarioLoginDto);

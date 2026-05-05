@@ -1,9 +1,6 @@
 package school.sptech.FamiliaConnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Produto {
@@ -11,6 +8,7 @@ public class Produto {
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
     private Integer quantidade;

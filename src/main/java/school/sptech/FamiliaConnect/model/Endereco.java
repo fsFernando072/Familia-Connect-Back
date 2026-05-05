@@ -8,6 +8,7 @@ public class Endereco {
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String cep;
     private String bairro;

@@ -3,23 +3,19 @@ package school.sptech.FamiliaConnect.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.funcionario.*;
+import school.sptech.FamiliaConnect.enums.AcessoEnum;
 import school.sptech.FamiliaConnect.mapper.FuncionarioMapper;
 import school.sptech.FamiliaConnect.model.Funcionario;
-import school.sptech.FamiliaConnect.repository.FuncionarioRepository;
 import school.sptech.FamiliaConnect.service.FuncionarioService;
 
 import java.time.Duration;
@@ -56,7 +52,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "204", description = "Lista de funcionários retornada vazia")
     })
     @GetMapping
-    @PreAuthorize("hasAuthority('listar_funcionarios')")
+    @PreAuthorize("hasAuthority('"+ AcessoEnum.Constants.LISTAR_FUNCIONARIOS +"')")
     public ResponseEntity<List<FuncionarioResponseDto>> listarFuncionarios(){
 
         List<Funcionario> funcionarios = funcionarioService.listar();
@@ -66,7 +62,6 @@ public class FuncionarioController {
         }
 
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarios));
-
     }
 
     @Operation(

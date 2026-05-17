@@ -18,10 +18,6 @@ public class CargoHasAcesso {
     @JoinColumn(name = "acesso_id")
     private Acesso acesso;
 
-    @ManyToOne
-    @JoinColumn(name = "permissao_id")
-    private Permissao permissao;
-
     public Integer getId() {
         return id;
     }
@@ -46,11 +42,4 @@ public class CargoHasAcesso {
         this.acesso = acesso;
     }
 
-    public Permissao getPermissao() {
-        return permissao;
-    }
-
-    public void setPermissao(Permissao permissao) {
-        this.permissao = permissao;
-    }
 }

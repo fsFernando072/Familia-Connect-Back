@@ -4,17 +4,15 @@ import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoResponseDto
 import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.model.CargoHasAcesso;
-import school.sptech.FamiliaConnect.model.Permissao;
 
 import java.util.List;
 
 public class CargoHasAcessoMapper {
 
-    public static CargoHasAcesso toModel(Cargo cargo, Acesso acesso, Permissao permissao) {
+    public static CargoHasAcesso toModel(Cargo cargo, Acesso acesso) {
          CargoHasAcesso cargoHasAcesso = new CargoHasAcesso();
          cargoHasAcesso.setCargo(cargo);
          cargoHasAcesso.setAcesso(acesso);
-         cargoHasAcesso.setPermissao(permissao);
 
          return cargoHasAcesso;
     }
@@ -30,17 +28,12 @@ public class CargoHasAcessoMapper {
         acesso.setId(acessoEntidade.getId());
         acesso.setNomeTela(acessoEntidade.getNomeTela());
 
-        Permissao permissaoEntidade = entity.getPermissao();
-        CargoHasAcessoResponseDto.Permissao permissao = new CargoHasAcessoResponseDto.Permissao();
-        permissao.setId(permissaoEntidade.getId());
-        permissao.setNome(permissaoEntidade.getNome());
 
         CargoHasAcessoResponseDto dto = new CargoHasAcessoResponseDto();
 
         dto.setId(entity.getId());
         dto.setCargo(cargo);
         dto.setAcesso(acesso);
-        dto.setPermissao(permissao);
 
         return dto;
     }

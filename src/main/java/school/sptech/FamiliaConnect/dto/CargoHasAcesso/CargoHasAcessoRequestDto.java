@@ -10,15 +10,12 @@ public class CargoHasAcessoRequestDto {
     @NotNull
     private Integer acessoId;
 
-    @NotNull
-    private Integer permissaoId;
 
     public CargoHasAcessoRequestDto() {}
 
-    public CargoHasAcessoRequestDto(Integer cargoId, Integer acessoId, Integer permissaoId) {
+    public CargoHasAcessoRequestDto(Integer cargoId, Integer acessoId) {
         this.cargoId = cargoId;
         this.acessoId = acessoId;
-        this.permissaoId = permissaoId;
     }
 
     public Integer getCargoId() {
@@ -37,12 +34,5 @@ public class CargoHasAcessoRequestDto {
         this.acessoId = acessoId;
     }
 
-    public Integer getPermissaoId() {
-        return permissaoId;
-    }
-
-    public void setPermissaoId(Integer permissaoId) {
-        this.permissaoId = permissaoId;
-    }
 
 }

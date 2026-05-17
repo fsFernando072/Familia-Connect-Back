@@ -99,19 +99,24 @@ public class FuncionarioService {
 
     public FuncionarioTokenDto autenticar(Funcionario usuario) {
 
+        //envelopando credenciais do usuário para futura autenticação.
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
                 usuario.getCpf(), usuario.getSenha());
 
+        //Beleza, usuário existe la no banco, e agr está autenticado, com payload e roles / authorities (era pra ter)
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
+        //pega todos os dados do usuário autenticado (incluindo o ID) para gerar o token
         Funcionario usuarioAutenticado =
                 funcionarioRepository.findByCpf(usuario.getCpf())
                         .orElseThrow(
                                 () -> new ResponseStatusException(404, "CPF do usuário não cadastrado", null)
                         );
 
+        //fala pro contexto do spring/jwt que é esse o usuário autenticado no momento da req (para validações no fluxo mais pra frente)
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        //gera token.
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
         return FuncionarioMapper.of(usuarioAutenticado, token);

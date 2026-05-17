@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.funcionario.*;
@@ -55,6 +56,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "204", description = "Lista de funcionários retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_funcionarios')")
     public ResponseEntity<List<FuncionarioResponseDto>> listarFuncionarios(){
 
         List<Funcionario> funcionarios = funcionarioService.listar();
@@ -93,7 +95,6 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado pelo ID")
     })
     @PostMapping
-    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<FuncionarioResponseDto> cadastrarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto){
 
         Funcionario funcionarioCadastrado = funcionarioService.salvar(requestDto);

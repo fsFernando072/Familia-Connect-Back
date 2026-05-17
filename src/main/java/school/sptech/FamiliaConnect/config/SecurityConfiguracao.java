@@ -28,7 +28,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity //para usar PreAuthorize nos endpoints
 public class SecurityConfiguracao {
 
     @Autowired

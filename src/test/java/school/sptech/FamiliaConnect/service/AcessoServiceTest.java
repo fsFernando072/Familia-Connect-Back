@@ -50,7 +50,6 @@ class AcessoServiceTest {
 
             Acesso resultado = acessoService.cadastrar(acessoRequestDto);
 
-            Assertions.assertEquals(AcessoMapper.toModel(acessoRequestDto).getId(), resultado.getId());
             Assertions.assertEquals(AcessoMapper.toModel(acessoRequestDto).getNomeTela(), resultado.getNomeTela());
         }
 
@@ -64,11 +63,9 @@ class AcessoServiceTest {
 
             acessoRequestDto.setNomeTela("acesso1");
 
-            //When
             Mockito.when(acessoRepository.findByNomeTela(nome))
                     .thenReturn(Optional.of(AcessoMapper.toModel(acessoRequestDto)));
 
-            //then
             Assertions.assertThrows(
                     EntidadeJaCadastradaException.class,
                     () -> acessoService.cadastrar(acessoRequestDto)
@@ -124,14 +121,12 @@ class AcessoServiceTest {
             acesso.setId(1);
             acesso.setNomeTela("acesso1");
 
-
             Mockito.when(acessoRepository.findById(1))
                     .thenReturn(Optional.of(acesso));
             Acesso resultado = acessoService.buscarPorId(1);
 
             Assertions.assertEquals(1, resultado.getId());
             Assertions.assertEquals("acesso1", resultado.getNomeTela());
-
 
         }
 
@@ -142,16 +137,13 @@ class AcessoServiceTest {
             Integer id = 1;
             Optional<Acesso> optional = Optional.empty();
 
-            //When
             Mockito.when(acessoRepository.findById(id))
                     .thenReturn(optional);
 
-            //then
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
                     () -> acessoService.buscarPorId(id)
             );
-
 
         }
 

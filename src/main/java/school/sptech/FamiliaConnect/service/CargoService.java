@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.Cargo.CargoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.Cargo;
@@ -19,6 +20,12 @@ public class CargoService {
     }
 
     public Cargo cadastrar(CargoRequestDto dto) {
+
+        cargoRepository.findByNome(dto.getNome())
+                .ifPresent(cargo -> {
+                    throw new EntidadeJaCadastradaException("Cargo já cadastrado");
+                });
+
         Cargo cargo = CargoMapper.toModel(dto);
         return cargoRepository.save(cargo);
     }

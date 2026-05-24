@@ -1,6 +1,5 @@
 package school.sptech.FamiliaConnect.controller;
 
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -12,11 +11,14 @@ import school.sptech.FamiliaConnect.service.OcrService;
 
 @RestController
 @RequestMapping("/ocr")
-@AllArgsConstructor
 public class OcrController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OcrController.class);
     private final OcrService ocrService;
+
+    public OcrController(OcrService ocrService) {
+        this.ocrService = ocrService;
+    }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FamiliaFormResponseDto> consumerDadosFamilia(@RequestParam MultipartFile arquivo) {

@@ -1,7 +1,5 @@
 package school.sptech.FamiliaConnect.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.client.OcrClient;
@@ -11,11 +9,13 @@ import school.sptech.FamiliaConnect.exception.DadosDaFamiliaAusenteException;
 import school.sptech.FamiliaConnect.exception.TipoDeArquivoIncompativelException;
 
 @Service
-@AllArgsConstructor
-@Builder
 public class OcrService {
 
     private final OcrClient ocrClient;
+
+    public OcrService(OcrClient ocrClient) {
+        this.ocrClient = ocrClient;
+    }
 
     public FamiliaFormResponseDto extractDadosFamilia(MultipartFile fotoFamilia) {
 

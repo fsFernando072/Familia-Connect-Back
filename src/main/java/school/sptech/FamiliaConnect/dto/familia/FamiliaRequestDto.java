@@ -24,6 +24,7 @@ public class FamiliaRequestDto {
 
     @Schema(description = "Se a família possui integrante PNE")
     @NotBlank(message = "PNE é obrigatório")
+    @NotBlank(message = "PNE é obrigatório")
     private Boolean possuiPrioridade;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------

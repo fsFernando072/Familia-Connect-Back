@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.produto.ProdutoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.ProdutoMapper;
 import school.sptech.FamiliaConnect.model.Categoria;
@@ -32,7 +33,10 @@ public class CategoriaService {
     }
 
     public Categoria salvar(Categoria categoria){
-
+        categoriaRepository.findByNome(categoria.getNome())
+                .ifPresent(categorias -> {
+                    throw new EntidadeJaCadastradaException("Acesso já cadastrado");
+                });
         return categoriaRepository.save(categoria);
 
     }

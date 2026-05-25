@@ -1,6 +1,5 @@
 package school.sptech.FamiliaConnect.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,21 +27,22 @@ public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
     private final CargoRepository cargoRepository;
-
-    @Autowired
-    private GerenciadorTokenJwt gerenciadorTokenJwt;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final GerenciadorTokenJwt gerenciadorTokenJwt;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository,
+                              CargoRepository cargoRepository,
+                              GerenciadorTokenJwt gerenciadorTokenJwt,
+                              AuthenticationManager authenticationManager,
+                              PasswordEncoder passwordEncoder) {
         this.funcionarioRepository = funcionarioRepository;
         this.cargoRepository = cargoRepository;
+        this.gerenciadorTokenJwt = gerenciadorTokenJwt;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Funções ---------------------------------------------------------------------------------------------------------

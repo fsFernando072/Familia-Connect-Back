@@ -39,19 +39,19 @@ class AcessoServiceTest {
         @Test
         @DisplayName("Cadastrar acesso corretamente")
         void cadastrarAcesso(){
-            AcessoRequestDto acessoRequestDto = new AcessoRequestDto();
+            Acesso acesso = new Acesso();
 
-            acessoRequestDto.setNomeTela("acesso1");
+            acesso.setNomeTela("acesso1");
 
 
 
             Mockito.when(acessoRepository.save(Mockito.any(Acesso.class)))
-                    .thenReturn(AcessoMapper.toModel(acessoRequestDto));
+                    .thenReturn(acesso);
 
-            Acesso resultado = acessoService.cadastrar(acessoRequestDto);
+            Acesso resultado = acessoService.cadastrar(acesso);
 
-            Assertions.assertEquals(AcessoMapper.toModel(acessoRequestDto).getId(), resultado.getId());
-            Assertions.assertEquals(AcessoMapper.toModel(acessoRequestDto).getNomeTela(), resultado.getNomeTela());
+            Assertions.assertEquals(acesso.getId(), resultado.getId());
+            Assertions.assertEquals(acesso.getNomeTela(), resultado.getNomeTela());
         }
 
         @Test
@@ -60,18 +60,18 @@ class AcessoServiceTest {
 
             String nome = "acesso1";
 
-            AcessoRequestDto acessoRequestDto = new AcessoRequestDto();
+            Acesso acesso = new Acesso();
 
-            acessoRequestDto.setNomeTela("acesso1");
+            acesso.setNomeTela("acesso1");
 
             //When
             Mockito.when(acessoRepository.findByNomeTela(nome))
-                    .thenReturn(Optional.of(AcessoMapper.toModel(acessoRequestDto)));
+                    .thenReturn(Optional.of(acesso));
 
             //then
             Assertions.assertThrows(
                     EntidadeJaCadastradaException.class,
-                    () -> acessoService.cadastrar(acessoRequestDto)
+                    () -> acessoService.cadastrar(acesso)
             );
         }
 
@@ -166,10 +166,10 @@ class AcessoServiceTest {
 
             Integer id = 1;
 
-            AcessoRequestDto acessoRequestDto = new AcessoRequestDto();
-            acessoRequestDto.setNomeTela("acessoAtualizado");
+            Acesso acesso = new Acesso();
+            acesso.setNomeTela("acessoAtualizado");
 
-            Acesso acessoAtualizado = AcessoMapper.toModel(acessoRequestDto);
+            Acesso acessoAtualizado = acesso;
             acessoAtualizado.setId(id);
 
             Mockito.when(acessoRepository.existsById(id))
@@ -178,7 +178,7 @@ class AcessoServiceTest {
             Mockito.when(acessoRepository.save(Mockito.any(Acesso.class)))
                     .thenReturn(acessoAtualizado);
 
-            Acesso resultado = acessoService.atualizar(id, acessoRequestDto);
+            Acesso resultado = acessoService.atualizar(id, acesso);
 
             Assertions.assertEquals(id, resultado.getId());
             Assertions.assertEquals("acessoAtualizado", resultado.getNomeTela());
@@ -190,15 +190,15 @@ class AcessoServiceTest {
 
             Integer id = 1;
 
-            AcessoRequestDto acessoRequestDto = new AcessoRequestDto();
-            acessoRequestDto.setNomeTela("acessoAtualizado");
+            Acesso acesso = new Acesso();
+            acesso.setNomeTela("acessoAtualizado");
 
             Mockito.when(acessoRepository.existsById(id))
                     .thenReturn(false);
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> acessoService.atualizar(id, acessoRequestDto)
+                    () -> acessoService.atualizar(id, acesso)
             );
         }
     }

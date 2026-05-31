@@ -45,7 +45,7 @@ public class PessoaController {
     @PostMapping
     public ResponseEntity<PessoaResponseDto> cadastrarPessoa(@RequestBody @Valid PessoaRequestDto pessoaRequestDto){
 
-        Pessoa pessoaCadastrada = pessoaService.salvar(pessoaRequestDto);
+        Pessoa pessoaCadastrada = pessoaService.salvar(PessoaMapper.toModel(pessoaRequestDto));
 
         PessoaResponseDto pessoaResponseDto = PessoaMapper.toResponse(pessoaCadastrada);
 

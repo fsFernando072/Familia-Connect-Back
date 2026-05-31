@@ -24,7 +24,7 @@ public class EnderecoRequestDto {
     private String logradouro;
 
     @Schema(description = "Número do endereço")
-    @NotBlank(message = "Número do endereço é obrigatório")
+    @NotNull(message = "Número do endereço é obrigatório")
     @Positive(message = "Númeto do endereço tem que ser positivo")
     private Integer numero;
 

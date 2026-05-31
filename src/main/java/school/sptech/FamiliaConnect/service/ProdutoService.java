@@ -35,12 +35,12 @@ public class ProdutoService {
 
     }
 
-    public Produto salvar(ProdutoRequestDto produtoRequestDto){
+    public Produto salvar(Produto produto){
 
-        Categoria categoria = categoriaRepository.findById(produtoRequestDto.getIdCategoria())
+        Categoria categoria = categoriaRepository.findById(produto.getCategoria().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria com o id não foi encontrada"));
 
-        Produto produto = ProdutoMapper.toModel(produtoRequestDto);
+
         produto.setCategoria(categoria);
 
         return produtoRepository.save(produto);

@@ -123,13 +123,14 @@ class FuncionarioServiceTest {
         @Test
         @DisplayName("Deve salvar funcionário com sucesso")
         void salvarFuncionario() {
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "Maria Souza", "123.456.789-00", "senha123", "foto.png", 1
-            );
-
             Cargo cargo = new Cargo();
             cargo.setId(1);
             cargo.setNome("Administrador");
+
+            Funcionario dto = new Funcionario(
+                    "Maria Souza", "123.456.789-00", "senha123", "foto.png");
+            dto.setId(1);
+            dto.setCargo(cargo);
 
             Funcionario funcionarioSalvo = new Funcionario("Maria Souza", "123.456.789-00", "senhaHash", "foto.png");
             funcionarioSalvo.setId(1);
@@ -154,9 +155,13 @@ class FuncionarioServiceTest {
         @Test
         @DisplayName("Deve lançar EntidadeNaoEncontradaException quando cargo não for encontrado")
         void salvarFuncionarioCargoNaoEncontrado() {
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "Maria Souza", "123.456.789-00", "senha123", "foto.png", 99
-            );
+            Cargo cargo = new Cargo();
+            cargo.setId(99);
+            cargo.setNome("Administrador");
+
+            Funcionario dto = new Funcionario("Maria Souza", "123.456.789-00", "senha123", "foto.png");
+            dto.setId(1);
+            dto.setCargo(cargo);
 
             Mockito.when(cargoRepository.findById(99))
                     .thenReturn(Optional.empty());
@@ -177,8 +182,8 @@ class FuncionarioServiceTest {
         void atualizarFuncionario() {
             Integer id = 1;
 
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png", 1
+            Funcionario dto = new Funcionario(
+                    "João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png"
             );
 
             Cargo cargo = new Cargo();
@@ -209,8 +214,8 @@ class FuncionarioServiceTest {
         void atualizarFuncionarioCargoNaoEncontrado() {
             Integer id = 1;
 
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "João", "123.456.789-00", "senha", "foto.png", 99
+            Funcionario dto = new Funcionario(
+                    "João", "123.456.789-00", "senha", "foto.png"
             );
 
             Mockito.when(cargoRepository.findById(id))
@@ -227,8 +232,8 @@ class FuncionarioServiceTest {
         void atualizarFuncionarioNaoEncontrado() {
             Integer id = 99;
 
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "João", "123.456.789-00", "senha", "foto.png", 1
+            Funcionario dto = new Funcionario(
+                    "João", "123.456.789-00", "senha", "foto.png"
             );
 
             Cargo cargo = new Cargo();

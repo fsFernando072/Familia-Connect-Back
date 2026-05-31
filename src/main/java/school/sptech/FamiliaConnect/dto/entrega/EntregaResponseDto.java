@@ -39,6 +39,21 @@ public class EntregaResponseDto {
             this.nome = nome;
         }
 
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
     }
 
     public static class EntregaPessoa{
@@ -51,6 +66,21 @@ public class EntregaResponseDto {
             this.nome = nome;
         }
 
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
     }
 
     public static class EntregaProduto{
@@ -63,6 +93,21 @@ public class EntregaResponseDto {
             this.nome = nome;
         }
 
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
     }
 
     // Construtores ----------------------------------------------------------------------------------------------------

@@ -11,14 +11,18 @@ public class FuncionarioMapper {
     public static Funcionario toModel(FuncionarioRequestDto dto) {
 
         Funcionario funcionario = new Funcionario(
-            dto.getNome(),
+                dto.getNome(),
                 dto.getCpf(),
                 dto.getSenha(),
                 dto.getFotoFuncionario()
         );
 
-        return funcionario;
+        Cargo cargo = new Cargo();
+        cargo.setId(dto.getCargoId());
 
+        funcionario.setCargo(cargo);
+
+        return funcionario;
     }
 
     public static FuncionarioResponseDto toResponse(Funcionario funcionario) {

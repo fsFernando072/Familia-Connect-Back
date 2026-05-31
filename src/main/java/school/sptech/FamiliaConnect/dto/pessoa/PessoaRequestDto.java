@@ -28,7 +28,7 @@ public class PessoaRequestDto {
     private String cpf;
 
     @Schema(description = "Data de nascimento da pessoa")
-    @NotBlank(message = "Data de nascimento da pessoa é obrigatório")
+    @NotNull(message = "Data de nascimento da pessoa é obrigatório")
     private LocalDate dataNascimento;
 
     @Schema(description = "ID da profissão da pessoa")

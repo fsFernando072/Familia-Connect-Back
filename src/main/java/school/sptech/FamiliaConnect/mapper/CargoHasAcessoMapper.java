@@ -1,5 +1,6 @@
 package school.sptech.FamiliaConnect.mapper;
 
+import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoRequestDto;
 import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoResponseDto;
 import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Cargo;
@@ -9,12 +10,20 @@ import java.util.List;
 
 public class CargoHasAcessoMapper {
 
-    public static CargoHasAcesso toModel(Cargo cargo, Acesso acesso) {
-         CargoHasAcesso cargoHasAcesso = new CargoHasAcesso();
-         cargoHasAcesso.setCargo(cargo);
-         cargoHasAcesso.setAcesso(acesso);
+    public static CargoHasAcesso toModel(CargoHasAcessoRequestDto dto) {
+        CargoHasAcesso cargoHasAcesso = new CargoHasAcesso();
 
-         return cargoHasAcesso;
+        Cargo cargo = new Cargo();
+        cargo.setId(dto.getCargoId());
+
+        Acesso acesso = new Acesso();
+        acesso.setId(dto.getAcessoId());
+
+        cargoHasAcesso.setCargo(cargo);
+        cargoHasAcesso.setAcesso(acesso);
+
+
+        return cargoHasAcesso;
     }
 
     public static CargoHasAcessoResponseDto toResponse(CargoHasAcesso entity) {

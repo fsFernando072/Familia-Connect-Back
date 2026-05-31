@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.mapper;
 
 import school.sptech.FamiliaConnect.dto.produto.ProdutoRequestDto;
 import school.sptech.FamiliaConnect.dto.produto.ProdutoResponseDto;
+import school.sptech.FamiliaConnect.model.Categoria;
 import school.sptech.FamiliaConnect.model.Produto;
 
 import java.util.List;
@@ -14,6 +15,11 @@ public class ProdutoMapper {
         produto.setDescricao(dto.getDescricao());
         produto.setNome(dto.getNome());
         produto.setQuantidade(dto.getQuantidade());
+
+        Categoria categoria = new Categoria();
+        categoria.setId(dto.getIdCategoria());
+
+        produto.setCategoria(categoria);
 
         return produto;
 

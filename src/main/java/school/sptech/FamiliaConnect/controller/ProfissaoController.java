@@ -43,7 +43,7 @@ public class ProfissaoController {
     @PostMapping
     public ResponseEntity<ProfissaoResponseDto> cadastrarProfissao(@RequestBody @Valid ProfissaoRequestDto profissaoRequestDto){
 
-        Profissao profissaoSalva = profissaoService.cadastrarProfissao(profissaoRequestDto);
+        Profissao profissaoSalva = profissaoService.cadastrarProfissao(ProfissaoMapper.toModel(profissaoRequestDto));
 
         ProfissaoResponseDto profissaoResponseDto = ProfissaoMapper.toResponse(profissaoSalva);
 

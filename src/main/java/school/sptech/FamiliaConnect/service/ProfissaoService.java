@@ -25,13 +25,12 @@ public class ProfissaoService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Profissao cadastrarProfissao(ProfissaoRequestDto dto){
+    public Profissao cadastrarProfissao(Profissao profissao){
 
-        if (profissaoRepository.existsByNome(dto.getNome())){
+        if (profissaoRepository.existsByNome(profissao.getNome())){
             throw new EntidadeJaCadastradaException("Profissão já cadastrada");
         }
 
-        Profissao profissao = ProfissaoMapper.toModel(dto);
 
         return profissaoRepository.save(profissao);
 

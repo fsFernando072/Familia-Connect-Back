@@ -30,12 +30,12 @@ public class FamiliaService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Familia salvar(FamiliaRequestDto dto){
+    public Familia salvar(Familia familia){
 
-        Endereco endereco = enderecoRepository.findById(dto.getEnderecoId())
+        Endereco endereco = enderecoRepository.findById(familia.getEndereco().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O endereco com o id não foi encontrada"));
 
-        Familia familia = FamiliaMapper.toModel(dto);
+
         familia.setEndereco(endereco);
 
         return familiaRepository.save(familia);
@@ -52,5 +52,23 @@ public class FamiliaService {
 
         return familiaRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com o id não foi encontrada"));
+    }
+
+    public Familia atualizar(Integer idFamilia, Familia familiaAtualizada) {
+
+        Familia familiaExistente = familiaRepository.findById(idFamilia)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Família não encontrada pelo id"));
+
+        Endereco endereco = enderecoRepository.findById(
+                        familiaAtualizada.getEndereco().getId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Endereço não encontrado pelo id"));
+
+        familiaExistente.setFotoFamilia(familiaAtualizada.getFotoFamilia());
+
+        familiaExistente.setPossuiPrioridade(familiaAtualizada.getPossuiPrioridade());
+
+        familiaExistente.setEndereco(endereco);
+
+        return familiaRepository.save(familiaExistente);
     }
 }

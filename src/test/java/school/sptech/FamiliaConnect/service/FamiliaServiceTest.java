@@ -40,15 +40,16 @@ class FamiliaServiceTest {
         @Test
         @DisplayName("Deve salvar família com sucesso")
         void salvarFamilia() {
-            FamiliaRequestDto dto = new FamiliaRequestDto();
-            dto.setEnderecoId(1);
-            dto.setFotoFamilia("foto.png");
-            dto.setPossuiPrioridade(false);
-            dto.setDataCadastro(LocalDate.now());
 
             Endereco endereco = new Endereco();
             endereco.setId(1);
             endereco.setCep("08020-000");
+
+            Familia dto = new Familia();
+            dto.setEndereco(endereco);
+            dto.setFotoFamilia("foto.png");
+            dto.setPossuiPrioridade(false);
+            dto.setDataCadastro(LocalDate.now());
 
             Familia familiaEsperada = new Familia();
             familiaEsperada.setId(1);
@@ -71,8 +72,12 @@ class FamiliaServiceTest {
         @Test
         @DisplayName("Deve lançar EntidadeNaoEncontradaException quando endereço não for encontrado")
         void salvarFamiliaEnderecoNaoEncontrado() {
-            FamiliaRequestDto dto = new FamiliaRequestDto();
-            dto.setEnderecoId(99);
+            Endereco endereco = new Endereco();
+            endereco.setId(99);
+
+            endereco.setCep("08020-000");
+            Familia dto = new Familia();
+            dto.setEndereco(endereco);
 
             Mockito.when(enderecoRepository.findById(99))
                     .thenReturn(Optional.empty());

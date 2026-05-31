@@ -36,7 +36,7 @@ public class AcessoController {
     })
     @PostMapping
     public ResponseEntity<AcessoResponseDto> cadastrar(@RequestBody @Valid AcessoRequestDto dto) {
-        Acesso acesso = acessoService.cadastrar(dto);
+        Acesso acesso = acessoService.cadastrar(AcessoMapper.toModel(dto));
         AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
 
         return ResponseEntity.status(201).body(responseDto);
@@ -88,7 +88,7 @@ public class AcessoController {
     @PutMapping("/{id}")
     public ResponseEntity<AcessoResponseDto> atualizar(@PathVariable Integer id,
                                                        @RequestBody @Valid AcessoRequestDto dto) {
-        Acesso acesso = acessoService.atualizar(id, dto);
+        Acesso acesso = acessoService.atualizar(id, AcessoMapper.toModel(dto));
         AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
 
         return ResponseEntity.status(200).body(responseDto);

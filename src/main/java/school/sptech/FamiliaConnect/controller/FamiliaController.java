@@ -43,7 +43,7 @@ public class FamiliaController {
     @PostMapping
     public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
 
-        Familia familiaCadastrada = familiaService.salvar(familiaRequestDto);
+        Familia familiaCadastrada = familiaService.salvar(FamiliaMapper.toModel(familiaRequestDto));
 
         FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
 
@@ -80,14 +80,20 @@ public class FamiliaController {
             @ApiResponse(responseCode = "200", description = "Família atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Família não encontrada pelo ID")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<FamiliaResponseDto> atualizarFamilia(@PathVariable Integer idFamilia) {
+    @PutMapping("/{idFamilia}")
+    public ResponseEntity<FamiliaResponseDto> atualizarFamilia(
+            @PathVariable Integer idFamilia,
+            @RequestBody @Valid FamiliaRequestDto requestDto
+    ) {
 
-        Familia familia = familiaService.listarPorId(idFamilia);
+        Familia familia = FamiliaMapper.toModel(requestDto);
 
-        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familia);
+        Familia familiaAtualizada =
+                familiaService.atualizar(idFamilia, familia);
 
-        return ResponseEntity.status(200).body(responseDto);
+        FamiliaResponseDto responseDto =
+                FamiliaMapper.toResponse(familiaAtualizada);
 
+        return ResponseEntity.ok(responseDto);
     }
 }

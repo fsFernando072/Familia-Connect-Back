@@ -55,18 +55,18 @@ public class EntregaService {
 
     }
 
-    public Entrega salvar(EntregaRequestDto requestDto){
+    public Entrega salvar(Entrega entrega){
 
-        Pessoa pessoa = pessoaRepository.findById(requestDto.getIdPessoa())
+        Pessoa pessoa = pessoaRepository.findById(entrega.getPessoa().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Pessoa não encontrada pelo id"));
 
-        Funcionario funcionario = funcionarioRepository.findById(requestDto.getIdFuncionario())
+        Funcionario funcionario = funcionarioRepository.findById(entrega.getFuncionario().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id"));
 
-        Produto produto = produtoRepository.findById(requestDto.getIdProduto())
+        Produto produto = produtoRepository.findById(entrega.getProduto().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado pelo id"));
 
-        Entrega entrega = EntregaMapper.toModel(requestDto);
+
         entrega.setPessoa(pessoa);
         entrega.setFuncionario(funcionario);
         entrega.setProduto(produto);

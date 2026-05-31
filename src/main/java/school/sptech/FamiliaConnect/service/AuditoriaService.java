@@ -23,11 +23,11 @@ public class AuditoriaService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public Auditoria cadastrar(AuditoriaRequestDto dto) {
-        Funcionario funcionario = funcionarioRepository.findById(dto.getFuncionarioId())
+    public Auditoria cadastrar(Auditoria auditoria) {
+        Funcionario funcionario = funcionarioRepository.findById(auditoria.getFuncionario().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrada"));
 
-        Auditoria auditoria = AuditoriaMapper.toModel(dto);
+
         auditoria.setFuncionario(funcionario);
 
         return auditoriaRepository.save(auditoria);
@@ -42,15 +42,15 @@ public class AuditoriaService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada"));
     }
 
-    public Auditoria atualizar(Integer id, AuditoriaRequestDto dto) {
+    public Auditoria atualizar(Integer id, Auditoria auditoria) {
         if (!auditoriaRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada");
         }
 
-        Funcionario funcionario = funcionarioRepository.findById(dto.getFuncionarioId())
+        Funcionario funcionario = funcionarioRepository.findById(auditoria.getFuncionario().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrada"));
 
-        Auditoria auditoria = AuditoriaMapper.toModel(dto);
+
         auditoria.setId(id);
         auditoria.setFuncionario(funcionario);
 

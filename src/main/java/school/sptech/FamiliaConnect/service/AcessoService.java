@@ -20,14 +20,14 @@ public class AcessoService {
         this.acessoRepository = acessoRepository;
     }
 
-    public Acesso cadastrar(AcessoRequestDto dto) {
+    public Acesso cadastrar(Acesso acesso) {
 
-        acessoRepository.findByNomeTela(dto.getNomeTela())
-                .ifPresent(acesso -> {
+        acessoRepository.findByNomeTela(acesso.getNomeTela())
+                .ifPresent(acesso1 -> {
                     throw new EntidadeJaCadastradaException("Acesso já cadastrado");
                 });
 
-        Acesso acesso = AcessoMapper.toModel(dto);
+
         return acessoRepository.save(acesso);
     }
 
@@ -40,12 +40,12 @@ public class AcessoService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O acesso com o id não foi encontrado"));
     }
 
-    public Acesso atualizar(Integer id, AcessoRequestDto dto) {
+    public Acesso atualizar(Integer id, Acesso acesso) {
         if (!acessoRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("O acesso com o id não foi encontrado");
         }
 
-        Acesso acesso = AcessoMapper.toModel(dto);
+
         acesso.setId(id);
 
         return acessoRepository.save(acesso);

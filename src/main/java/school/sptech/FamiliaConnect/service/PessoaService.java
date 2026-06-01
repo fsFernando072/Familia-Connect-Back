@@ -34,22 +34,22 @@ public class PessoaService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Pessoa salvar(PessoaRequestDto dto){
+    public Pessoa salvar(Pessoa pessoa){
 
-        if (pessoaRepository.existsByCpf(dto.getCpf())){
+        if (pessoaRepository.existsByCpf(pessoa.getCpf())){
            throw new EntidadeJaCadastradaException("Pessoa já cadastrada");
         }
 
-        Familia familia = familiaRepository.findById(dto.getIdFamilia())
+        Familia familia = familiaRepository.findById(pessoa.getFamilia().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("A família não foi encontrada"));
 
 
 
-        Pessoa pessoa = PessoaMapper.toModel(dto);
+
         pessoa.setFamilia(familia);
 
-        if(dto.getIdProfissao() != null){
-            Optional<Profissao> profissao = profissaoRepository.findById(dto.getIdProfissao());
+        if(pessoa.getProfissao().getId() != null){
+            Optional<Profissao> profissao = profissaoRepository.findById(pessoa.getProfissao().getId());
             pessoa.setProfissao(profissao.get());
         }
 

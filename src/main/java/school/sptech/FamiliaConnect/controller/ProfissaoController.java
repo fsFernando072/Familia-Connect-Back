@@ -45,7 +45,7 @@ public class ProfissaoController {
     @PreAuthorize("hasAuthority('cadastrar_profissoes')")
     public ResponseEntity<ProfissaoResponseDto> cadastrarProfissao(@RequestBody @Valid ProfissaoRequestDto profissaoRequestDto){
 
-        Profissao profissaoSalva = profissaoService.cadastrarProfissao(profissaoRequestDto);
+        Profissao profissaoSalva = profissaoService.cadastrarProfissao(ProfissaoMapper.toModel(profissaoRequestDto));
 
         ProfissaoResponseDto profissaoResponseDto = ProfissaoMapper.toResponse(profissaoSalva);
 

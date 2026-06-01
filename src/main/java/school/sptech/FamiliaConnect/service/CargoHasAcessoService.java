@@ -28,16 +28,20 @@ public class CargoHasAcessoService {
         this.acessoRepository = acessoRepository;
     }
 
-    public CargoHasAcesso cadastrar(CargoHasAcessoRequestDto dto) {
-        Cargo cargo = cargoRepository.findById(dto.getCargoId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado"));
-        Acesso acesso = acessoRepository.findById(dto.getAcessoId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("O acesso com o id não foi encontrado"));;
+    public CargoHasAcesso cadastrar(CargoHasAcesso cargoHasAcesso) {
 
-        CargoHasAcesso cargoHasAcesso = CargoHasAcessoMapper.toModel(
-                cargo,
-                acesso
-        );
+        Integer cargoId = cargoHasAcesso.getCargo().getId();
+        Integer acessoId = cargoHasAcesso.getAcesso().getId();
+
+        Cargo cargo = cargoRepository.findById(cargoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado"));
+        Acesso acesso = acessoRepository.findById(acessoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O acesso com o id não foi encontrado"));
+
+
+        cargoHasAcesso.setCargo(cargo);
+        cargoHasAcesso.setAcesso(acesso);
+
 
         return cargoHasAcessoRepository.save(cargoHasAcesso);
     }
@@ -51,17 +55,18 @@ public class CargoHasAcessoService {
                 .orElseThrow();
     }
 
-    public CargoHasAcesso atualizar(Integer id, CargoHasAcessoRequestDto dto) {
+    public CargoHasAcesso atualizar(Integer id, CargoHasAcesso cargoHasAcesso) {
         if (!cargoHasAcessoRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("O CargoHasAcesso com id não foi encontrado");
         }
+        Integer cargoId = cargoHasAcesso.getCargo().getId();
+        Integer acessoId = cargoHasAcesso.getAcesso().getId();
 
-        Cargo cargo = cargoRepository.findById(dto.getCargoId())
+        Cargo cargo = cargoRepository.findById(cargoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com id não foi encontrado"));
-        Acesso acesso = acessoRepository.findById(dto.getAcessoId())
+        Acesso acesso = acessoRepository.findById(acessoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O acesso com id não foi encontrado"));
 
-        CargoHasAcesso cargoHasAcesso = new CargoHasAcesso();
         cargoHasAcesso.setId(id);
         cargoHasAcesso.setCargo(cargo);
         cargoHasAcesso.setAcesso(acesso);

@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaResponseDto;
+import school.sptech.FamiliaConnect.mapper.AcessoMapper;
 import school.sptech.FamiliaConnect.mapper.AuditoriaMapper;
+import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Auditoria;
 import school.sptech.FamiliaConnect.service.AuditoriaService;
 
@@ -36,7 +38,7 @@ public class AuditoriaController {
     })
     @PostMapping
     public ResponseEntity<AuditoriaResponseDto> cadastrar(@RequestBody @Valid AuditoriaRequestDto dto) {
-        Auditoria auditoria = auditoriaService.cadastrar(dto);
+        Auditoria auditoria = auditoriaService.cadastrar(AuditoriaMapper.toModel(dto));
         AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
 
         return ResponseEntity.status(201).body(responseDto);
@@ -88,7 +90,7 @@ public class AuditoriaController {
     @PutMapping("/{id}")
     public ResponseEntity<AuditoriaResponseDto> atualizar(@PathVariable Integer id,
                                                           @RequestBody @Valid AuditoriaRequestDto dto) {
-        Auditoria auditoria = auditoriaService.atualizar(id, dto);
+        Auditoria auditoria = auditoriaService.atualizar(id, AuditoriaMapper.toModel(dto));
         AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
 
         return ResponseEntity.status(200).body(responseDto);

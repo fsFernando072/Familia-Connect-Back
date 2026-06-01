@@ -65,12 +65,12 @@ public class FuncionarioService {
 
     }
 
-    public Funcionario salvar(FuncionarioRequestDto requestDto){
+    public Funcionario salvar(Funcionario funcionario){
 
-        Cargo cargo = cargoRepository.findById(requestDto.getCargoId())
+        Cargo cargo = cargoRepository.findById(funcionario.getCargo().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Cargo não encontrado pelo id"));
 
-        Funcionario funcionario = FuncionarioMapper.toModel(requestDto);
+
         funcionario.setCargo(cargo);
 
         String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
@@ -80,16 +80,16 @@ public class FuncionarioService {
 
     }
 
-    public Funcionario atualizar(FuncionarioRequestDto requestDto, Integer id){
+    public Funcionario atualizar(Funcionario funcionario, Integer id){
 
-        Cargo cargo = cargoRepository.findById(id)
+        Cargo cargo = cargoRepository.findById(funcionario.getCargo().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Cargo não encontrado pelo id"));
 
         if(!funcionarioRepository.existsById(id)){
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id");
         }
 
-        Funcionario funcionario = FuncionarioMapper.toModel(requestDto);
+
         funcionario.setId(id);
         funcionario.setCargo(cargo);
 

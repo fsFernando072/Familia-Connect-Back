@@ -36,7 +36,7 @@ public class CargoController {
     })
     @PostMapping
     public ResponseEntity<CargoResponseDto> cadastrar(@RequestBody @Valid CargoRequestDto dto) {
-        Cargo cargo = cargoService.cadastrar(dto);
+        Cargo cargo = cargoService.cadastrar( CargoMapper.toModel(dto));
         CargoResponseDto responseDto = CargoMapper.toResponse(cargo);
 
         return ResponseEntity.status(201).body(responseDto);
@@ -74,7 +74,7 @@ public class CargoController {
     @PreAuthorize("hasAuthority('atualizar_cargos')")
     public ResponseEntity<CargoResponseDto> atualizar(@PathVariable Integer id,
                                                       @RequestBody @Valid CargoRequestDto dto) {
-        Cargo cargo = cargoService.atualizar(id, dto);
+        Cargo cargo = cargoService.atualizar(id, CargoMapper.toModel(dto));
         CargoResponseDto responseDto = CargoMapper.toResponse(cargo);
 
         return ResponseEntity.status(200).body(responseDto);

@@ -21,19 +21,28 @@ public class PessoaMapper {
         pessoa.setResponsavel(pessoaRequestDto.getResponsavel());
         pessoa.setGrauParentesco(pessoaRequestDto.getGrauParentesco());
         pessoa.setTelefone(pessoaRequestDto.getTelefone());
+        Familia familia = new Familia();
+        familia.setId(pessoaRequestDto.getIdFamilia());
+        if(pessoaRequestDto.getIdProfissao() != null){
+            Profissao profissao = new Profissao();
+            profissao.setId(pessoaRequestDto.getIdProfissao());
 
+            pessoa.setProfissao(profissao);
+        }
+
+        pessoa.setFamilia(familia);
         return pessoa;
 
     }
 
     public static PessoaResponseDto toResponse(Pessoa pessoa){
 
-        Familia familiaEntidade = new Familia();
+        Familia familiaEntidade = pessoa.getFamilia();
         PessoaResponseDto.PessoaFamilia familia = new PessoaResponseDto.PessoaFamilia();
         familia.setDataCadastro(familiaEntidade.getDataCadastro());
         familia.setFoto(familiaEntidade.getFotoFamilia());
 
-        Profissao profissaoEntidade = new Profissao();
+        Profissao profissaoEntidade = pessoa.getProfissao();
         PessoaResponseDto.PessoaProfissao profissao = new PessoaResponseDto.PessoaProfissao();
         profissao.setNome(profissaoEntidade.getNome());
 

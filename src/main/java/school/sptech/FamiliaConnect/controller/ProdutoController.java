@@ -67,7 +67,7 @@ public class ProdutoController {
     @PreAuthorize("hasAuthority('cadastrar_produtos')")
     public ResponseEntity<ProdutoResponseDto> cadastrarProduto(@RequestBody @Valid ProdutoRequestDto requestDto){
 
-        Produto produtoCadastrado = produtoService.salvar(requestDto);
+        Produto produtoCadastrado = produtoService.salvar(ProdutoMapper.toModel(requestDto));
 
         return ResponseEntity.status(201).body(ProdutoMapper.toResponse(produtoCadastrado));
 

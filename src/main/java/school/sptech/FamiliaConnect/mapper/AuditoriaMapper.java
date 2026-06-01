@@ -3,6 +3,8 @@ package school.sptech.FamiliaConnect.mapper;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaResponseDto;
 import school.sptech.FamiliaConnect.model.Auditoria;
+import school.sptech.FamiliaConnect.model.Entrega;
+import school.sptech.FamiliaConnect.model.Funcionario;
 
 import java.util.List;
 
@@ -16,6 +18,11 @@ public class AuditoriaMapper {
         auditoria.setCreatedAt(dto.getCreatedAt());
         auditoria.setTipoLog(dto.getTipoLog());
 
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(dto.getFuncionarioId());
+
+        auditoria.setFuncionario(funcionario);
+
         return auditoria;
     }
 
@@ -24,12 +31,15 @@ public class AuditoriaMapper {
         AuditoriaResponseDto dto = new AuditoriaResponseDto();
 
         dto.setId(auditoria.getId());
-        dto.setTipoLog(dto.getTipoLog());
-        dto.setDadoAntigo(dto.getDadoAntigo());
-        dto.setDadoNovo(dto.getDadoNovo());
-        dto.setCreatedAt(dto.getCreatedAt());
-        dto.setFuncionarioId(dto.getFuncionarioId());
-        dto.setFuncionarioNome(dto.getFuncionarioNome());
+        dto.setTipoLog(auditoria.getTipoLog());
+        dto.setDadoAntigo(auditoria.getDadoAntigo());
+        dto.setDadoNovo(auditoria.getDadoNovo());
+        dto.setCreatedAt(auditoria.getCreatedAt());
+
+        if(auditoria.getFuncionario() != null){
+            dto.setFuncionarioId(auditoria.getFuncionario().getId());
+            dto.setFuncionarioNome(auditoria.getFuncionario().getNome());
+        }
 
         return dto;
     }

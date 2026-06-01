@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.FamiliaConnect.config.GerenciadorTokenJwt;
-import school.sptech.FamiliaConnect.dto.funcionario.FuncionarioRequestDto;
 import school.sptech.FamiliaConnect.dto.funcionario.FuncionarioTokenDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.model.Cargo;
@@ -123,13 +122,12 @@ class FuncionarioServiceTest {
         @Test
         @DisplayName("Deve salvar funcionário com sucesso")
         void salvarFuncionario() {
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "Maria Souza", "123.456.789-00", "senha123", "foto.png", 1
-            );
-
             Cargo cargo = new Cargo();
             cargo.setId(1);
             cargo.setNome("Administrador");
+
+            Funcionario funcionario = new Funcionario("Maria Souza", "123.456.789-00", "senha123", "foto.png");
+            funcionario.setCargo(cargo);
 
             Funcionario funcionarioSalvo = new Funcionario("Maria Souza", "123.456.789-00", "senhaHash", "foto.png");
             funcionarioSalvo.setId(1);
@@ -144,7 +142,7 @@ class FuncionarioServiceTest {
             Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class)))
                     .thenReturn(funcionarioSalvo);
 
-            Funcionario resultado = funcionarioService.salvar(dto);
+            Funcionario resultado = funcionarioService.salvar(funcionario);
 
             Assertions.assertEquals(1, resultado.getId());
             Assertions.assertEquals("Maria Souza", resultado.getNome());
@@ -154,16 +152,18 @@ class FuncionarioServiceTest {
         @Test
         @DisplayName("Deve lançar EntidadeNaoEncontradaException quando cargo não for encontrado")
         void salvarFuncionarioCargoNaoEncontrado() {
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "Maria Souza", "123.456.789-00", "senha123", "foto.png", 99
-            );
+            Cargo cargo = new Cargo();
+            cargo.setId(99);
+
+            Funcionario funcionario = new Funcionario("Maria Souza", "123.456.789-00", "senha123", "foto.png");
+            funcionario.setCargo(cargo);
 
             Mockito.when(cargoRepository.findById(99))
                     .thenReturn(Optional.empty());
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> funcionarioService.salvar(dto)
+                    () -> funcionarioService.salvar(funcionario)
             );
         }
     }
@@ -177,19 +177,18 @@ class FuncionarioServiceTest {
         void atualizarFuncionario() {
             Integer id = 1;
 
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png", 1
-            );
-
             Cargo cargo = new Cargo();
             cargo.setId(1);
             cargo.setNome("Administrador");
+
+            Funcionario funcionario = new Funcionario("João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png");
+            funcionario.setCargo(cargo);
 
             Funcionario funcionarioAtualizado = new Funcionario("João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png");
             funcionarioAtualizado.setId(id);
             funcionarioAtualizado.setCargo(cargo);
 
-            Mockito.when(cargoRepository.findById(id))
+            Mockito.when(cargoRepository.findById(1))
                     .thenReturn(Optional.of(cargo));
 
             Mockito.when(funcionarioRepository.existsById(id))
@@ -198,7 +197,7 @@ class FuncionarioServiceTest {
             Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class)))
                     .thenReturn(funcionarioAtualizado);
 
-            Funcionario resultado = funcionarioService.atualizar(dto, id);
+            Funcionario resultado = funcionarioService.atualizar(funcionario, id);
 
             Assertions.assertEquals(id, resultado.getId());
             Assertions.assertEquals("João Atualizado", resultado.getNome());
@@ -209,16 +208,18 @@ class FuncionarioServiceTest {
         void atualizarFuncionarioCargoNaoEncontrado() {
             Integer id = 1;
 
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "João", "123.456.789-00", "senha", "foto.png", 99
-            );
+            Cargo cargo = new Cargo();
+            cargo.setId(1);
 
-            Mockito.when(cargoRepository.findById(id))
+            Funcionario funcionario = new Funcionario("João", "123.456.789-00", "senha", "foto.png");
+            funcionario.setCargo(cargo);
+
+            Mockito.when(cargoRepository.findById(1))
                     .thenReturn(Optional.empty());
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> funcionarioService.atualizar(dto, id)
+                    () -> funcionarioService.atualizar(funcionario, id)
             );
         }
 
@@ -227,14 +228,13 @@ class FuncionarioServiceTest {
         void atualizarFuncionarioNaoEncontrado() {
             Integer id = 99;
 
-            FuncionarioRequestDto dto = new FuncionarioRequestDto(
-                    "João", "123.456.789-00", "senha", "foto.png", 1
-            );
-
             Cargo cargo = new Cargo();
             cargo.setId(1);
 
-            Mockito.when(cargoRepository.findById(id))
+            Funcionario funcionario = new Funcionario("João", "123.456.789-00", "senha", "foto.png");
+            funcionario.setCargo(cargo);
+
+            Mockito.when(cargoRepository.findById(1))
                     .thenReturn(Optional.of(cargo));
 
             Mockito.when(funcionarioRepository.existsById(id))
@@ -242,7 +242,7 @@ class FuncionarioServiceTest {
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> funcionarioService.atualizar(dto, id)
+                    () -> funcionarioService.atualizar(funcionario, id)
             );
         }
     }

@@ -93,7 +93,7 @@ public class FuncionarioController {
     @PreAuthorize("hasAuthority('cadastrar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> cadastrarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto){
 
-        Funcionario funcionarioCadastrado = funcionarioService.salvar(requestDto);
+        Funcionario funcionarioCadastrado = funcionarioService.salvar(FuncionarioMapper.toModel(requestDto));
 
         return ResponseEntity.status(201).body(FuncionarioMapper.toResponse(funcionarioCadastrado));
 
@@ -111,7 +111,7 @@ public class FuncionarioController {
     @PreAuthorize("hasAuthority('editar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> atualiazarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto, @PathVariable Integer id){
 
-        Funcionario funcionarioAtualizado = funcionarioService.atualizar(requestDto, id);
+        Funcionario funcionarioAtualizado = funcionarioService.atualizar(FuncionarioMapper.toModel(requestDto), id);
 
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarioAtualizado));
 

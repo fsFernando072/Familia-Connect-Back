@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.Cargo.CargoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.Cargo;
@@ -18,8 +19,11 @@ public class CargoService {
         this.cargoRepository = cargoRepository;
     }
 
-    public Cargo cadastrar(CargoRequestDto dto) {
-        Cargo cargo = CargoMapper.toModel(dto);
+    public Cargo cadastrar(Cargo cargo) {
+        cargoRepository.findByNome(cargo.getNome())
+                .ifPresent(cargo1 -> {
+                    throw new EntidadeJaCadastradaException("Cargo já cadastrado");
+                });
         return cargoRepository.save(cargo);
     }
 
@@ -32,12 +36,11 @@ public class CargoService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado"));
     }
 
-    public Cargo atualizar(Integer id, CargoRequestDto dto) {
+    public Cargo atualizar(Integer id, Cargo cargo) {
         if (!cargoRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
         }
 
-        Cargo cargo = CargoMapper.toModel(dto);
         cargo.setId(id);
 
         return cargoRepository.save(cargo);

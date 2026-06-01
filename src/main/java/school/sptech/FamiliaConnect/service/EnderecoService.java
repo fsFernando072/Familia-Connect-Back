@@ -28,19 +28,19 @@ public class EnderecoService {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Endereco salvar(EnderecoRequestDto enderecoRequestDto){
+    public Endereco salvar(Endereco endereco){
 
-        if (enderecoRepository.existsByLogradouroAndNumero(enderecoRequestDto.getLogradouro(), enderecoRequestDto.getNumero())){
+        if (enderecoRepository.existsByLogradouroAndNumero(endereco.getLogradouro(), endereco.getNumero())){
             throw new EntidadeJaCadastradaException("Entidade Endereço já cadastrada");
         }
 
-        Estado estado = estadoRepository.findById(enderecoRequestDto.getEstadoId())
+        Estado estado = estadoRepository.findById(endereco.getEstado().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O estado com o id não foi encontrado"));
 
-        Endereco enderecoParaSalvar = EnderecoMapper.toModel(enderecoRequestDto);
-        enderecoParaSalvar.setEstado(estado);
 
-        return enderecoRepository.save(enderecoParaSalvar);
+        endereco.setEstado(estado);
+
+        return enderecoRepository.save(endereco);
     }
 
 }

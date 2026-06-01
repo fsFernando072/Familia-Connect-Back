@@ -18,6 +18,11 @@ public class EnderecoMapper {
         endereco.setCep(enderecoRequestDto.getCep());
         endereco.setLogradouro(enderecoRequestDto.getLogradouro());
         endereco.setNumero(enderecoRequestDto.getNumero());
+        endereco.setCidade(enderecoRequestDto.getCidade());
+
+        Estado estado = new Estado();
+        estado.setId(enderecoRequestDto.getEstadoId());
+        endereco.setEstado(estado);
 
         return endereco;
 

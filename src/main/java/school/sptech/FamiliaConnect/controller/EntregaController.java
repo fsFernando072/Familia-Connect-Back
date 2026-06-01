@@ -86,7 +86,7 @@ public class EntregaController {
 
     public ResponseEntity<EntregaResponseDto> cadastrarEntrega(@RequestBody @Valid EntregaRequestDto requestDto){
 
-        Entrega entrega = entregaService.salvar(requestDto);
+        Entrega entrega = entregaService.salvar(EntregaMapper.toModel(requestDto));
 
         return ResponseEntity.status(201).body(EntregaMapper.toResponse(entrega));
 

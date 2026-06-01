@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
-import school.sptech.FamiliaConnect.exception.DadosDaFamiliaAusenteException;
 import school.sptech.FamiliaConnect.mapper.FamiliaMapper;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
@@ -48,10 +47,9 @@ public class FamiliaController {
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado pelo ID")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('cadastrar_familias')")
     public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
 
-        Familia familiaCadastrada = familiaService.salvar(familiaRequestDto);
+        Familia familiaCadastrada = familiaService.salvar(FamiliaMapper.toModel(familiaRequestDto));
 
         FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
 
@@ -88,40 +86,46 @@ public class FamiliaController {
 
     @Operation(
             summary = "Listar família por ID",
+            description = "Retorna os dados da família conforme o ID informado"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados da família retornados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Família com o ID informado não identificada")
+    })
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('listar_familias')")
+    public ResponseEntity<List<Pessoa>> listarFamiliaPorId(@PathVariable Integer id){
+
+        List<Pessoa> familias = familiaService.listarPorIdFamilia(id);
+
+
+        return ResponseEntity.status(200).body(familias);
+
+    }
+
+
+    @Operation(
+            summary = "Listar família por ID",
             description = "Retorna os dados da familía com base no ID fornecido"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna informações da família com sucesso"),
             @ApiResponse(responseCode = "404", description = "Retorna erro ao achar família com o ID informado")
     })
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('listar_familias')")
-    public ResponseEntity<List<Pessoa>> familiaById(@PathVariable Integer id){
+    @PutMapping("/{idFamilia}")
+    public ResponseEntity<FamiliaResponseDto> atualizarFamilia(
+            @PathVariable Integer idFamilia,
+            @RequestBody @Valid FamiliaRequestDto requestDto
+    ) {
 
-        List<Pessoa> familia = familiaService.listarPorIdFamilia(id);
+        Familia familia = FamiliaMapper.toModel(requestDto);
 
-        return ResponseEntity.status(200).body(familia);
+        Familia familiaAtualizada =
+                familiaService.atualizar(idFamilia, familia);
 
+        FamiliaResponseDto responseDto =
+                FamiliaMapper.toResponse(familiaAtualizada);
+
+        return ResponseEntity.ok(responseDto);
     }
-
-//
-//    @Operation(
-//            summary = "Atualizar família",
-//            description = "Atualiza uma família com os dados fornecidos pelo ID"
-//    )
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Família atualizada com sucesso"),
-//            @ApiResponse(responseCode = "404", description = "Família não encontrada pelo ID")
-//    })
-//    @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('editar_familias')")
-//    public ResponseEntity<FamiliaResponseDto> atualizarFamilia(@PathVariable Integer idFamilia) {
-//
-//        Familia familia = familiaService.listarPorId(idFamilia);
-//
-//        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familia);
-//
-//        return ResponseEntity.status(200).body(responseDto);
-//
-//    }
 }

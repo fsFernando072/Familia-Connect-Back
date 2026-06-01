@@ -28,7 +28,7 @@ public class CargoHasAcessoController {
 
     @PostMapping
     public ResponseEntity<CargoHasAcessoResponseDto> cadastrar(@RequestBody @Valid CargoHasAcessoRequestDto dto) {
-        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.cadastrar(dto);
+        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.cadastrar(CargoHasAcessoMapper.toModel(dto));
         CargoHasAcessoResponseDto responseDto = CargoHasAcessoMapper.toResponse(cargoHasAcesso);
 
         return ResponseEntity.status(201).body(responseDto);
@@ -56,7 +56,7 @@ public class CargoHasAcessoController {
     @PutMapping("/{id}")
     public ResponseEntity<CargoHasAcessoResponseDto> atualizar(@PathVariable Integer id,
                                                                @RequestBody @Valid CargoHasAcessoRequestDto dto) {
-        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.atualizar(id, dto);
+        CargoHasAcesso cargoHasAcesso = cargoHasAcessoService.atualizar(id, CargoHasAcessoMapper.toModel(dto));
         CargoHasAcessoResponseDto responseDto = CargoHasAcessoMapper.toResponse(cargoHasAcesso);
 
         return ResponseEntity.status(200).body(responseDto);

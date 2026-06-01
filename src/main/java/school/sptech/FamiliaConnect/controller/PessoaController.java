@@ -47,7 +47,7 @@ public class PessoaController {
     @PreAuthorize("hasAuthority('cadastrar_familias')")
     public ResponseEntity<PessoaResponseDto> cadastrarPessoa(@RequestBody @Valid PessoaRequestDto pessoaRequestDto){
 
-        Pessoa pessoaCadastrada = pessoaService.salvar(pessoaRequestDto);
+        Pessoa pessoaCadastrada = pessoaService.salvar(PessoaMapper.toModel(pessoaRequestDto));
 
         PessoaResponseDto pessoaResponseDto = PessoaMapper.toResponse(pessoaCadastrada);
 

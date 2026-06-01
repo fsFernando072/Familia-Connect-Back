@@ -17,25 +17,37 @@ public class FamiliaMapper {
         familia.setFotoFamilia(familiaRequestDto.getFotoFamilia());
         familia.setDataCadastro(familiaRequestDto.getDataCadastro());
         familia.setPossuiPrioridade(familiaRequestDto.getPossuiPrioridade());
+        Endereco endereco = new Endereco();
+        endereco.setId(familiaRequestDto.getEnderecoId());
+
+        familia.setEndereco(endereco);
 
         return familia;
     }
 
     public static FamiliaResponseDto toResponse(Familia familia){
 
-        Endereco enderecoEntidade = new Endereco();
-        FamiliaResponseDto.FamiliaEndereco familiaEndereco = new FamiliaResponseDto.FamiliaEndereco();
+        Endereco enderecoEntidade = familia.getEndereco();
+
+        FamiliaResponseDto.FamiliaEndereco familiaEndereco =
+                new FamiliaResponseDto.FamiliaEndereco();
+
+        familiaEndereco.setId(enderecoEntidade.getId());
         familiaEndereco.setCep(enderecoEntidade.getCep());
         familiaEndereco.setBairro(enderecoEntidade.getBairro());
         familiaEndereco.setLogradouro(enderecoEntidade.getLogradouro());
         familiaEndereco.setNumero(enderecoEntidade.getNumero());
-        familiaEndereco.setLogradouro(enderecoEntidade.getLogradouro());
         familiaEndereco.setCidade(enderecoEntidade.getCidade());
+        familiaEndereco.setComplemento(enderecoEntidade.getComplemento());
 
-        Estado estadoEntidade = new Estado();
-        FamiliaResponseDto.FamiliaEndereco.EnderecoEstado enderecoEstado = new FamiliaResponseDto.FamiliaEndereco.EnderecoEstado();
-        enderecoEstado.setNome(estadoEntidade.getNome());
-        enderecoEstado.setSigla(estadoEntidade.getSigla());
+        Estado estado = enderecoEntidade.getEstado();
+
+        FamiliaResponseDto.FamiliaEndereco.EnderecoEstado enderecoEstado =
+                new FamiliaResponseDto.FamiliaEndereco.EnderecoEstado();
+
+        enderecoEstado.setId(estado.getId());
+        enderecoEstado.setNome(estado.getNome());
+        enderecoEstado.setSigla(estado.getSigla());
 
         familiaEndereco.setEnderecoEstado(enderecoEstado);
 
@@ -47,7 +59,6 @@ public class FamiliaMapper {
         dto.setFamiliaEndereco(familiaEndereco);
 
         return dto;
-
     }
 
     public static List<FamiliaResponseDto> toResponse(List<Familia> familias){

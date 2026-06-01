@@ -5,6 +5,7 @@ import school.sptech.FamiliaConnect.dto.entrega.EntregaResponseDto;
 import school.sptech.FamiliaConnect.model.Entrega;
 import school.sptech.FamiliaConnect.model.Funcionario;
 import school.sptech.FamiliaConnect.model.Pessoa;
+import school.sptech.FamiliaConnect.model.Produto;
 
 import java.util.List;
 
@@ -15,6 +16,18 @@ public class EntregaMapper {
         Entrega entrega = new Entrega(
             requestDto.getDataEntrega()
         );
+        Pessoa pessoa = new Pessoa();
+        pessoa.setId(requestDto.getIdPessoa());
+
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(requestDto.getIdFuncionario());
+
+        Produto produto = new Produto();
+        produto.setId(requestDto.getIdProduto());
+
+        entrega.setPessoa(pessoa);
+        entrega.setFuncionario(funcionario);
+        entrega.setProduto(produto);
 
         return entrega;
 

@@ -47,7 +47,7 @@ public class EnderecoController {
     @PreAuthorize("hasAuthority('cadastrar_funcionarios')")
     public ResponseEntity<EnderecoResponseDto> salvar(@RequestBody @Valid EnderecoRequestDto enderecoRequestDto){
 
-        Endereco endereco = enderecoService.salvar(enderecoRequestDto);
+        Endereco endereco = enderecoService.salvar(EnderecoMapper.toModel(enderecoRequestDto));
 
         EnderecoResponseDto responseDto = EnderecoMapper.toResponse(endereco);
 

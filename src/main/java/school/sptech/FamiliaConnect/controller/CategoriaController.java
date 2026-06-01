@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.categoria.CategoriaRequestDto;
 import school.sptech.FamiliaConnect.dto.categoria.CategoriaResponseDto;
@@ -41,6 +42,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "204", description = "Lista de categorias retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_produtos')")
     public ResponseEntity<List<CategoriaResponseDto>> listarCategorias(){
 
         List<Categoria> categorias = categoriaService.listar();
@@ -60,6 +62,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_produtos')")
     public ResponseEntity<CategoriaResponseDto> cadastrarCategoria(@RequestBody @Valid CategoriaRequestDto requestDto){
 
         Categoria categoria = CategoriaMapper.toModel(requestDto);

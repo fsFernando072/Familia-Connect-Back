@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaResponseDto;
@@ -43,6 +44,7 @@ public class PessoaController {
             @ApiResponse(responseCode = "409", description = "Pessoa já cadastrada")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_familias')")
     public ResponseEntity<PessoaResponseDto> cadastrarPessoa(@RequestBody @Valid PessoaRequestDto pessoaRequestDto){
 
         Pessoa pessoaCadastrada = pessoaService.salvar(pessoaRequestDto);

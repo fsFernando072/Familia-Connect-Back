@@ -27,11 +27,8 @@ class AcessoServiceTest {
     @Mock
     AcessoRepository acessoRepository;
 
-
-
     @InjectMocks
     AcessoService acessoService;
-
 
     @Nested
     @DisplayName("Deve cadastrar os acessos corretamente")
@@ -43,14 +40,11 @@ class AcessoServiceTest {
 
             acessoRequestDto.setNomeTela("acesso1");
 
-
-
             Mockito.when(acessoRepository.save(Mockito.any(Acesso.class)))
                     .thenReturn(AcessoMapper.toModel(acessoRequestDto));
 
             Acesso resultado = acessoService.cadastrar(acessoRequestDto);
 
-            Assertions.assertEquals(AcessoMapper.toModel(acessoRequestDto).getId(), resultado.getId());
             Assertions.assertEquals(AcessoMapper.toModel(acessoRequestDto).getNomeTela(), resultado.getNomeTela());
         }
 

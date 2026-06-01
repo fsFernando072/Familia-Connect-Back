@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.funcionario.*;
-import school.sptech.FamiliaConnect.enums.AcessoEnum;
 import school.sptech.FamiliaConnect.mapper.FuncionarioMapper;
 import school.sptech.FamiliaConnect.model.Funcionario;
 import school.sptech.FamiliaConnect.service.FuncionarioService;
@@ -52,7 +51,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "204", description = "Lista de funcionários retornada vazia")
     })
     @GetMapping
-    @PreAuthorize("hasAuthority('"+ AcessoEnum.Constants.LISTAR_FUNCIONARIOS +"')")
+    @PreAuthorize("hasAuthority('listar_funcionarios')")
     public ResponseEntity<List<FuncionarioResponseDto>> listarFuncionarios(){
 
         List<Funcionario> funcionarios = funcionarioService.listar();
@@ -73,6 +72,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado pelo ID")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('listar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> listarPorId(@PathVariable Integer id){
 
         Funcionario funcionario = funcionarioService.listarPorId(id);
@@ -90,6 +90,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado pelo ID")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> cadastrarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto){
 
         Funcionario funcionarioCadastrado = funcionarioService.salvar(requestDto);
@@ -107,6 +108,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado pelo ID")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('editar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> atualiazarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto, @PathVariable Integer id){
 
         Funcionario funcionarioAtualizado = funcionarioService.atualizar(requestDto, id);

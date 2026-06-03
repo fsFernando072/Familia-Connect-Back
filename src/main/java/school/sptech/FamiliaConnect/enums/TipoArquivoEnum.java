@@ -21,7 +21,7 @@ public enum TipoArquivoEnum {
 
     public static void validateEnum(String valor) {
          Boolean isValid = Arrays.stream(TipoArquivoEnum.values())
-                .allMatch(e -> e.getValor().equals(valor));
+                .anyMatch(e -> e.getValor().equals(valor.trim()));
 
          if(!isValid) throw new TipoDeArquivoIncompativelException("Tipo de arquivo não compatível: "+ valor);
     }

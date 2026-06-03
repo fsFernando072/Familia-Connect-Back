@@ -1,16 +1,10 @@
 package school.sptech.FamiliaConnect.dto.ocr;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Builder
 public class DependenteResponseDto {
 
     private String nome;
@@ -19,4 +13,5 @@ public class DependenteResponseDto {
     private Boolean responsavel;
 
 }
+
 

@@ -103,7 +103,6 @@ public class FamiliaController {
 
     }
 
-
     @Operation(
             summary = "Listar família por ID",
             description = "Retorna os dados da familía com base no ID fornecido"

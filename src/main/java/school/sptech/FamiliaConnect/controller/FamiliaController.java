@@ -47,6 +47,7 @@ public class FamiliaController {
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado pelo ID")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_familias')")
     public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
 
         Familia familiaCadastrada = familiaService.salvar(FamiliaMapper.toModel(familiaRequestDto));
@@ -112,6 +113,7 @@ public class FamiliaController {
             @ApiResponse(responseCode = "404", description = "Retorna erro ao achar família com o ID informado")
     })
     @PutMapping("/{idFamilia}")
+    @PreAuthorize("hasAuthority('editar_familias')")
     public ResponseEntity<FamiliaResponseDto> atualizarFamilia(
             @PathVariable Integer idFamilia,
             @RequestBody @Valid FamiliaRequestDto requestDto

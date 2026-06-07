@@ -36,6 +36,7 @@ public class AcessoController {
             @ApiResponse(responseCode = "201", description = "Acesso cadastrado com sucesso")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_acessos')")
     public ResponseEntity<AcessoResponseDto> cadastrar(@RequestBody @Valid AcessoRequestDto dto) {
         Acesso acesso = acessoService.cadastrar(AcessoMapper.toModel(dto));
         AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
@@ -52,6 +53,7 @@ public class AcessoController {
             @ApiResponse(responseCode = "204", description = "Lista de acessos retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_acessos')")
     public ResponseEntity<List<AcessoResponseDto>> listar() {
         List<Acesso> acessos = acessoService.listar();
 
@@ -71,6 +73,7 @@ public class AcessoController {
             @ApiResponse(responseCode = "404", description = "Acesso não encontrado pelo ID")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('listar_acessos')")
     public ResponseEntity<AcessoResponseDto> buscarPorId(@PathVariable Integer id) {
         Acesso acesso = acessoService.buscarPorId(id);
         AcessoResponseDto responseDto = AcessoMapper.toResponse(acesso);
@@ -87,6 +90,7 @@ public class AcessoController {
             @ApiResponse(responseCode = "404", description = "Acesso não encontrado pelo ID")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('editar_acessos')")
     public ResponseEntity<AcessoResponseDto> atualizar(@PathVariable Integer id,
                                                        @RequestBody @Valid AcessoRequestDto dto) {
         Acesso acesso = acessoService.atualizar(id, AcessoMapper.toModel(dto));
@@ -104,6 +108,7 @@ public class AcessoController {
             @ApiResponse(responseCode = "404", description = "Acesso não encontrado pelo ID")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('excluir_acessos')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         acessoService.deletar(id);
 

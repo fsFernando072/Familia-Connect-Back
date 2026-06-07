@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
 import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaResponseDto;
@@ -37,6 +38,7 @@ public class AuditoriaController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado pelo ID")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_auditorias')")
     public ResponseEntity<AuditoriaResponseDto> cadastrar(@RequestBody @Valid AuditoriaRequestDto dto) {
         Auditoria auditoria = auditoriaService.cadastrar(AuditoriaMapper.toModel(dto));
         AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
@@ -53,6 +55,7 @@ public class AuditoriaController {
             @ApiResponse(responseCode = "204", description = "Lista de aditorias retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_auditorias')")
     public ResponseEntity<List<AuditoriaResponseDto>> listar() {
         List<Auditoria> auditorias = auditoriaService.listar();
 
@@ -72,6 +75,7 @@ public class AuditoriaController {
             @ApiResponse(responseCode = "404", description = "Auditoria não encontrada pelo ID")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('listar_auditorias')")
     public ResponseEntity<AuditoriaResponseDto> buscarPorId(@PathVariable Integer id) {
         Auditoria auditoria = auditoriaService.buscarPorId(id);
         AuditoriaResponseDto responseDto = AuditoriaMapper.toResponse(auditoria);
@@ -88,6 +92,7 @@ public class AuditoriaController {
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado (Auditoria ou Funcionário)")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('editar_auditorias')")
     public ResponseEntity<AuditoriaResponseDto> atualizar(@PathVariable Integer id,
                                                           @RequestBody @Valid AuditoriaRequestDto dto) {
         Auditoria auditoria = auditoriaService.atualizar(id, AuditoriaMapper.toModel(dto));
@@ -105,6 +110,7 @@ public class AuditoriaController {
             @ApiResponse(responseCode = "404", description = "Auditoria não encontrada pelo ID")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('excluir_auditorias')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         auditoriaService.deletar(id);
 

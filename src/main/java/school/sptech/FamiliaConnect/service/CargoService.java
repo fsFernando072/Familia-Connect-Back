@@ -41,6 +41,11 @@ public class CargoService {
             throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
         }
 
+        cargoRepository.findByNome(cargo.getNome())
+                .ifPresent(cargo1 -> {
+                    throw new EntidadeJaCadastradaException("Cargo já cadastrado");
+                });
+
         cargo.setId(id);
 
         return cargoRepository.save(cargo);

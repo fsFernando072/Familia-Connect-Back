@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.profissao.ProfissaoRequestDto;
 import school.sptech.FamiliaConnect.dto.profissao.ProfissaoResponseDto;
@@ -41,6 +42,7 @@ public class ProfissaoController {
             @ApiResponse(responseCode = "409", description = "Profissão já cadastrada")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_profissoes')")
     public ResponseEntity<ProfissaoResponseDto> cadastrarProfissao(@RequestBody @Valid ProfissaoRequestDto profissaoRequestDto){
 
         Profissao profissaoSalva = profissaoService.cadastrarProfissao(ProfissaoMapper.toModel(profissaoRequestDto));
@@ -59,6 +61,7 @@ public class ProfissaoController {
             @ApiResponse(responseCode = "204", description = "Lista de profissões retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_profissoes')")
     public ResponseEntity<List<ProfissaoResponseDto>> buscarProfissoes(){
 
         List<Profissao> profissoes = profissaoService.listarProfissoes();

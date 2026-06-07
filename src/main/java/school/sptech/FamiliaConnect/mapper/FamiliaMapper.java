@@ -1,5 +1,6 @@
 package school.sptech.FamiliaConnect.mapper;
 
+import org.springframework.data.domain.Page;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
 import school.sptech.FamiliaConnect.model.Endereco;
@@ -65,6 +66,12 @@ public class FamiliaMapper {
         return familias.stream()
                 .map(FamiliaMapper::toResponse)
                 .toList();
+
+    }
+
+    public static Page<FamiliaResponseDto> toResponse(Page<Familia> familias){
+
+        return familias.map(FamiliaMapper::toResponse);
 
     }
 

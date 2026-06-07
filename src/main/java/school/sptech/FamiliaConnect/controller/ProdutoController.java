@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.produto.ProdutoRequestDto;
 import school.sptech.FamiliaConnect.dto.produto.ProdutoResponseDto;
@@ -41,6 +42,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "204", description = "Lista de produtos retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_produtos')")
     public ResponseEntity<List<ProdutoResponseDto>> listarProdutos(){
 
         List<Produto> produtos = produtoService.listar();
@@ -62,6 +64,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Categoria do produto não encontrada pelo ID")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_produtos')")
     public ResponseEntity<ProdutoResponseDto> cadastrarProduto(@RequestBody @Valid ProdutoRequestDto requestDto){
 
         Produto produtoCadastrado = produtoService.salvar(ProdutoMapper.toModel(requestDto));

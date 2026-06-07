@@ -1,17 +1,17 @@
 package school.sptech.FamiliaConnect.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
-import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.FamiliaMapper;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Familia;
+import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.repository.EnderecoRepository;
 import school.sptech.FamiliaConnect.repository.FamiliaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FamiliaService {
@@ -42,9 +42,9 @@ public class FamiliaService {
 
     }
 
-    public List<Familia> listar(){
+    public Page<FamiliaListResponseDto> listar(Pageable pageable){
 
-        return familiaRepository.findAll();
+        return familiaRepository.findAllCustomized(pageable);
 
     }
 
@@ -70,5 +70,11 @@ public class FamiliaService {
         familiaExistente.setEndereco(endereco);
 
         return familiaRepository.save(familiaExistente);
+    }
+
+    public List<Pessoa> listarPorIdFamilia(Integer id){
+
+        return familiaRepository.findByIdFamilia(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com o id não foi encontrada"));
     }
 }

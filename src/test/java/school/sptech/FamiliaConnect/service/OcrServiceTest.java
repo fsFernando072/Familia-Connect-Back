@@ -12,10 +12,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.client.OcrClient;
+import school.sptech.FamiliaConnect.dto.ocr.EnderecoResponseDto;
 import school.sptech.FamiliaConnect.dto.ocr.FamiliaFormResponseDto;
+import school.sptech.FamiliaConnect.dto.ocr.ResponsavelResponseDto;
 import school.sptech.FamiliaConnect.enums.TipoArquivoEnum;
 import school.sptech.FamiliaConnect.exception.DadosDaFamiliaAusenteException;
 import school.sptech.FamiliaConnect.exception.TipoDeArquivoIncompativelException;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class OcrServiceTest {
@@ -38,11 +42,15 @@ class OcrServiceTest {
 
             FamiliaFormResponseDto dadosMock = new FamiliaFormResponseDto();
 
+            dadosMock.setResponsavel(new ResponsavelResponseDto());
+
+            dadosMock.setFamiliaEndereco(new EnderecoResponseDto());
+
             try (MockedStatic<TipoArquivoEnum> mockedStatic = Mockito.mockStatic(TipoArquivoEnum.class)) {
                 mockedStatic.when(() -> TipoArquivoEnum.validateEnum("image/png"))
                         .thenAnswer(invocation -> null);
 
-                Mockito.when(ocrClient.getDadosFamilia("mock")).thenReturn(dadosMock);
+                Mockito.when(ocrClient.getDadosFamilia(arquivo)).thenReturn(List.of(dadosMock));
 
                 FamiliaFormResponseDto resultado = ocrService.extractDadosFamilia(arquivo);
 
@@ -81,7 +89,11 @@ class OcrServiceTest {
                 mockedStatic.when(() -> TipoArquivoEnum.validateEnum("image/png"))
                         .thenAnswer(invocation -> null);
 
-                Mockito.when(ocrClient.getDadosFamilia("mock")).thenReturn(null);
+                FamiliaFormResponseDto dtoVazio =
+                        new FamiliaFormResponseDto();
+
+                Mockito.when(ocrClient.getDadosFamilia(arquivo))
+                        .thenReturn(List.of(dtoVazio));
 
                 Assertions.assertThrows(
                         DadosDaFamiliaAusenteException.class,

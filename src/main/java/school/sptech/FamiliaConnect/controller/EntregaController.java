@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.FamiliaConnect.dto.entrega.EntregaRequestDto;
 import school.sptech.FamiliaConnect.dto.entrega.EntregaResponseDto;
@@ -41,6 +42,7 @@ public class EntregaController {
             @ApiResponse(responseCode = "204", description = "Lista de entregas retornada vazia")
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('listar_entregas')")
     public ResponseEntity<List<EntregaResponseDto>> listarEntregas(){
 
         List<Entrega> entregas = entregaService.listar();
@@ -62,6 +64,7 @@ public class EntregaController {
             @ApiResponse(responseCode = "200", description = "Entrega retornada com sucesso pelo ID")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('listar_entregas')")
     public ResponseEntity<EntregaResponseDto> listarPorId(@PathVariable Integer id){
 
         Entrega entrega = entregaService.listarPorId(id);
@@ -79,6 +82,8 @@ public class EntregaController {
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado (Pessoa, Funcionário ou Produto)")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_entregas')")
+
     public ResponseEntity<EntregaResponseDto> cadastrarEntrega(@RequestBody @Valid EntregaRequestDto requestDto){
 
         Entrega entrega = entregaService.salvar(EntregaMapper.toModel(requestDto));

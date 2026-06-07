@@ -5,12 +5,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
 import school.sptech.FamiliaConnect.mapper.FamiliaMapper;
 import school.sptech.FamiliaConnect.model.Familia;
+import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.service.FamiliaService;
 
 import java.util.List;
@@ -60,25 +66,50 @@ public class FamiliaController {
             @ApiResponse(responseCode = "204", description = "Lista de famílias retornada vazia")
     })
     @GetMapping
-    public ResponseEntity<List<FamiliaResponseDto>> listarFamilias(){
+    @PreAuthorize("hasAuthority('listar_familias')")
+    public ResponseEntity<Page<FamiliaListResponseDto>> listarFamilias(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ){
+        Sort sort = Sort.by("dataCadastro").descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
 
-        List<Familia> familias = familiaService.listar();
+        Page<FamiliaListResponseDto> familias = familiaService.listar(pageRequest);
 
         if (familias.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(FamiliaMapper.toResponse(familias));
+        return ResponseEntity.status(200).body(familias);
 
     }
 
     @Operation(
-            summary = "Atualizar família",
-            description = "Atualiza uma família com os dados fornecidos pelo ID"
+            summary = "Listar família por ID",
+            description = "Retorna os dados da família conforme o ID informado"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Família atualizada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Família não encontrada pelo ID")
+            @ApiResponse(responseCode = "200", description = "Dados da família retornados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Família com o ID informado não identificada")
+    })
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('listar_familias')")
+    public ResponseEntity<List<Pessoa>> listarFamiliaPorId(@PathVariable Integer id){
+
+        List<Pessoa> familias = familiaService.listarPorIdFamilia(id);
+
+
+        return ResponseEntity.status(200).body(familias);
+
+    }
+
+    @Operation(
+            summary = "Listar família por ID",
+            description = "Retorna os dados da familía com base no ID fornecido"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna informações da família com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Retorna erro ao achar família com o ID informado")
     })
     @PutMapping("/{idFamilia}")
     public ResponseEntity<FamiliaResponseDto> atualizarFamilia(

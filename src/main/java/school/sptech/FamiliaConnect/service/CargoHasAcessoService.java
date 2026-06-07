@@ -52,7 +52,7 @@ public class CargoHasAcessoService {
 
     public CargoHasAcesso buscarPorId(Integer id) {
         return cargoHasAcessoRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O cargo com id não foi encontrado"));
     }
 
     public CargoHasAcesso atualizar(Integer id, CargoHasAcesso cargoHasAcesso) {

@@ -35,6 +35,7 @@ public class CargoController {
             @ApiResponse(responseCode = "201", description = "Cargo cadastrado com sucesso")
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('cadastrar_cargos')")
     public ResponseEntity<CargoResponseDto> cadastrar(@RequestBody @Valid CargoRequestDto dto) {
         Cargo cargo = cargoService.cadastrar( CargoMapper.toModel(dto));
         CargoResponseDto responseDto = CargoMapper.toResponse(cargo);
@@ -71,7 +72,7 @@ public class CargoController {
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado pelo ID")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('atualizar_cargos')")
+    @PreAuthorize("hasAuthority('editar_cargos')")
     public ResponseEntity<CargoResponseDto> atualizar(@PathVariable Integer id,
                                                       @RequestBody @Valid CargoRequestDto dto) {
         Cargo cargo = cargoService.atualizar(id, CargoMapper.toModel(dto));

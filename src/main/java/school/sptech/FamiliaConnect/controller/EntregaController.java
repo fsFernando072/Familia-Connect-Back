@@ -83,7 +83,6 @@ public class EntregaController {
     })
     @PostMapping
     @PreAuthorize("hasAuthority('cadastrar_entregas')")
-
     public ResponseEntity<EntregaResponseDto> cadastrarEntrega(@RequestBody @Valid EntregaRequestDto requestDto){
 
         Entrega entrega = entregaService.salvar(EntregaMapper.toModel(requestDto));

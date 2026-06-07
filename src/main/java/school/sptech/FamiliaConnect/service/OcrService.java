@@ -37,10 +37,17 @@ public class OcrService implements OcrUsecase {
     }
 
     private void validateFile(MultipartFile fotoFamilia) {
-        LOGGER.info("Iniciando validação de arquivo recebido, nome {}; tipo {}", fotoFamilia.getOriginalFilename(), fotoFamilia.getContentType());
         if(fotoFamilia == null){
-            throw new TipoDeArquivoIncompativelException("Erro ao identificar arquivo");
+            throw new TipoDeArquivoIncompativelException(
+                    "Erro ao identificar arquivo"
+            );
         }
+
+        LOGGER.info(
+                "Iniciando validação de arquivo recebido, nome {}; tipo {}",
+                fotoFamilia.getOriginalFilename(),
+                fotoFamilia.getContentType()
+        );
 
         TipoArquivoEnum.validateEnum(fotoFamilia.getContentType());
     }

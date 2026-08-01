@@ -3,8 +3,13 @@ package school.sptech.FamiliaConnect.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaCompletaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
+import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.mapper.EnderecoMapper;
+import school.sptech.FamiliaConnect.mapper.PessoaMapper;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
@@ -20,12 +25,17 @@ public class FamiliaService {
 
     private final FamiliaRepository familiaRepository;
     private final EnderecoRepository enderecoRepository;
+    private final EnderecoService enderecoService;
+    private final PessoaService pessoaService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository) {
+    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository,
+                          EnderecoService enderecoService, PessoaService pessoaService) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
+        this.enderecoService = enderecoService;
+        this.pessoaService = pessoaService;
     }
 
     // Funções ---------------------------------------------------------------------------------------------------------
@@ -40,6 +50,34 @@ public class FamiliaService {
 
         return familiaRepository.save(familia);
 
+    }
+
+    @Transactional
+    public Familia salvarCompleta(FamiliaCompletaRequestDto dto) {
+
+        Endereco endereco = EnderecoMapper.toModel(dto.getEndereco());
+        endereco = enderecoService.salvar(endereco);
+
+        Familia familia = new Familia();
+        familia.setDataCadastro(dto.getDataCadastro());
+        familia.setFotoFamilia(dto.getFotoFamilia());
+        familia.setPossuiPrioridade(dto.getPossuiPrioridade());
+        familia.setEndereco(endereco);
+        familia = familiaRepository.save(familia);
+
+        Pessoa responsavel = PessoaMapper.toModel(dto.getResponsavel());
+        responsavel.setFamilia(familia);
+        pessoaService.salvar(responsavel);
+
+        if (dto.getDependentes() != null) {
+            for (PessoaRequestDto dependente : dto.getDependentes()) {
+                Pessoa dependentePessoa = PessoaMapper.toModel(dependente);
+                dependentePessoa.setFamilia(familia);
+                pessoaService.salvar(dependentePessoa);
+            }
+        }
+
+        return familia;
     }
 
     public Page<FamiliaListResponseDto> listar(Pageable pageable){

@@ -9,10 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.dto.Cargo.CargoRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.repository.CargoRepository;
 

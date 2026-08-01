@@ -7,4 +7,6 @@ public interface ProfissaoRepository extends JpaRepository<Profissao, Integer> {
 
     public Boolean existsByNome(String nome);
 
+    public Profissao findByNome(String nome);
+
 }

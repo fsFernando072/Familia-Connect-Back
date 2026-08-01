@@ -28,9 +28,6 @@ public class PessoaResponseDto {
     @Schema(description = "Telefone da pessoa")
     private String telefone;
 
-    @Schema(description = "Se a pessoa está trabalhando")
-    private Boolean isTrabalhando;
-
     @Schema(description = "Se a pessoa é a responsável da família")
     private Boolean isResponsavel;
 
@@ -48,14 +45,13 @@ public class PessoaResponseDto {
     public PessoaResponseDto() {
     }
 
-    public PessoaResponseDto(Integer id, String nome, String rg, String cpf, LocalDate dataNascimento, String telefone, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco) {
+    public PessoaResponseDto(Integer id, String nome, String rg, String cpf, LocalDate dataNascimento, String telefone, Boolean isResponsavel, String grauParentesco) {
         this.id = id;
         this.nome = nome;
         this.rg = rg;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.telefone = telefone;
-        this.isTrabalhando = isTrabalhando;
         this.isResponsavel = isResponsavel;
         this.grauParentesco = grauParentesco;
     }
@@ -145,14 +141,6 @@ public class PessoaResponseDto {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public Boolean getTrabalhando() {
-        return isTrabalhando;
-    }
-
-    public void setTrabalhando(Boolean trabalhando) {
-        isTrabalhando = trabalhando;
     }
 
     public Boolean getResponsavel() {

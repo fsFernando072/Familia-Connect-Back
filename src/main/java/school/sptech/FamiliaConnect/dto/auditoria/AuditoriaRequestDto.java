@@ -1,6 +1,5 @@
-package school.sptech.FamiliaConnect.dto.Auditoria;
+package school.sptech.FamiliaConnect.dto.auditoria;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

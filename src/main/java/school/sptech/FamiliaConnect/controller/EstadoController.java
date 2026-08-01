@@ -4,17 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.FamiliaConnect.dto.Estado.EstadoRequestDto;
-import school.sptech.FamiliaConnect.dto.Estado.EstadoResponseDto;
+import school.sptech.FamiliaConnect.dto.estado.EstadoResponseDto;
 import school.sptech.FamiliaConnect.mapper.EstadoMapper;
 import school.sptech.FamiliaConnect.model.Estado;
 import school.sptech.FamiliaConnect.service.EstadoService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "Estados", description = "Operações relacionadas aos estados cadastrados no sistema")
 @RestController

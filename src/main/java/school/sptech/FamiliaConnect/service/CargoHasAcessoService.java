@@ -1,9 +1,7 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
-import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.CargoHasAcessoMapper;
 import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.model.CargoHasAcesso;

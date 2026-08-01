@@ -1,7 +1,7 @@
 package school.sptech.FamiliaConnect.mapper;
 
-import school.sptech.FamiliaConnect.dto.Estado.EstadoRequestDto;
-import school.sptech.FamiliaConnect.dto.Estado.EstadoResponseDto;
+import school.sptech.FamiliaConnect.dto.estado.EstadoRequestDto;
+import school.sptech.FamiliaConnect.dto.estado.EstadoResponseDto;
 import school.sptech.FamiliaConnect.model.Estado;
 
 import java.util.List;

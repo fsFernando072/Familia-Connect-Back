@@ -1,7 +1,7 @@
 package school.sptech.FamiliaConnect.mapper;
 
-import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoRequestDto;
-import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoResponseDto;
+import school.sptech.FamiliaConnect.dto.cargoHasAcesso.CargoHasAcessoRequestDto;
+import school.sptech.FamiliaConnect.dto.cargoHasAcesso.CargoHasAcessoResponseDto;
 import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.model.CargoHasAcesso;

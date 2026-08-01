@@ -1,7 +1,7 @@
 package school.sptech.FamiliaConnect.mapper;
 
-import school.sptech.FamiliaConnect.dto.Acesso.AcessoRequestDto;
-import school.sptech.FamiliaConnect.dto.Acesso.AcessoResponseDto;
+import school.sptech.FamiliaConnect.dto.acesso.AcessoRequestDto;
+import school.sptech.FamiliaConnect.dto.acesso.AcessoResponseDto;
 import school.sptech.FamiliaConnect.model.Acesso;
 
 import java.util.List;

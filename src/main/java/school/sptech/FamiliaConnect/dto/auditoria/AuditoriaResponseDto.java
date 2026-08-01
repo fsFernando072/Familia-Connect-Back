@@ -1,4 +1,4 @@
-package school.sptech.FamiliaConnect.dto.Auditoria;
+package school.sptech.FamiliaConnect.dto.auditoria;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

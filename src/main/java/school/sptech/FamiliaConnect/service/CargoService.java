@@ -1,10 +1,8 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
-import school.sptech.FamiliaConnect.dto.Cargo.CargoRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.repository.CargoRepository;
 

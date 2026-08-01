@@ -1,4 +1,4 @@
-package school.sptech.FamiliaConnect.dto.CargoHasAcesso;
+package school.sptech.FamiliaConnect.dto.cargoHasAcesso;
 
 public class CargoHasAcessoResponseDto {
 

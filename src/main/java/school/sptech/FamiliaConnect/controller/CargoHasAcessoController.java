@@ -1,19 +1,16 @@
 package school.sptech.FamiliaConnect.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoRequestDto;
-import school.sptech.FamiliaConnect.dto.CargoHasAcesso.CargoHasAcessoResponseDto;
+import school.sptech.FamiliaConnect.dto.cargoHasAcesso.CargoHasAcessoRequestDto;
+import school.sptech.FamiliaConnect.dto.cargoHasAcesso.CargoHasAcessoResponseDto;
 import school.sptech.FamiliaConnect.mapper.CargoHasAcessoMapper;
-import school.sptech.FamiliaConnect.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.model.CargoHasAcesso;
 import school.sptech.FamiliaConnect.service.CargoHasAcessoService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "Cargos-Acessos", description = "Operações relacionadas aos acessos de cada cargo")
 @RestController

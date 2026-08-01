@@ -21,14 +21,14 @@ public class PessoaService {
 
     private final PessoaRepository pessoaRepository;
     private final FamiliaRepository familiaRepository;
-    private final ProfissaoRepository profissaoRepository;
+    private final ProfissaoService profissaoService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public PessoaService(PessoaRepository pessoaRepository, FamiliaRepository familiaRepository, ProfissaoRepository profissaoRepository) {
+    public PessoaService(PessoaRepository pessoaRepository, FamiliaRepository familiaRepository, ProfissaoService profissaoService) {
         this.pessoaRepository = pessoaRepository;
         this.familiaRepository = familiaRepository;
-        this.profissaoRepository = profissaoRepository;
+        this.profissaoService = profissaoService;
     }
 
 
@@ -43,14 +43,16 @@ public class PessoaService {
         Familia familia = familiaRepository.findById(pessoa.getFamilia().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("A família não foi encontrada"));
 
-
-
-
         pessoa.setFamilia(familia);
 
-        if(pessoa.getProfissao().getId() != null){
-            Optional<Profissao> profissao = profissaoRepository.findById(pessoa.getProfissao().getId());
-            pessoa.setProfissao(profissao.get());
+        if (pessoa.getProfissao() != null &&
+            pessoa.getProfissao().getNome() != null &&
+            !pessoa.getProfissao().getNome().isBlank()
+        ){
+            Profissao profissao = profissaoService.listarOuCadastrarPorNome(pessoa.getProfissao());
+            pessoa.setProfissao(profissao);
+        } else {
+            pessoa.setProfissao(null);
         }
 
         return pessoaRepository.save(pessoa);

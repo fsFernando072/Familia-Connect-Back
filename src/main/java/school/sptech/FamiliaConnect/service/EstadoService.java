@@ -1,14 +1,11 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
-import school.sptech.FamiliaConnect.dto.Estado.EstadoRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.EstadoMapper;
 import school.sptech.FamiliaConnect.model.Estado;
 import school.sptech.FamiliaConnect.repository.EstadoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EstadoService {

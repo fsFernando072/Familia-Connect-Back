@@ -1,9 +1,8 @@
 package school.sptech.FamiliaConnect.mapper;
 
-import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
-import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaResponseDto;
+import school.sptech.FamiliaConnect.dto.auditoria.AuditoriaRequestDto;
+import school.sptech.FamiliaConnect.dto.auditoria.AuditoriaResponseDto;
 import school.sptech.FamiliaConnect.model.Auditoria;
-import school.sptech.FamiliaConnect.model.Entrega;
 import school.sptech.FamiliaConnect.model.Funcionario;
 
 import java.util.List;

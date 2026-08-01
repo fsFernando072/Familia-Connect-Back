@@ -17,20 +17,14 @@ public class PessoaMapper {
         pessoa.setRg(pessoaRequestDto.getRg());
         pessoa.setCpf(pessoaRequestDto.getCpf());
         pessoa.setDtNascimento(pessoaRequestDto.getDataNascimento());
-        pessoa.setTrabalhando(pessoaRequestDto.getTrabalhando());
         pessoa.setResponsavel(pessoaRequestDto.getResponsavel());
         pessoa.setGrauParentesco(pessoaRequestDto.getGrauParentesco());
         pessoa.setTelefone(pessoaRequestDto.getTelefone());
-        Familia familia = new Familia();
-        familia.setId(pessoaRequestDto.getIdFamilia());
-        if(pessoaRequestDto.getIdProfissao() != null){
-            Profissao profissao = new Profissao();
-            profissao.setId(pessoaRequestDto.getIdProfissao());
 
-            pessoa.setProfissao(profissao);
-        }
+        Profissao profissao = new Profissao();
+        profissao.setNome(pessoaRequestDto.getProfissao());
+        pessoa.setProfissao(profissao);
 
-        pessoa.setFamilia(familia);
         return pessoa;
 
     }
@@ -53,7 +47,6 @@ public class PessoaMapper {
         dto.setRg(pessoa.getRg());
         dto.setCpf(pessoa.getCpf());
         dto.setDataNascimento(pessoa.getDtNascimento());
-        dto.setTrabalhando(pessoa.getTrabalhando());
         dto.setResponsavel(pessoa.getResponsavel());
         dto.setGrauParentesco(pessoa.getGrauParentesco());
         dto.setTelefone(pessoa.getTelefone());

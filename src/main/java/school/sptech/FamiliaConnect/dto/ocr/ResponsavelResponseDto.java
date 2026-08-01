@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.dto.ocr;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,6 +11,8 @@ public class ResponsavelResponseDto {
     private String nome;
     private String rg;
     private String cpf;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR")
     private LocalDate dataNascimento;
     private String telefone;
     private String profissao;

@@ -1,4 +1,4 @@
-package school.sptech.FamiliaConnect.dto.Acesso;
+package school.sptech.FamiliaConnect.dto.acesso;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

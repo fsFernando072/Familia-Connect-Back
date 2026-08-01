@@ -31,24 +31,17 @@ public class PessoaRequestDto {
     @NotNull(message = "Data de nascimento da pessoa é obrigatório")
     private LocalDate dataNascimento;
 
-    @Schema(description = "ID da profissão da pessoa")
-    @NotNull(message = "ID da profissão da pessoa é obrigatório")
-    @Positive(message = "ID da profissão da pessoa tem que ser positivo")
-    private Integer idProfissao;
+    @Schema(description = "Profissão da pessoa")
+    private String profissao;
 
     @Schema(description = "ID da família da pessoa")
     @Positive(message = "ID da família da pessoa tem que ser positivo")
-    @NotNull(message = "ID da família da pessoa é obrigatório")
     private Integer idFamilia;
 
     @Schema(description = "Telefone da pessoa")
     @NotBlank(message = "Telefone da pessoa é obrigatório")
     @Size(min = 11, max = 11, message = "Telefone da pessoa tem que ser válido")
     private String telefone;
-
-    @Schema(description = "Se a pessoa trabalha")
-    @NotNull(message = "Se a pessoa trabalha é obrigatório")
-    private Boolean isTrabalhando;
 
     @Schema(description = "Se a pessoa é a responsável da família")
     @NotNull(message = "Se a pessoa é responsável é obrigatório")
@@ -63,15 +56,14 @@ public class PessoaRequestDto {
     public PessoaRequestDto() {
     }
 
-    public PessoaRequestDto(String nome, String rg, String cpf, LocalDate dataNascimento, Integer idProfissao, Integer idFamilia, String telefone, Boolean isTrabalhando, Boolean isResponsavel, String grauParentesco) {
+    public PessoaRequestDto(String nome, String rg, String cpf, LocalDate dataNascimento, String profissao, Integer idFamilia, String telefone, Boolean isResponsavel, String grauParentesco) {
         this.nome = nome;
         this.rg = rg;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
-        this.idProfissao = idProfissao;
+        this.profissao = profissao;
         this.idFamilia = idFamilia;
         this.telefone = telefone;
-        this.isTrabalhando = isTrabalhando;
         this.isResponsavel = isResponsavel;
         this.grauParentesco = grauParentesco;
     }
@@ -110,12 +102,12 @@ public class PessoaRequestDto {
         this.dataNascimento = dataNascimento;
     }
 
-    public Integer getIdProfissao() {
-        return idProfissao;
+    public String getProfissao() {
+        return profissao;
     }
 
-    public void setIdProfissao(Integer idProfissao) {
-        this.idProfissao = idProfissao;
+    public void setProfissao(String profissao) {
+        this.profissao = profissao;
     }
 
     public Integer getIdFamilia() {
@@ -132,14 +124,6 @@ public class PessoaRequestDto {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public Boolean getTrabalhando() {
-        return isTrabalhando;
-    }
-
-    public void setTrabalhando(Boolean trabalhando) {
-        isTrabalhando = trabalhando;
     }
 
     public Boolean getResponsavel() {

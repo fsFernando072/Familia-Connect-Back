@@ -1,9 +1,7 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
-import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.AuditoriaMapper;
 import school.sptech.FamiliaConnect.model.Auditoria;
 import school.sptech.FamiliaConnect.model.Funcionario;
 import school.sptech.FamiliaConnect.repository.AuditoriaRepository;

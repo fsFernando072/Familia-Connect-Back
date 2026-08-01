@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaCompletaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
@@ -51,6 +52,28 @@ public class FamiliaController {
     public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
 
         Familia familiaCadastrada = familiaService.salvar(FamiliaMapper.toModel(familiaRequestDto));
+
+        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
+
+        return ResponseEntity.status(201).body(responseDto);
+
+    }
+
+    @Operation(
+            summary = "Cadastrar família completa",
+            description = "Cadastra endereço, família, responsável e dependentes em uma única transação. " +
+                    "Se qualquer etapa falhar (endereço duplicado, estado inexistente, CPF duplicado etc.), nada é salvo."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Família cadastrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Estado não encontrado pelo ID"),
+            @ApiResponse(responseCode = "409", description = "Endereço ou pessoa (CPF) já cadastrados")
+    })
+    @PostMapping("/completo")
+    @PreAuthorize("hasAuthority('cadastrar_familias')")
+    public ResponseEntity<FamiliaResponseDto> cadastrarFamiliaCompleta(@RequestBody @Valid FamiliaCompletaRequestDto familiaCompletaRequestDto){
+
+        Familia familiaCadastrada = familiaService.salvarCompleta(familiaCompletaRequestDto);
 
         FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
 

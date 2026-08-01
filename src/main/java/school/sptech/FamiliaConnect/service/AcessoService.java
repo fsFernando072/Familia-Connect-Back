@@ -1,15 +1,12 @@
 package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
-import school.sptech.FamiliaConnect.dto.Acesso.AcessoRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.mapper.AcessoMapper;
 import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.repository.AcessoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AcessoService {

@@ -1,7 +1,7 @@
 package school.sptech.FamiliaConnect.mapper;
 
-import school.sptech.FamiliaConnect.dto.Cargo.CargoRequestDto;
-import school.sptech.FamiliaConnect.dto.Cargo.CargoResponseDto;
+import school.sptech.FamiliaConnect.dto.cargo.CargoRequestDto;
+import school.sptech.FamiliaConnect.dto.cargo.CargoResponseDto;
 import school.sptech.FamiliaConnect.model.Cargo;
 
 import java.util.List;

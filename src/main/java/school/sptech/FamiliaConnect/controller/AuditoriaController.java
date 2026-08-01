@@ -8,11 +8,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaRequestDto;
-import school.sptech.FamiliaConnect.dto.Auditoria.AuditoriaResponseDto;
-import school.sptech.FamiliaConnect.mapper.AcessoMapper;
+import school.sptech.FamiliaConnect.dto.auditoria.AuditoriaRequestDto;
+import school.sptech.FamiliaConnect.dto.auditoria.AuditoriaResponseDto;
 import school.sptech.FamiliaConnect.mapper.AuditoriaMapper;
-import school.sptech.FamiliaConnect.model.Acesso;
 import school.sptech.FamiliaConnect.model.Auditoria;
 import school.sptech.FamiliaConnect.service.AuditoriaService;
 

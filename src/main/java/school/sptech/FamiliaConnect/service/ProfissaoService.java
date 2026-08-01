@@ -31,9 +31,15 @@ public class ProfissaoService {
             throw new EntidadeJaCadastradaException("Profissão já cadastrada");
         }
 
-
         return profissaoRepository.save(profissao);
+    }
 
+    public Profissao listarOuCadastrarPorNome(Profissao profissao){
+        if (!profissaoRepository.existsByNome(profissao.getNome())) {
+            return cadastrarProfissao(profissao);
+        }
+
+        return profissaoRepository.findByNome(profissao.getNome());
     }
 
     public List<Profissao> listarProfissoes(){

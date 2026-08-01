@@ -16,7 +16,6 @@ public class Pessoa {
     private String rg;
     private String cpf;
     private LocalDate dtNascimento;
-    private Boolean isTrabalhando;
     private Boolean isResponsavel;
     private String grauParentesco;
     private String telefone;
@@ -75,14 +74,6 @@ public class Pessoa {
 
     public void setResponsavel(Boolean responsavel) {
         isResponsavel = responsavel;
-    }
-
-    public Boolean getTrabalhando() {
-        return isTrabalhando;
-    }
-
-    public void setTrabalhando(Boolean trabalhando) {
-        isTrabalhando = trabalhando;
     }
 
     public String getNome() {

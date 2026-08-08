@@ -8,4 +8,5 @@ public interface FamiliaListResponseDto {
     String getNomeResponsavel();
     String getNomeFamilia();
     String getTelefoneResponsavel();
+    String getFotoFamilia();
 }

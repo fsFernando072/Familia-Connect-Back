@@ -4,19 +4,26 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import school.sptech.FamiliaConnect.dto.familia.FamiliaCompletaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.EnderecoMapper;
 import school.sptech.FamiliaConnect.mapper.PessoaMapper;
 import school.sptech.FamiliaConnect.model.Endereco;
+import school.sptech.FamiliaConnect.model.Entrega;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.repository.EnderecoRepository;
+import school.sptech.FamiliaConnect.repository.EntregaRepository;
 import school.sptech.FamiliaConnect.repository.FamiliaRepository;
+import school.sptech.FamiliaConnect.repository.PessoaRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class FamiliaService {
@@ -25,35 +32,28 @@ public class FamiliaService {
 
     private final FamiliaRepository familiaRepository;
     private final EnderecoRepository enderecoRepository;
+    private final PessoaRepository pessoaRepository;
+    private final EntregaRepository entregaRepository;
     private final EnderecoService enderecoService;
     private final PessoaService pessoaService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
     public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository,
+                          PessoaRepository pessoaRepository, EntregaRepository entregaRepository,
                           EnderecoService enderecoService, PessoaService pessoaService) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
+        this.pessoaRepository = pessoaRepository;
+        this.entregaRepository = entregaRepository;
         this.enderecoService = enderecoService;
         this.pessoaService = pessoaService;
     }
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Familia salvar(Familia familia){
-
-        Endereco endereco = enderecoRepository.findById(familia.getEndereco().getId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("O endereco com o id não foi encontrada"));
-
-
-        familia.setEndereco(endereco);
-
-        return familiaRepository.save(familia);
-
-    }
-
     @Transactional
-    public Familia salvarCompleta(FamiliaCompletaRequestDto dto) {
+    public Familia salvar(FamiliaRequestDto dto) {
 
         Endereco endereco = EnderecoMapper.toModel(dto.getEndereco());
         endereco = enderecoService.salvar(endereco);
@@ -67,15 +67,10 @@ public class FamiliaService {
 
         Pessoa responsavel = PessoaMapper.toModel(dto.getResponsavel());
         responsavel.setFamilia(familia);
+        responsavel.setResponsavel(true);
         pessoaService.salvar(responsavel);
 
-        if (dto.getDependentes() != null) {
-            for (PessoaRequestDto dependente : dto.getDependentes()) {
-                Pessoa dependentePessoa = PessoaMapper.toModel(dependente);
-                dependentePessoa.setFamilia(familia);
-                pessoaService.salvar(dependentePessoa);
-            }
-        }
+        salvarDependentes(dto.getDependentes(), familia);
 
         return familia;
     }
@@ -92,27 +87,111 @@ public class FamiliaService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com o id não foi encontrada"));
     }
 
-    public Familia atualizar(Integer idFamilia, Familia familiaAtualizada) {
+    public List<Pessoa> listarIntegrantes(Integer id){
+
+        return familiaRepository.findByIdFamilia(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com o id não foi encontrada"));
+    }
+
+    @Transactional
+    public Familia atualizar(Integer idFamilia, FamiliaRequestDto dto) {
 
         Familia familiaExistente = familiaRepository.findById(idFamilia)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Família não encontrada pelo id"));
 
-        Endereco endereco = enderecoRepository.findById(
-                        familiaAtualizada.getEndereco().getId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Endereço não encontrado pelo id"));
+        Endereco enderecoAtualizado = enderecoService.atualizar(
+                familiaExistente.getEndereco().getId(), EnderecoMapper.toModel(dto.getEndereco()));
 
-        familiaExistente.setFotoFamilia(familiaAtualizada.getFotoFamilia());
+        familiaExistente.setFotoFamilia(dto.getFotoFamilia());
+        familiaExistente.setPossuiPrioridade(dto.getPossuiPrioridade());
+        familiaExistente.setEndereco(enderecoAtualizado);
+        familiaExistente = familiaRepository.save(familiaExistente);
 
-        familiaExistente.setPossuiPrioridade(familiaAtualizada.getPossuiPrioridade());
+        List<Pessoa> integrantes = listarIntegrantes(idFamilia);
 
-        familiaExistente.setEndereco(endereco);
+        Pessoa responsavelExistente = integrantes.stream()
+                .filter(Pessoa::getResponsavel)
+                .findFirst()
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O responsável da família não foi encontrado"));
 
-        return familiaRepository.save(familiaExistente);
+        Pessoa responsavelAtualizado = PessoaMapper.toModel(dto.getResponsavel());
+        responsavelAtualizado.setResponsavel(true);
+        pessoaService.atualizar(responsavelExistente.getId(), responsavelAtualizado);
+
+        List<Pessoa> dependentesExistentes = integrantes.stream()
+                .filter(pessoa -> !Boolean.TRUE.equals(pessoa.getResponsavel()))
+                .toList();
+
+        atualizarDependentes(dependentesExistentes, dto.getDependentes(), familiaExistente);
+
+        return familiaExistente;
     }
 
-    public List<Pessoa> listarPorIdFamilia(Integer id){
+    private void atualizarDependentes(List<Pessoa> dependentesExistentes, List<PessoaRequestDto> dependentesDto, Familia familia) {
 
-        return familiaRepository.findByIdFamilia(id)
+        List<PessoaRequestDto> dependentes = dependentesDto != null ? dependentesDto : List.of();
+
+        Map<String, Pessoa> dependentesExistentesPorCpf = dependentesExistentes.stream()
+                .filter(pessoa -> pessoa.getCpf() != null && !pessoa.getCpf().isBlank())
+                .collect(Collectors.toMap(Pessoa::getCpf, pessoa -> pessoa));
+
+        Set<Integer> idsMantidos = new HashSet<>();
+
+        for (PessoaRequestDto dependenteDto : dependentes) {
+
+            Pessoa dependenteExistente = dependenteDto.getCpf() != null
+                    ? dependentesExistentesPorCpf.get(dependenteDto.getCpf())
+                    : null;
+
+            if (dependenteExistente != null) {
+                Pessoa dependenteAtualizado = PessoaMapper.toModel(dependenteDto);
+                dependenteAtualizado.setResponsavel(false);
+                pessoaService.atualizar(dependenteExistente.getId(), dependenteAtualizado);
+                idsMantidos.add(dependenteExistente.getId());
+            } else {
+                Pessoa novoDependente = PessoaMapper.toModel(dependenteDto);
+                novoDependente.setFamilia(familia);
+                novoDependente.setResponsavel(false);
+                pessoaService.salvar(novoDependente);
+            }
+        }
+
+        List<Pessoa> dependentesRemovidos = dependentesExistentes.stream()
+                .filter(pessoa -> !idsMantidos.contains(pessoa.getId()))
+                .toList();
+
+        List<Entrega> entregasRemovidas = entregaRepository.findByPessoaIn(dependentesRemovidos);
+        entregaRepository.deleteAll(entregasRemovidas);
+        pessoaRepository.deleteAll(dependentesRemovidos);
+    }
+
+    @Transactional
+    public void deletar(Integer id) {
+
+        Familia familia = familiaRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com o id não foi encontrada"));
+
+        List<Pessoa> integrantes = listarIntegrantes(id);
+
+        List<Entrega> entregas = entregaRepository.findByPessoaIn(integrantes);
+        entregaRepository.deleteAll(entregas);
+
+        pessoaRepository.deleteAll(integrantes);
+        familiaRepository.delete(familia);
+        enderecoRepository.delete(familia.getEndereco());
+    }
+
+    private void salvarDependentes(List<PessoaRequestDto> dependentes, Familia familia) {
+
+        if (dependentes == null) {
+            return;
+        }
+
+        for (PessoaRequestDto dependente : dependentes) {
+            Pessoa dependentePessoa = PessoaMapper.toModel(dependente);
+            dependentePessoa.setFamilia(familia);
+            dependentePessoa.setResponsavel(false);
+            pessoaService.salvar(dependentePessoa);
+        }
     }
 }

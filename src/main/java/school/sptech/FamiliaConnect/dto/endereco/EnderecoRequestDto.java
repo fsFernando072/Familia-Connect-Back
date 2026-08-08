@@ -29,7 +29,6 @@ public class EnderecoRequestDto {
     private Integer numero;
 
     @Schema(description = "Complemento do endereço")
-    @NotBlank(message = "Nome do complemento é obrigatório")
     private String complemento;
 
     @Schema(description = "Nome da cidade do endereço")

@@ -13,13 +13,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import school.sptech.FamiliaConnect.dto.endereco.EnderecoRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
+import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Familia;
+import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.repository.EnderecoRepository;
+import school.sptech.FamiliaConnect.repository.EntregaRepository;
 import school.sptech.FamiliaConnect.repository.FamiliaRepository;
+import school.sptech.FamiliaConnect.repository.PessoaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,59 +39,81 @@ class FamiliaServiceTest {
     @Mock
     EnderecoRepository enderecoRepository;
 
+    @Mock
+    PessoaRepository pessoaRepository;
+
+    @Mock
+    EntregaRepository entregaRepository;
+
+    @Mock
+    EnderecoService enderecoService;
+
+    @Mock
+    PessoaService pessoaService;
+
     @InjectMocks
     FamiliaService familiaService;
+
+    private FamiliaRequestDto criarFamiliaRequestDto() {
+        EnderecoRequestDto enderecoDto = new EnderecoRequestDto();
+        enderecoDto.setCep("08020-000");
+        enderecoDto.setBairro("Itaquera");
+        enderecoDto.setLogradouro("Rua Macapá");
+        enderecoDto.setNumero(1290);
+        enderecoDto.setComplemento("Apartamento 20");
+        enderecoDto.setCidade("São Paulo");
+        enderecoDto.setEstadoId(1);
+
+        PessoaRequestDto responsavelDto = new PessoaRequestDto();
+        responsavelDto.setNome("Paola Ferreira");
+        responsavelDto.setCpf("35012387698");
+        responsavelDto.setRg("368878769");
+        responsavelDto.setDataNascimento(LocalDate.of(1992, 7, 13));
+        responsavelDto.setTelefone("11998439876");
+
+        PessoaRequestDto dependenteDto = new PessoaRequestDto();
+        dependenteDto.setNome("Maria Ferreira");
+        dependenteDto.setDataNascimento(LocalDate.of(2010, 7, 19));
+        dependenteDto.setGrauParentesco("Filha(o)");
+
+        FamiliaRequestDto dto = new FamiliaRequestDto();
+        dto.setDataCadastro(LocalDate.now());
+        dto.setFotoFamilia("foto.png");
+        dto.setPossuiPrioridade(false);
+        dto.setEndereco(enderecoDto);
+        dto.setResponsavel(responsavelDto);
+        dto.setDependentes(List.of(dependenteDto));
+
+        return dto;
+    }
 
     @Nested
     @DisplayName("Deve salvar a família corretamente")
     class salvar {
 
         @Test
-        @DisplayName("Deve salvar família com sucesso")
+        @DisplayName("Deve salvar família, responsável e dependentes com sucesso")
         void salvarFamilia() {
             Endereco endereco = new Endereco();
             endereco.setId(1);
-            endereco.setCep("08020-000");
 
-            Familia familia = new Familia();
-            familia.setEndereco(endereco);
-            familia.setFotoFamilia("foto.png");
-            familia.setPossuiPrioridade(false);
+            Familia familiaSalva = new Familia();
+            familiaSalva.setId(1);
+            familiaSalva.setEndereco(endereco);
 
-            Familia familiaEsperada = new Familia();
-            familiaEsperada.setId(1);
-            familiaEsperada.setEndereco(endereco);
-            familiaEsperada.setFotoFamilia("foto.png");
-
-            Mockito.when(enderecoRepository.findById(1))
-                    .thenReturn(Optional.of(endereco));
+            Mockito.when(enderecoService.salvar(Mockito.any(Endereco.class)))
+                    .thenReturn(endereco);
 
             Mockito.when(familiaRepository.save(Mockito.any(Familia.class)))
-                    .thenReturn(familiaEsperada);
+                    .thenReturn(familiaSalva);
 
-            Familia resultado = familiaService.salvar(familia);
+            Mockito.when(pessoaService.salvar(Mockito.any(Pessoa.class)))
+                    .thenAnswer(invocation -> invocation.getArgument(0));
+
+            Familia resultado = familiaService.salvar(criarFamiliaRequestDto());
 
             Assertions.assertEquals(1, resultado.getId());
-            Assertions.assertNotNull(resultado.getEndereco());
-            Assertions.assertEquals("08020-000", resultado.getEndereco().getCep());
-        }
-
-        @Test
-        @DisplayName("Deve lançar EntidadeNaoEncontradaException quando endereço não for encontrado")
-        void salvarFamiliaEnderecoNaoEncontrado() {
-            Endereco endereco = new Endereco();
-            endereco.setId(99);
-
-            Familia familia = new Familia();
-            familia.setEndereco(endereco);
-
-            Mockito.when(enderecoRepository.findById(99))
-                    .thenReturn(Optional.empty());
-
-            Assertions.assertThrows(
-                    EntidadeNaoEncontradaException.class,
-                    () -> familiaService.salvar(familia)
-            );
+            Mockito.verify(pessoaService, Mockito.times(2)).salvar(Mockito.any(Pessoa.class));
         }
     }
 
@@ -158,39 +187,86 @@ class FamiliaServiceTest {
     }
 
     @Nested
+    @DisplayName("Deve listar os integrantes da família corretamente")
+    class listarIntegrantes {
+
+        @Test
+        @DisplayName("Deve retornar responsável e dependentes de uma família existente")
+        void retornarIntegrantesDaFamilia() {
+            Pessoa responsavel = new Pessoa();
+            responsavel.setId(1);
+            responsavel.setResponsavel(true);
+
+            Mockito.when(familiaRepository.findByIdFamilia(1))
+                    .thenReturn(Optional.of(List.of(responsavel)));
+
+            List<Pessoa> resultado = familiaService.listarIntegrantes(1);
+
+            Assertions.assertEquals(1, resultado.size());
+            Assertions.assertTrue(resultado.get(0).getResponsavel());
+        }
+
+        @Test
+        @DisplayName("Deve lançar EntidadeNaoEncontradaException quando família não for encontrada pelo ID")
+        void retornarExceptionFamiliaNaoEncontrada() {
+            Integer id = 99;
+
+            Mockito.when(familiaRepository.findByIdFamilia(id))
+                    .thenReturn(Optional.empty());
+
+            Assertions.assertThrows(
+                    EntidadeNaoEncontradaException.class,
+                    () -> familiaService.listarIntegrantes(id)
+            );
+        }
+    }
+
+    @Nested
     @DisplayName("Deve atualizar a família corretamente")
     class atualizar {
 
         @Test
-        @DisplayName("Deve atualizar família com sucesso")
+        @DisplayName("Deve atualizar família, responsável e dependentes com sucesso")
         void atualizarFamilia() {
             Integer id = 1;
 
             Endereco endereco = new Endereco();
             endereco.setId(1);
-            endereco.setCep("08020-000");
 
             Familia familiaExistente = new Familia();
             familiaExistente.setId(id);
             familiaExistente.setEndereco(endereco);
 
-            Familia familiaAtualizada = new Familia();
-            familiaAtualizada.setEndereco(endereco);
-            familiaAtualizada.setFotoFamilia("novaFoto.png");
-            familiaAtualizada.setPossuiPrioridade(true);
+            Pessoa responsavelExistente = new Pessoa();
+            responsavelExistente.setId(10);
+            responsavelExistente.setResponsavel(true);
+
+            Pessoa dependenteExistente = new Pessoa();
+            dependenteExistente.setId(20);
+            dependenteExistente.setResponsavel(false);
 
             Mockito.when(familiaRepository.findById(id))
                     .thenReturn(Optional.of(familiaExistente));
 
-            Mockito.when(enderecoRepository.findById(1))
-                    .thenReturn(Optional.of(endereco));
+            Mockito.when(enderecoService.atualizar(Mockito.eq(1), Mockito.any(Endereco.class)))
+                    .thenReturn(endereco);
 
             Mockito.when(familiaRepository.save(Mockito.any(Familia.class)))
                     .thenReturn(familiaExistente);
 
-            Familia resultado = familiaService.atualizar(id, familiaAtualizada);
+            Mockito.when(familiaRepository.findByIdFamilia(id))
+                    .thenReturn(Optional.of(List.of(responsavelExistente, dependenteExistente)));
+
+            Mockito.when(pessoaService.atualizar(Mockito.eq(10), Mockito.any(Pessoa.class)))
+                    .thenReturn(responsavelExistente);
+
+            Mockito.when(pessoaService.salvar(Mockito.any(Pessoa.class)))
+                    .thenAnswer(invocation -> invocation.getArgument(0));
+
+            Familia resultado = familiaService.atualizar(id, criarFamiliaRequestDto());
 
             Assertions.assertNotNull(resultado);
+            Mockito.verify(pessoaRepository).deleteAll(List.of(dependenteExistente));
         }
 
         @Test
@@ -198,18 +274,60 @@ class FamiliaServiceTest {
         void atualizarFamiliaNaoEncontrada() {
             Integer id = 99;
 
+            Mockito.when(familiaRepository.findById(id))
+                    .thenReturn(Optional.empty());
+
+            Assertions.assertThrows(
+                    EntidadeNaoEncontradaException.class,
+                    () -> familiaService.atualizar(id, criarFamiliaRequestDto())
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("Deve deletar a família corretamente")
+    class deletar {
+
+        @Test
+        @DisplayName("Deve deletar família, endereço e integrantes com sucesso")
+        void deletarFamilia() {
+            Integer id = 1;
+
             Endereco endereco = new Endereco();
             endereco.setId(1);
 
-            Familia familiaAtualizada = new Familia();
-            familiaAtualizada.setEndereco(endereco);
+            Familia familia = new Familia();
+            familia.setId(id);
+            familia.setEndereco(endereco);
+
+            Pessoa responsavel = new Pessoa();
+            responsavel.setId(10);
+            responsavel.setResponsavel(true);
+
+            Mockito.when(familiaRepository.findById(id))
+                    .thenReturn(Optional.of(familia));
+
+            Mockito.when(familiaRepository.findByIdFamilia(id))
+                    .thenReturn(Optional.of(List.of(responsavel)));
+
+            familiaService.deletar(id);
+
+            Mockito.verify(pessoaRepository).deleteAll(List.of(responsavel));
+            Mockito.verify(familiaRepository).delete(familia);
+            Mockito.verify(enderecoRepository).delete(endereco);
+        }
+
+        @Test
+        @DisplayName("Deve lançar EntidadeNaoEncontradaException quando família não for encontrada")
+        void deletarFamiliaNaoEncontrada() {
+            Integer id = 99;
 
             Mockito.when(familiaRepository.findById(id))
                     .thenReturn(Optional.empty());
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> familiaService.atualizar(id, familiaAtualizada)
+                    () -> familiaService.deletar(id)
             );
         }
     }

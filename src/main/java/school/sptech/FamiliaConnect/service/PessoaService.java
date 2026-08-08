@@ -36,8 +36,8 @@ public class PessoaService {
 
     public Pessoa salvar(Pessoa pessoa){
 
-        if (pessoaRepository.existsByCpf(pessoa.getCpf())){
-           throw new EntidadeJaCadastradaException("Pessoa já cadastrada");
+        if (pessoa.getCpf() != null && !pessoa.getCpf().isBlank() && pessoaRepository.existsByCpf(pessoa.getCpf())){
+            throw new EntidadeJaCadastradaException("Pessoa já cadastrada");
         }
 
         Familia familia = familiaRepository.findById(pessoa.getFamilia().getId())
@@ -46,8 +46,8 @@ public class PessoaService {
         pessoa.setFamilia(familia);
 
         if (pessoa.getProfissao() != null &&
-            pessoa.getProfissao().getNome() != null &&
-            !pessoa.getProfissao().getNome().isBlank()
+                pessoa.getProfissao().getNome() != null &&
+                !pessoa.getProfissao().getNome().isBlank()
         ){
             Profissao profissao = profissaoService.listarOuCadastrarPorNome(pessoa.getProfissao());
             pessoa.setProfissao(profissao);
@@ -56,6 +56,39 @@ public class PessoaService {
         }
 
         return pessoaRepository.save(pessoa);
+    }
+
+    public Pessoa atualizar(Integer id, Pessoa pessoaAtualizada) {
+
+        Pessoa pessoaExistente = pessoaRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A pessoa com o id não foi encontrada"));
+
+        if (pessoaAtualizada.getCpf() != null &&
+                !pessoaAtualizada.getCpf().isBlank() &&
+                !pessoaAtualizada.getCpf().equals(pessoaExistente.getCpf()) &&
+                pessoaRepository.existsByCpf(pessoaAtualizada.getCpf())
+        ) {
+            throw new EntidadeJaCadastradaException("Pessoa já cadastrada");
+        }
+
+        pessoaExistente.setNome(pessoaAtualizada.getNome());
+        pessoaExistente.setRg(pessoaAtualizada.getRg());
+        pessoaExistente.setCpf(pessoaAtualizada.getCpf());
+        pessoaExistente.setDtNascimento(pessoaAtualizada.getDtNascimento());
+        pessoaExistente.setTelefone(pessoaAtualizada.getTelefone());
+        pessoaExistente.setGrauParentesco(pessoaAtualizada.getGrauParentesco());
+
+        if (pessoaAtualizada.getProfissao() != null &&
+                pessoaAtualizada.getProfissao().getNome() != null &&
+                !pessoaAtualizada.getProfissao().getNome().isBlank()
+        ){
+            Profissao profissao = profissaoService.listarOuCadastrarPorNome(pessoaAtualizada.getProfissao());
+            pessoaExistente.setProfissao(profissao);
+        } else {
+            pessoaExistente.setProfissao(null);
+        }
+
+        return pessoaRepository.save(pessoaExistente);
     }
 
 }

@@ -43,4 +43,23 @@ public class EnderecoService {
         return enderecoRepository.save(endereco);
     }
 
+    public Endereco atualizar(Integer id, Endereco enderecoAtualizado) {
+
+        Endereco enderecoExistente = enderecoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O endereço com o id não foi encontrado"));
+
+        Estado estado = estadoRepository.findById(enderecoAtualizado.getEstado().getId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O estado com o id não foi encontrado"));
+
+        enderecoExistente.setCep(enderecoAtualizado.getCep());
+        enderecoExistente.setBairro(enderecoAtualizado.getBairro());
+        enderecoExistente.setLogradouro(enderecoAtualizado.getLogradouro());
+        enderecoExistente.setNumero(enderecoAtualizado.getNumero());
+        enderecoExistente.setComplemento(enderecoAtualizado.getComplemento());
+        enderecoExistente.setCidade(enderecoAtualizado.getCidade());
+        enderecoExistente.setEstado(estado);
+
+        return enderecoRepository.save(enderecoExistente);
+    }
+
 }

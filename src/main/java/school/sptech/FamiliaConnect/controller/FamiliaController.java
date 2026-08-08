@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.FamiliaConnect.dto.familia.FamiliaCompletaRequestDto;
+import school.sptech.FamiliaConnect.dto.familia.FamiliaDetalhesResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaResponseDto;
@@ -41,26 +41,6 @@ public class FamiliaController {
 
     @Operation(
             summary = "Cadastrar família",
-            description = "Cadastra uma família pelos dados fornecidos"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Família cadastrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Endereço não encontrado pelo ID")
-    })
-    @PostMapping
-    @PreAuthorize("hasAuthority('cadastrar_familias')")
-    public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
-
-        Familia familiaCadastrada = familiaService.salvar(FamiliaMapper.toModel(familiaRequestDto));
-
-        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
-
-        return ResponseEntity.status(201).body(responseDto);
-
-    }
-
-    @Operation(
-            summary = "Cadastrar família completa",
             description = "Cadastra endereço, família, responsável e dependentes em uma única transação. " +
                     "Se qualquer etapa falhar (endereço duplicado, estado inexistente, CPF duplicado etc.), nada é salvo."
     )
@@ -69,11 +49,11 @@ public class FamiliaController {
             @ApiResponse(responseCode = "404", description = "Estado não encontrado pelo ID"),
             @ApiResponse(responseCode = "409", description = "Endereço ou pessoa (CPF) já cadastrados")
     })
-    @PostMapping("/completo")
+    @PostMapping
     @PreAuthorize("hasAuthority('cadastrar_familias')")
-    public ResponseEntity<FamiliaResponseDto> cadastrarFamiliaCompleta(@RequestBody @Valid FamiliaCompletaRequestDto familiaCompletaRequestDto){
+    public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
 
-        Familia familiaCadastrada = familiaService.salvarCompleta(familiaCompletaRequestDto);
+        Familia familiaCadastrada = familiaService.salvar(familiaRequestDto);
 
         FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
 
@@ -109,8 +89,8 @@ public class FamiliaController {
     }
 
     @Operation(
-            summary = "Listar família por ID",
-            description = "Retorna os dados da família conforme o ID informado"
+            summary = "Detalhar família",
+            description = "Retorna os dados completos da família (endereço, responsável e dependentes) conforme o ID informado"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados da família retornados com sucesso"),
@@ -118,22 +98,25 @@ public class FamiliaController {
     })
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('listar_familias')")
-    public ResponseEntity<List<Pessoa>> listarFamiliaPorId(@PathVariable Integer id){
+    public ResponseEntity<FamiliaDetalhesResponseDto> detalharFamilia(@PathVariable Integer id){
 
-        List<Pessoa> familias = familiaService.listarPorIdFamilia(id);
+        Familia familia = familiaService.listarPorId(id);
+        List<Pessoa> integrantes = familiaService.listarIntegrantes(id);
 
+        FamiliaDetalhesResponseDto responseDto = FamiliaMapper.toDetalhes(familia, integrantes);
 
-        return ResponseEntity.status(200).body(familias);
+        return ResponseEntity.status(200).body(responseDto);
 
     }
 
     @Operation(
-            summary = "Listar família por ID",
-            description = "Retorna os dados da familía com base no ID fornecido"
+            summary = "Atualizar família",
+            description = "Atualiza endereço, família, responsável e dependentes de uma família em uma única transação"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna informações da família com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Retorna erro ao achar família com o ID informado")
+            @ApiResponse(responseCode = "200", description = "Família atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Família, endereço, estado ou responsável não encontrados"),
+            @ApiResponse(responseCode = "409", description = "CPF já cadastrado para outra pessoa")
     })
     @PutMapping("/{idFamilia}")
     @PreAuthorize("hasAuthority('editar_familias')")
@@ -142,14 +125,27 @@ public class FamiliaController {
             @RequestBody @Valid FamiliaRequestDto requestDto
     ) {
 
-        Familia familia = FamiliaMapper.toModel(requestDto);
+        Familia familiaAtualizada = familiaService.atualizar(idFamilia, requestDto);
 
-        Familia familiaAtualizada =
-                familiaService.atualizar(idFamilia, familia);
-
-        FamiliaResponseDto responseDto =
-                FamiliaMapper.toResponse(familiaAtualizada);
+        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaAtualizada);
 
         return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(
+            summary = "Deletar família",
+            description = "Deleta uma família, seu endereço e seus integrantes pelo ID fornecido"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Família deletada com sucesso pelo ID"),
+            @ApiResponse(responseCode = "404", description = "Família não encontrada pelo ID")
+    })
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('excluir_familias')")
+    public ResponseEntity<Void> deletarFamilia(@PathVariable Integer id) {
+
+        familiaService.deletar(id);
+
+        return ResponseEntity.status(204).build();
     }
 }

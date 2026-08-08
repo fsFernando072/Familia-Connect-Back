@@ -18,7 +18,8 @@ public interface FamiliaRepository extends JpaRepository<Familia, Integer> {
                 f.id as idFamilia,
                 p.nome as nomeResponsavel,
                 SUBSTRING_INDEX(p.nome, ' ', -1) as nomeFamilia,
-                p.telefone as telefoneResponsavel
+                p.telefone as telefoneResponsavel,
+                f.fotoFamilia as fotoFamilia
                 FROM Familia as f
                 INNER JOIN Pessoa p ON
                 p.familia = f

@@ -116,6 +116,23 @@ public class FuncionarioController {
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarioAtualizado));
 
     }
+    @Operation(
+            summary = "Deletar funcionário",
+            description = "Deleta um funcionário pelo ID fornecido"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Funcionário deletado com sucesso pelo ID"),
+            @ApiResponse(responseCode = "404", description = "Funcionário não encontrado pelo ID")
+    })
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('excluir_funcionarios')")
+    public ResponseEntity<Void> deletarFuncionario(@PathVariable Integer id){
+
+        funcionarioService.deletar(id);
+
+        return ResponseEntity.status(204).build();
+
+    }
 
     @PostMapping("/login")
     public ResponseEntity<FuncionarioSessaoDto> login(

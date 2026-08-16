@@ -121,4 +121,11 @@ public class FuncionarioService {
 
         return FuncionarioMapper.of(usuarioAutenticado, token);
     }
+    public void deletar(Integer id) {
+        if (!funcionarioRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
+        }
+
+        funcionarioRepository.deleteById(id);
+    }
 }

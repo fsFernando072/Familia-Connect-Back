@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.service;
 
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.dto.produto.ProdutoRequestDto;
+import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.ProdutoMapper;
 import school.sptech.FamiliaConnect.model.Categoria;
@@ -11,6 +12,7 @@ import school.sptech.FamiliaConnect.repository.CategoriaRepository;
 import school.sptech.FamiliaConnect.repository.ProdutoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoService {
@@ -45,5 +47,41 @@ public class ProdutoService {
 
         return produtoRepository.save(produto);
 
+    }
+
+    public Produto listarPorId(Integer id){
+
+        Optional<Produto> produto = produtoRepository.findById(id);
+
+        if(produto.isEmpty()){
+            throw new EntidadeNaoEncontradaException("Produto não encontrada pelo id");
+        }
+
+        return produto.get();
+
+    }
+
+    public Produto atualizar(Integer idCategoria, Produto produto) {
+
+        if (!categoriaRepository.existsById(idCategoria)) {
+            throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrada");
+        }
+
+        produtoRepository.findByNome(produto.getNome())
+                .ifPresent(produto1 -> {
+                    throw new EntidadeJaCadastradaException("Produto já cadastrado");
+                });
+
+        produto.setId(produto.getId());
+
+        return produtoRepository.save(produto);
+    }
+
+    public void deletar(Integer id) {
+        if (!produtoRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("o produto com o id fornecido não foi encontrada");
+        }
+
+        produtoRepository.deleteById(id);
     }
 }

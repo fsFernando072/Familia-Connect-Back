@@ -44,13 +44,16 @@ class FamiliaServiceTest {
     PessoaRepository pessoaRepository;
 
     @Mock
-    EntregaRepository entregaRepository;
-
-    @Mock
     EnderecoService enderecoService;
 
     @Mock
     PessoaService pessoaService;
+
+    @Mock
+    EntregaRepository entregaRepository;
+
+    @Mock
+    ArquivoService arquivoService;
 
     @InjectMocks
     FamiliaService familiaService;
@@ -110,7 +113,7 @@ class FamiliaServiceTest {
             Mockito.when(pessoaService.salvar(Mockito.any(Pessoa.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
-            Familia resultado = familiaService.salvar(criarFamiliaRequestDto());
+            Familia resultado = familiaService.salvar(criarFamiliaRequestDto(), null);
 
             Assertions.assertEquals(1, resultado.getId());
             Mockito.verify(pessoaService, Mockito.times(2)).salvar(Mockito.any(Pessoa.class));
@@ -161,7 +164,7 @@ class FamiliaServiceTest {
             Familia familia = new Familia();
             familia.setId(1);
             Arquivo foto = new Arquivo();
-            foto.setId(10L);
+            foto.setId(10);
             familia.setFoto(foto);
 
             Mockito.when(familiaRepository.findById(1))
@@ -170,7 +173,7 @@ class FamiliaServiceTest {
             Familia resultado = familiaService.listarPorId(1);
 
             Assertions.assertEquals(1, resultado.getId());
-            Assertions.assertEquals(10L, resultado.getFoto().getId());
+            Assertions.assertEquals(10, resultado.getFoto().getId());
         }
 
         @Test
@@ -205,7 +208,7 @@ class FamiliaServiceTest {
             List<Pessoa> resultado = familiaService.listarIntegrantes(1);
 
             Assertions.assertEquals(1, resultado.size());
-            Assertions.assertTrue(resultado.get(0).getResponsavel());
+            Assertions.assertTrue(resultado.getFirst().getResponsavel());
         }
 
         @Test
@@ -265,7 +268,7 @@ class FamiliaServiceTest {
             Mockito.when(pessoaService.salvar(Mockito.any(Pessoa.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
-            Familia resultado = familiaService.atualizar(id, criarFamiliaRequestDto());
+            Familia resultado = familiaService.atualizar(id, criarFamiliaRequestDto(), null);
 
             Assertions.assertNotNull(resultado);
             Mockito.verify(pessoaRepository).deleteAll(List.of(dependenteExistente));
@@ -281,7 +284,7 @@ class FamiliaServiceTest {
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> familiaService.atualizar(id, criarFamiliaRequestDto())
+                    () -> familiaService.atualizar(id, criarFamiliaRequestDto(), null)
             );
         }
     }
@@ -298,9 +301,13 @@ class FamiliaServiceTest {
             Endereco endereco = new Endereco();
             endereco.setId(1);
 
+            Arquivo arquivo = new Arquivo();
+            arquivo.setId(1);
+
             Familia familia = new Familia();
             familia.setId(id);
             familia.setEndereco(endereco);
+            familia.setFoto(arquivo);
 
             Pessoa responsavel = new Pessoa();
             responsavel.setId(10);
@@ -314,6 +321,7 @@ class FamiliaServiceTest {
 
             familiaService.deletar(id);
 
+            Mockito.verify(arquivoService).deletarPorId(arquivo.getId());
             Mockito.verify(pessoaRepository).deleteAll(List.of(responsavel));
             Mockito.verify(familiaRepository).delete(familia);
             Mockito.verify(enderecoRepository).delete(endereco);

@@ -142,7 +142,7 @@ class FuncionarioServiceTest {
             Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class)))
                     .thenReturn(funcionarioSalvo);
 
-            Funcionario resultado = funcionarioService.salvar(funcionario);
+            Funcionario resultado = funcionarioService.salvar(funcionario, null);
 
             Assertions.assertEquals(1, resultado.getId());
             Assertions.assertEquals("Maria Souza", resultado.getNome());
@@ -163,7 +163,7 @@ class FuncionarioServiceTest {
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> funcionarioService.salvar(funcionario)
+                    () -> funcionarioService.salvar(funcionario, null)
             );
         }
     }
@@ -197,7 +197,7 @@ class FuncionarioServiceTest {
             Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class)))
                     .thenReturn(funcionarioAtualizado);
 
-            Funcionario resultado = funcionarioService.atualizar(funcionario, id);
+            Funcionario resultado = funcionarioService.atualizar(id, funcionario, null);
 
             Assertions.assertEquals(id, resultado.getId());
             Assertions.assertEquals("João Atualizado", resultado.getNome());
@@ -219,7 +219,7 @@ class FuncionarioServiceTest {
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> funcionarioService.atualizar(funcionario, id)
+                    () -> funcionarioService.atualizar(id, funcionario, null)
             );
         }
 
@@ -242,7 +242,7 @@ class FuncionarioServiceTest {
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
-                    () -> funcionarioService.atualizar(funcionario, id)
+                    () -> funcionarioService.atualizar(id, funcionario, null)
             );
         }
     }

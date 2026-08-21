@@ -18,6 +18,7 @@ import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.model.Arquivo;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Familia;
 import school.sptech.FamiliaConnect.model.Pessoa;
@@ -78,7 +79,6 @@ class FamiliaServiceTest {
 
         FamiliaRequestDto dto = new FamiliaRequestDto();
         dto.setDataCadastro(LocalDate.now());
-        dto.setFotoFamilia("foto.png");
         dto.setPossuiPrioridade(false);
         dto.setEndereco(enderecoDto);
         dto.setResponsavel(responsavelDto);
@@ -160,7 +160,9 @@ class FamiliaServiceTest {
         void retornarFamiliaPorId() {
             Familia familia = new Familia();
             familia.setId(1);
-            familia.setFotoFamilia("foto.png");
+            Arquivo foto = new Arquivo();
+            foto.setId(10L);
+            familia.setFoto(foto);
 
             Mockito.when(familiaRepository.findById(1))
                     .thenReturn(Optional.of(familia));
@@ -168,7 +170,7 @@ class FamiliaServiceTest {
             Familia resultado = familiaService.listarPorId(1);
 
             Assertions.assertEquals(1, resultado.getId());
-            Assertions.assertEquals("foto.png", resultado.getFotoFamilia());
+            Assertions.assertEquals(10L, resultado.getFoto().getId());
         }
 
         @Test

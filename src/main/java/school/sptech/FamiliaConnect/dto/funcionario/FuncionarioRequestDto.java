@@ -21,9 +21,6 @@ public class FuncionarioRequestDto {
     @NotBlank(message = "Senha do funcionário tem que ser obrigatória")
     private String senha;
 
-    @Schema(description = "Endereço de armazenamento da foto do funcionário")
-    private String fotoFuncionario;
-
     @Schema(description = "ID do cargo do funcionário")
     @NotNull(message = "ID do cargo do funcionário é obrigatório")
     @Positive(message = "ID do cargo do funcionário tem que ser positivo")
@@ -32,11 +29,10 @@ public class FuncionarioRequestDto {
     public FuncionarioRequestDto() {
     }
 
-    public FuncionarioRequestDto(String nome, String cpf, String senha, String fotoFuncionario, Integer cargoId) {
+    public FuncionarioRequestDto(String nome, String cpf, String senha, Integer cargoId) {
         this.nome = nome;
         this.cpf = cpf;
         this.senha = senha;
-        this.fotoFuncionario = fotoFuncionario;
         this.cargoId = cargoId;
     }
 
@@ -62,14 +58,6 @@ public class FuncionarioRequestDto {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public String getFotoFuncionario() {
-        return fotoFuncionario;
-    }
-
-    public void setFotoFuncionario(String fotoFuncionario) {
-        this.fotoFuncionario = fotoFuncionario;
     }
 
     public Integer getCargoId() {

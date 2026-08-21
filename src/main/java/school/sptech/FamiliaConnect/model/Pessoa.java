@@ -1,6 +1,7 @@
 package school.sptech.FamiliaConnect.model;
 
 import jakarta.persistence.*;
+import school.sptech.FamiliaConnect.enums.SexoEnum;
 
 import java.time.LocalDate;
 
@@ -22,6 +23,9 @@ public class Pessoa {
 
     @ManyToOne
     private Profissao profissao;
+
+    @Enumerated(EnumType.STRING)
+    private SexoEnum sexo;
 
     @ManyToOne
     private Familia familia;
@@ -90,6 +94,14 @@ public class Pessoa {
 
     public void setProfissao(Profissao profissao) {
         this.profissao = profissao;
+    }
+
+    public SexoEnum getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(SexoEnum sexo) {
+        this.sexo = sexo;
     }
 
     public String getRg() {

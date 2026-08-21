@@ -43,6 +43,7 @@ public class FamiliaDetalhesResponseDto {
         private String telefone;
         private LocalDate dataNascimento;
         private String profissao;
+        private String sexo;
 
         public Integer getId() {
             return id;
@@ -99,6 +100,14 @@ public class FamiliaDetalhesResponseDto {
         public void setProfissao(String profissao) {
             this.profissao = profissao;
         }
+
+        public String getSexo() {
+            return sexo;
+        }
+
+        public void setSexo(String sexo) {
+            this.sexo = sexo;
+        }
     }
 
     public static class Dependente {
@@ -111,6 +120,7 @@ public class FamiliaDetalhesResponseDto {
         private LocalDate dataNascimento;
         private String grauParentesco;
         private String profissao;
+        private String sexo;
 
         public Integer getId() {
             return id;
@@ -174,6 +184,14 @@ public class FamiliaDetalhesResponseDto {
 
         public void setProfissao(String profissao) {
             this.profissao = profissao;
+        }
+
+        public String getSexo() {
+            return sexo;
+        }
+
+        public void setSexo(String sexo) {
+            this.sexo = sexo;
         }
     }
 

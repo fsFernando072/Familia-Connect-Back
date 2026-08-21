@@ -1,17 +1,22 @@
 package school.sptech.FamiliaConnect.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.FamiliaConnect.config.GerenciadorTokenJwt;
 import school.sptech.FamiliaConnect.dto.funcionario.FuncionarioRequestDto;
 import school.sptech.FamiliaConnect.dto.funcionario.FuncionarioTokenDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.mapper.ArquivoMapper;
 import school.sptech.FamiliaConnect.mapper.FuncionarioMapper;
+import school.sptech.FamiliaConnect.model.Arquivo;
+import school.sptech.FamiliaConnect.model.CategoriaArquivo;
 import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.model.Funcionario;
 import school.sptech.FamiliaConnect.repository.CargoRepository;
@@ -30,6 +35,8 @@ public class FuncionarioService {
     private final GerenciadorTokenJwt gerenciadorTokenJwt;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final ArquivoService arquivoService;
+    private final CategoriaArquivoService categoriaArquivoService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
@@ -37,12 +44,16 @@ public class FuncionarioService {
                               CargoRepository cargoRepository,
                               GerenciadorTokenJwt gerenciadorTokenJwt,
                               AuthenticationManager authenticationManager,
-                              PasswordEncoder passwordEncoder) {
+                              PasswordEncoder passwordEncoder,
+                              ArquivoService arquivoService,
+                              CategoriaArquivoService categoriaArquivoService) {
         this.funcionarioRepository = funcionarioRepository;
         this.cargoRepository = cargoRepository;
         this.gerenciadorTokenJwt = gerenciadorTokenJwt;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.arquivoService = arquivoService;
+        this.categoriaArquivoService = categoriaArquivoService;
     }
 
     // Funções ---------------------------------------------------------------------------------------------------------
@@ -65,13 +76,14 @@ public class FuncionarioService {
 
     }
 
-    public Funcionario salvar(Funcionario funcionario){
+    public Funcionario salvar(Funcionario funcionario, MultipartFile foto){
 
         Cargo cargo = cargoRepository.findById(funcionario.getCargo().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Cargo não encontrado pelo id"));
 
 
         funcionario.setCargo(cargo);
+        funcionario.setFoto(resolverFotoFuncionario(foto, null));
 
         String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
         funcionario.setSenha(senhaCriptografada);
@@ -80,21 +92,51 @@ public class FuncionarioService {
 
     }
 
-    public Funcionario atualizar(Funcionario funcionario, Integer id){
+    public Funcionario atualizar(Integer id, Funcionario funcionario, MultipartFile foto){
 
         Cargo cargo = cargoRepository.findById(funcionario.getCargo().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Cargo não encontrado pelo id"));
 
-        if(!funcionarioRepository.existsById(id)){
-            throw new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id");
-        }
-
+        Funcionario funcionarioExistente = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id"));
 
         funcionario.setId(id);
         funcionario.setCargo(cargo);
+        funcionario.setFoto(resolverFotoFuncionario(foto, funcionarioExistente.getFoto()));
 
         return funcionarioRepository.save(funcionario);
 
+    }
+
+    // Envia a foto recebida para a "parte de arquivos" (ArquivoService), já na categoria FUNCIONARIOS,
+    // e retorna a referência ao Arquivo salvo (antes retornava uma URL em String).
+    // Se nenhuma foto nova for enviada, mantém a referência atual (fotoAtual).
+    private Arquivo resolverFotoFuncionario(MultipartFile foto, Arquivo fotoAtual) {
+
+        if (foto == null || foto.isEmpty()) {
+            return fotoAtual;
+        }
+
+        if (fotoAtual != null) {
+            arquivoService.deletarPorId(fotoAtual.getId());
+        }
+
+        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("funcionarios");
+        Arquivo arquivo = ArquivoMapper.toEntity(foto, categoria);
+
+        return arquivoService.salvar(arquivo);
+    }
+
+    @Transactional
+    public void deletar(Integer id) {
+        if (!funcionarioRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
+        }
+
+        Funcionario funcionario = listarPorId(id);
+
+        funcionarioRepository.deleteById(id);
+        arquivoService.deletarPorId(funcionario.getFoto().getId());
     }
 
     public FuncionarioTokenDto autenticar(Funcionario usuario) {
@@ -120,12 +162,5 @@ public class FuncionarioService {
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
         return FuncionarioMapper.of(usuarioAutenticado, token);
-    }
-    public void deletar(Integer id) {
-        if (!funcionarioRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
-        }
-
-        funcionarioRepository.deleteById(id);
     }
 }

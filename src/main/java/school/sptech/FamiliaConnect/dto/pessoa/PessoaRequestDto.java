@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
+import school.sptech.FamiliaConnect.enums.SexoEnum;
 
 import java.time.LocalDate;
 
@@ -34,6 +35,10 @@ public class PessoaRequestDto {
     @Schema(description = "Profissão da pessoa")
     private String profissao;
 
+    @Schema(description = "Sexo da pessoa")
+    @NotNull(message = "Sexo da pessoa é obrigatório")
+    private SexoEnum sexo;
+
     @Schema(description = "ID da família da pessoa")
     @Positive(message = "ID da família da pessoa tem que ser positivo")
     private Integer idFamilia;
@@ -56,12 +61,13 @@ public class PessoaRequestDto {
     public PessoaRequestDto() {
     }
 
-    public PessoaRequestDto(String nome, String rg, String cpf, LocalDate dataNascimento, String profissao, Integer idFamilia, String telefone, Boolean isResponsavel, String grauParentesco) {
+    public PessoaRequestDto(String nome, String rg, String cpf, LocalDate dataNascimento, String profissao, SexoEnum sexo, Integer idFamilia, String telefone, Boolean isResponsavel, String grauParentesco) {
         this.nome = nome;
         this.rg = rg;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.profissao = profissao;
+        this.sexo = sexo;
         this.idFamilia = idFamilia;
         this.telefone = telefone;
         this.isResponsavel = isResponsavel;
@@ -108,6 +114,14 @@ public class PessoaRequestDto {
 
     public void setProfissao(String profissao) {
         this.profissao = profissao;
+    }
+
+    public SexoEnum getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(SexoEnum sexo) {
+        this.sexo = sexo;
     }
 
     public Integer getIdFamilia() {

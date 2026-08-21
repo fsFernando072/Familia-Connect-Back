@@ -4,12 +4,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.mapper.ArquivoMapper;
 import school.sptech.FamiliaConnect.mapper.EnderecoMapper;
 import school.sptech.FamiliaConnect.mapper.PessoaMapper;
+import school.sptech.FamiliaConnect.model.Arquivo;
+import school.sptech.FamiliaConnect.model.CategoriaArquivo;
 import school.sptech.FamiliaConnect.model.Endereco;
 import school.sptech.FamiliaConnect.model.Entrega;
 import school.sptech.FamiliaConnect.model.Familia;
@@ -36,31 +40,36 @@ public class FamiliaService {
     private final EntregaRepository entregaRepository;
     private final EnderecoService enderecoService;
     private final PessoaService pessoaService;
+    private final ArquivoService arquivoService;
+    private final CategoriaArquivoService categoriaArquivoService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
     public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository,
                           PessoaRepository pessoaRepository, EntregaRepository entregaRepository,
-                          EnderecoService enderecoService, PessoaService pessoaService) {
+                          EnderecoService enderecoService, PessoaService pessoaService,
+                          ArquivoService arquivoService, CategoriaArquivoService categoriaArquivoService) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
         this.pessoaRepository = pessoaRepository;
         this.entregaRepository = entregaRepository;
         this.enderecoService = enderecoService;
         this.pessoaService = pessoaService;
+        this.arquivoService = arquivoService;
+        this.categoriaArquivoService = categoriaArquivoService;
     }
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
     @Transactional
-    public Familia salvar(FamiliaRequestDto dto) {
+    public Familia salvar(FamiliaRequestDto dto, MultipartFile foto) {
 
         Endereco endereco = EnderecoMapper.toModel(dto.getEndereco());
         endereco = enderecoService.salvar(endereco);
 
         Familia familia = new Familia();
         familia.setDataCadastro(dto.getDataCadastro());
-        familia.setFotoFamilia(dto.getFotoFamilia());
+        familia.setFoto(resolverFotoFamilia(foto, null));
         familia.setPossuiPrioridade(dto.getPossuiPrioridade());
         familia.setEndereco(endereco);
         familia = familiaRepository.save(familia);
@@ -94,7 +103,7 @@ public class FamiliaService {
     }
 
     @Transactional
-    public Familia atualizar(Integer idFamilia, FamiliaRequestDto dto) {
+    public Familia atualizar(Integer idFamilia, FamiliaRequestDto dto, MultipartFile foto) {
 
         Familia familiaExistente = familiaRepository.findById(idFamilia)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Família não encontrada pelo id"));
@@ -102,7 +111,7 @@ public class FamiliaService {
         Endereco enderecoAtualizado = enderecoService.atualizar(
                 familiaExistente.getEndereco().getId(), EnderecoMapper.toModel(dto.getEndereco()));
 
-        familiaExistente.setFotoFamilia(dto.getFotoFamilia());
+        familiaExistente.setFoto(resolverFotoFamilia(foto, familiaExistente.getFoto()));
         familiaExistente.setPossuiPrioridade(dto.getPossuiPrioridade());
         familiaExistente.setEndereco(enderecoAtualizado);
         familiaExistente = familiaRepository.save(familiaExistente);
@@ -178,7 +187,24 @@ public class FamiliaService {
 
         pessoaRepository.deleteAll(integrantes);
         familiaRepository.delete(familia);
+        arquivoService.deletarPorId(familia.getFoto().getId());
         enderecoRepository.delete(familia.getEndereco());
+    }
+
+    private Arquivo resolverFotoFamilia(MultipartFile foto, Arquivo fotoAtual) {
+
+        if (foto == null || foto.isEmpty()) {
+            return fotoAtual;
+        }
+
+        if (fotoAtual != null) {
+            arquivoService.deletarPorId(fotoAtual.getId());
+        }
+
+        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("familias");
+        Arquivo arquivo = ArquivoMapper.toEntity(foto, categoria);
+
+        return arquivoService.salvar(arquivo);
     }
 
     private void salvarDependentes(List<PessoaRequestDto> dependentes, Familia familia) {

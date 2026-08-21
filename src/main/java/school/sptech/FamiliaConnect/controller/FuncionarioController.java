@@ -8,10 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.dto.funcionario.*;
 import school.sptech.FamiliaConnect.mapper.FuncionarioMapper;
 import school.sptech.FamiliaConnect.model.Funcionario;
@@ -89,11 +91,14 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "201", description = "Funcionário cadastrado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado pelo ID")
     })
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('cadastrar_funcionarios')")
-    public ResponseEntity<FuncionarioResponseDto> cadastrarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto){
+    public ResponseEntity<FuncionarioResponseDto> cadastrarFuncionario(
+            @RequestPart("funcionarioRequestDto") @Valid FuncionarioRequestDto requestDto,
+            @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
+    ){
 
-        Funcionario funcionarioCadastrado = funcionarioService.salvar(FuncionarioMapper.toModel(requestDto));
+        Funcionario funcionarioCadastrado = funcionarioService.salvar(FuncionarioMapper.toModel(requestDto), arquivo);
 
         return ResponseEntity.status(201).body(FuncionarioMapper.toResponse(funcionarioCadastrado));
 
@@ -107,11 +112,15 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "200", description = "Funcionário atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado pelo ID")
     })
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('editar_funcionarios')")
-    public ResponseEntity<FuncionarioResponseDto> atualiazarFuncionario(@RequestBody @Valid FuncionarioRequestDto requestDto, @PathVariable Integer id){
+    public ResponseEntity<FuncionarioResponseDto> atualizarFuncionario(
+            @PathVariable Integer id,
+            @RequestPart(("funcionarioRequestDto")) @Valid FuncionarioRequestDto requestDto,
+            @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
+    ){
 
-        Funcionario funcionarioAtualizado = funcionarioService.atualizar(FuncionarioMapper.toModel(requestDto), id);
+        Funcionario funcionarioAtualizado = funcionarioService.atualizar(id, FuncionarioMapper.toModel(requestDto), arquivo);
 
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarioAtualizado));
 

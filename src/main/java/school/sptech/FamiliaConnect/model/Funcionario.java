@@ -13,18 +13,21 @@ public class Funcionario {
     private String nome;
     private String cpf;
     private String senha;
-    private String foto_funcionario;
+
+    @ManyToOne
+    private Arquivo foto;
+
     @ManyToOne
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public Funcionario(String nome, String cpf, String senha, String foto_funcionario) {
+    public Funcionario(String nome, String cpf, String senha, Arquivo foto) {
         this.nome = nome;
         this.cpf = cpf;
         this.senha = senha;
-        this.foto_funcionario = foto_funcionario;
+        this.foto = foto;
     }
 
     public Funcionario(String cpf, String senha) {
@@ -37,12 +40,17 @@ public class Funcionario {
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
-    public String getFoto_funcionario() {
-        return foto_funcionario;
+    public Arquivo getFoto() {
+        return foto;
     }
 
-    public void setFoto_funcionario(String foto_funcionario) {
-        this.foto_funcionario = foto_funcionario;
+    public void setFoto(Arquivo foto) {
+        this.foto = foto;
+    }
+
+    // Helper para expor a foto como URL nos DTOs de resposta, sem espalhar essa lógica pelos mappers.
+    public String getFotoUrl() {
+        return foto != null ? "/arquivos/" + foto.getId() + "/visualizar" : null;
     }
 
     public Cargo getCargo() {

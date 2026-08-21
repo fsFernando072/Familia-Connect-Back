@@ -19,7 +19,7 @@ public interface FamiliaRepository extends JpaRepository<Familia, Integer> {
                 p.nome as nomeResponsavel,
                 SUBSTRING_INDEX(p.nome, ' ', -1) as nomeFamilia,
                 p.telefone as telefoneResponsavel,
-                f.fotoFamilia as fotoFamilia
+                CASE WHEN f.foto IS NOT NULL THEN CONCAT('/arquivos/', f.foto.id, '/visualizar') ELSE NULL END as fotoFamilia
                 FROM Familia as f
                 INNER JOIN Pessoa p ON
                 p.familia = f

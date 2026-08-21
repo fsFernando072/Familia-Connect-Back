@@ -13,7 +13,11 @@ public class Familia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDate dataCadastro;
-    private String fotoFamilia;
+
+    // Referência de verdade ao arquivo da foto (antes era só uma String com o caminho/URL).
+    @ManyToOne
+    private Arquivo foto;
+
     private Boolean possuiPrioridade;
 
     @OneToOne
@@ -37,12 +41,17 @@ public class Familia {
         this.endereco = endereco;
     }
 
-    public String getFotoFamilia() {
-        return fotoFamilia;
+    public Arquivo getFoto() {
+        return foto;
     }
 
-    public void setFotoFamilia(String fotoFamilia) {
-        this.fotoFamilia = fotoFamilia;
+    public void setFoto(Arquivo foto) {
+        this.foto = foto;
+    }
+
+    // Helper para expor a foto como URL nos DTOs de resposta, sem espalhar essa lógica pelos mappers.
+    public String getFotoUrl() {
+        return foto != null ? "/arquivos/" + foto.getId() + "/visualizar" : null;
     }
 
     public Integer getId() {

@@ -25,6 +25,8 @@ public class PessoaMapper {
         profissao.setNome(pessoaRequestDto.getProfissao());
         pessoa.setProfissao(profissao);
 
+        pessoa.setSexo(pessoaRequestDto.getSexo());
+
         return pessoa;
 
     }
@@ -34,7 +36,7 @@ public class PessoaMapper {
         Familia familiaEntidade = pessoa.getFamilia();
         PessoaResponseDto.PessoaFamilia familia = new PessoaResponseDto.PessoaFamilia();
         familia.setDataCadastro(familiaEntidade.getDataCadastro());
-        familia.setFoto(familiaEntidade.getFotoFamilia());
+        familia.setFoto(familiaEntidade.getFotoUrl());
 
         Profissao profissaoEntidade = pessoa.getProfissao();
         PessoaResponseDto.PessoaProfissao profissao = new PessoaResponseDto.PessoaProfissao();
@@ -50,6 +52,7 @@ public class PessoaMapper {
         dto.setResponsavel(pessoa.getResponsavel());
         dto.setGrauParentesco(pessoa.getGrauParentesco());
         dto.setTelefone(pessoa.getTelefone());
+        dto.setSexo(pessoa.getSexo());
 
         dto.setPessoaFamilia(familia);
         dto.setPessoaProfissao(profissao);

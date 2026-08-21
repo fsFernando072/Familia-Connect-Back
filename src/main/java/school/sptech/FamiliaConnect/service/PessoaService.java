@@ -88,6 +88,8 @@ public class PessoaService {
             pessoaExistente.setProfissao(null);
         }
 
+        pessoaExistente.setSexo(pessoaAtualizada.getSexo());
+
         return pessoaRepository.save(pessoaExistente);
     }
 

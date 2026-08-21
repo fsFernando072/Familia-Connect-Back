@@ -55,7 +55,7 @@ class FuncionarioServiceTest {
         void retornarListaComTodosFuncionarios() {
             List<Funcionario> funcionarios = new ArrayList<>();
 
-            Funcionario funcionario = new Funcionario("João Silva", "123.456.789-00", "senha123", "foto.png");
+            Funcionario funcionario = new Funcionario("João Silva", "123.456.789-00", "senha123", null);
             funcionario.setId(1);
             funcionarios.add(funcionario);
 
@@ -88,7 +88,7 @@ class FuncionarioServiceTest {
         @Test
         @DisplayName("Deve retornar um funcionário que existe através do seu ID")
         void retornarFuncionarioPorId() {
-            Funcionario funcionario = new Funcionario("João Silva", "123.456.789-00", "senha123", "foto.png");
+            Funcionario funcionario = new Funcionario("João Silva", "123.456.789-00", "senha123", null);
             funcionario.setId(1);
 
             Mockito.when(funcionarioRepository.findById(1))
@@ -126,10 +126,10 @@ class FuncionarioServiceTest {
             cargo.setId(1);
             cargo.setNome("Administrador");
 
-            Funcionario funcionario = new Funcionario("Maria Souza", "123.456.789-00", "senha123", "foto.png");
+            Funcionario funcionario = new Funcionario("Maria Souza", "123.456.789-00", "senha123", null);
             funcionario.setCargo(cargo);
 
-            Funcionario funcionarioSalvo = new Funcionario("Maria Souza", "123.456.789-00", "senhaHash", "foto.png");
+            Funcionario funcionarioSalvo = new Funcionario("Maria Souza", "123.456.789-00", "senhaHash", null);
             funcionarioSalvo.setId(1);
             funcionarioSalvo.setCargo(cargo);
 
@@ -155,7 +155,7 @@ class FuncionarioServiceTest {
             Cargo cargo = new Cargo();
             cargo.setId(99);
 
-            Funcionario funcionario = new Funcionario("Maria Souza", "123.456.789-00", "senha123", "foto.png");
+            Funcionario funcionario = new Funcionario("Maria Souza", "123.456.789-00", "senha123", null);
             funcionario.setCargo(cargo);
 
             Mockito.when(cargoRepository.findById(99))
@@ -181,18 +181,18 @@ class FuncionarioServiceTest {
             cargo.setId(1);
             cargo.setNome("Administrador");
 
-            Funcionario funcionario = new Funcionario("João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png");
+            Funcionario funcionario = new Funcionario("João Atualizado", "123.456.789-00", "novaSenha", null);
             funcionario.setCargo(cargo);
 
-            Funcionario funcionarioAtualizado = new Funcionario("João Atualizado", "123.456.789-00", "novaSenha", "novaFoto.png");
+            Funcionario funcionarioAtualizado = new Funcionario("João Atualizado", "123.456.789-00", "novaSenha", null);
             funcionarioAtualizado.setId(id);
             funcionarioAtualizado.setCargo(cargo);
 
             Mockito.when(cargoRepository.findById(1))
                     .thenReturn(Optional.of(cargo));
 
-            Mockito.when(funcionarioRepository.existsById(id))
-                    .thenReturn(true);
+            Mockito.when(funcionarioRepository.findById(id))
+                    .thenReturn(Optional.of(funcionario));
 
             Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class)))
                     .thenReturn(funcionarioAtualizado);
@@ -211,7 +211,7 @@ class FuncionarioServiceTest {
             Cargo cargo = new Cargo();
             cargo.setId(1);
 
-            Funcionario funcionario = new Funcionario("João", "123.456.789-00", "senha", "foto.png");
+            Funcionario funcionario = new Funcionario("João", "123.456.789-00", "senha", null);
             funcionario.setCargo(cargo);
 
             Mockito.when(cargoRepository.findById(1))
@@ -231,14 +231,14 @@ class FuncionarioServiceTest {
             Cargo cargo = new Cargo();
             cargo.setId(1);
 
-            Funcionario funcionario = new Funcionario("João", "123.456.789-00", "senha", "foto.png");
+            Funcionario funcionario = new Funcionario("João", "123.456.789-00", "senha", null);
             funcionario.setCargo(cargo);
 
             Mockito.when(cargoRepository.findById(1))
                     .thenReturn(Optional.of(cargo));
 
-            Mockito.when(funcionarioRepository.existsById(id))
-                    .thenReturn(false);
+            Mockito.when(funcionarioRepository.findById(id))
+                    .thenReturn(Optional.empty());
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
@@ -262,7 +262,7 @@ class FuncionarioServiceTest {
             cargo.setId(1);
             cargo.setNome("Admin");
 
-            Funcionario usuarioAutenticado = new Funcionario("João", "123.456.789-00", "senhaHash", "foto.png");
+            Funcionario usuarioAutenticado = new Funcionario("João", "123.456.789-00", "senhaHash", null);
             usuarioAutenticado.setId(1);
             usuarioAutenticado.setCargo(cargo);
 

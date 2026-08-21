@@ -16,9 +16,6 @@ public class FamiliaRequestDto {
     @Schema(description = "Data de cadastro da família")
     private LocalDate dataCadastro;
 
-    @Schema(description = "Endereço de armazenamento da foto da família")
-    private String fotoFamilia;
-
     @Schema(description = "Se a família possui integrante PNE")
     private Boolean possuiPrioridade;
 
@@ -44,14 +41,6 @@ public class FamiliaRequestDto {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
-    }
-
-    public String getFotoFamilia() {
-        return fotoFamilia;
-    }
-
-    public void setFotoFamilia(String fotoFamilia) {
-        this.fotoFamilia = fotoFamilia;
     }
 
     public Boolean getPossuiPrioridade() {

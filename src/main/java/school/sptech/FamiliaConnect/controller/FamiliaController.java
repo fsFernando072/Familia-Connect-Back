@@ -8,9 +8,11 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaDetalhesResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
@@ -49,11 +51,14 @@ public class FamiliaController {
             @ApiResponse(responseCode = "404", description = "Estado não encontrado pelo ID"),
             @ApiResponse(responseCode = "409", description = "Endereço ou pessoa (CPF) já cadastrados")
     })
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('cadastrar_familias')")
-    public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(@RequestBody @Valid FamiliaRequestDto familiaRequestDto){
+    public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(
+            @RequestPart("familiaRequestDto") @Valid FamiliaRequestDto familiaRequestDto,
+            @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
+    ){
 
-        Familia familiaCadastrada = familiaService.salvar(familiaRequestDto);
+        Familia familiaCadastrada = familiaService.salvar(familiaRequestDto, arquivo);
 
         FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
 
@@ -118,14 +123,15 @@ public class FamiliaController {
             @ApiResponse(responseCode = "404", description = "Família, endereço, estado ou responsável não encontrados"),
             @ApiResponse(responseCode = "409", description = "CPF já cadastrado para outra pessoa")
     })
-    @PutMapping("/{idFamilia}")
+    @PutMapping(value = "/{idFamilia}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('editar_familias')")
     public ResponseEntity<FamiliaResponseDto> atualizarFamilia(
             @PathVariable Integer idFamilia,
-            @RequestBody @Valid FamiliaRequestDto requestDto
+            @RequestPart("familiaRequestDto") @Valid FamiliaRequestDto requestDto,
+            @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
     ) {
 
-        Familia familiaAtualizada = familiaService.atualizar(idFamilia, requestDto);
+        Familia familiaAtualizada = familiaService.atualizar(idFamilia, requestDto, arquivo);
 
         FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaAtualizada);
 

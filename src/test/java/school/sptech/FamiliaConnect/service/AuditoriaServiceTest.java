@@ -48,7 +48,6 @@ class AuditoriaServiceTest {
             funcionario.setCargo(cargo);
             funcionario.setSenha("123456");
             funcionario.setCpf("330.983.740-80");
-            funcionario.setFoto_funcionario("foto do funcionario legal");
             funcionario.setNome("Pedro");
 
             Auditoria auditoria = new Auditoria();
@@ -96,7 +95,6 @@ class AuditoriaServiceTest {
             funcionario.setCargo(cargo);
             funcionario.setSenha("123456");
             funcionario.setCpf("330.983.740-80");
-            funcionario.setFoto_funcionario("foto do funcionario legal");
             funcionario.setNome("Pedro");
             List<Auditoria> auditorias = new ArrayList<>();
 
@@ -145,7 +143,6 @@ class AuditoriaServiceTest {
             funcionario.setCargo(cargo);
             funcionario.setSenha("123456");
             funcionario.setCpf("330.983.740-80");
-            funcionario.setFoto_funcionario("foto do funcionario legal");
             funcionario.setNome("Pedro");
 
             Auditoria auditoria = new Auditoria();
@@ -205,7 +202,6 @@ class AuditoriaServiceTest {
             funcionario.setCargo(cargo);
             funcionario.setSenha("123456");
             funcionario.setCpf("330.983.740-80");
-            funcionario.setFoto_funcionario("foto do funcionario legal");
             funcionario.setNome("Pedro");
 
             Auditoria auditoria = new Auditoria();

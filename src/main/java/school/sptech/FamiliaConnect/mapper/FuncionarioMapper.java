@@ -14,7 +14,7 @@ public class FuncionarioMapper {
                 dto.getNome(),
                 dto.getCpf(),
                 dto.getSenha(),
-                dto.getFotoFuncionario()
+                null
         );
 
         Cargo cargo = new Cargo();
@@ -37,7 +37,7 @@ public class FuncionarioMapper {
                 funcionario.getNome(),
                 funcionario.getCpf(),
                 funcionario.getSenha(),
-                funcionario.getFoto_funcionario(),
+                funcionario.getFotoUrl(),
                 funcionarioCargo
         );
 

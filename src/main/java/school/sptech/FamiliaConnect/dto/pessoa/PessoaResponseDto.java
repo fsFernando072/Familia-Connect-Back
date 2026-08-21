@@ -1,6 +1,7 @@
 package school.sptech.FamiliaConnect.dto.pessoa;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import school.sptech.FamiliaConnect.enums.SexoEnum;
 import school.sptech.FamiliaConnect.model.Pessoa;
 
 import java.time.LocalDate;
@@ -39,6 +40,9 @@ public class PessoaResponseDto {
 
     @Schema(description = "Profissão da pessoa")
     private PessoaProfissao pessoaProfissao;
+
+    @Schema(description = "Sexo da pessoa")
+    private SexoEnum sexo;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
@@ -173,5 +177,13 @@ public class PessoaResponseDto {
 
     public void setPessoaProfissao(PessoaProfissao pessoaProfissao) {
         this.pessoaProfissao = pessoaProfissao;
+    }
+
+    public SexoEnum getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(SexoEnum sexo) {
+        this.sexo = sexo;
     }
 }

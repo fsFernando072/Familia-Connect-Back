@@ -42,7 +42,7 @@ public class FamiliaMapper {
         FamiliaResponseDto dto = new FamiliaResponseDto();
         dto.setId(familia.getId());
         dto.setDataCadastro(familia.getDataCadastro());
-        dto.setFotoFamilia(familia.getFotoFamilia());
+        dto.setFotoFamilia(familia.getFotoUrl());
         dto.setPossuiPrioridade(familia.getPossuiPrioridade());
         dto.setFamiliaEndereco(familiaEndereco);
 
@@ -68,7 +68,7 @@ public class FamiliaMapper {
         FamiliaDetalhesResponseDto dto = new FamiliaDetalhesResponseDto();
         dto.setId(familia.getId());
         dto.setDataCadastro(familia.getDataCadastro());
-        dto.setFotoFamilia(familia.getFotoFamilia());
+        dto.setFotoFamilia(familia.getFotoUrl());
         dto.setPossuiPrioridade(familia.getPossuiPrioridade());
         dto.setEndereco(EnderecoMapper.toResponse(familia.getEndereco()));
 
@@ -96,6 +96,7 @@ public class FamiliaMapper {
         responsavel.setRg(pessoa.getRg());
         responsavel.setTelefone(pessoa.getTelefone());
         responsavel.setDataNascimento(pessoa.getDtNascimento());
+        responsavel.setSexo(pessoa.getSexo().toString());
 
         if (pessoa.getProfissao() != null) {
             responsavel.setProfissao(pessoa.getProfissao().getNome());
@@ -114,6 +115,7 @@ public class FamiliaMapper {
         dependente.setTelefone(pessoa.getTelefone());
         dependente.setDataNascimento(pessoa.getDtNascimento());
         dependente.setGrauParentesco(pessoa.getGrauParentesco());
+        dependente.setSexo(pessoa.getSexo().toString());
 
         if (pessoa.getProfissao() != null) {
             dependente.setProfissao(pessoa.getProfissao().getNome());

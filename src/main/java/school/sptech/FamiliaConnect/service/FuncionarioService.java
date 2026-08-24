@@ -103,6 +103,8 @@ public class FuncionarioService {
         funcionario.setId(id);
         funcionario.setCargo(cargo);
         funcionario.setFoto(resolverFotoFuncionario(foto, funcionarioExistente.getFoto()));
+        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+        funcionario.setSenha(senhaCriptografada);
 
         return funcionarioRepository.save(funcionario);
 

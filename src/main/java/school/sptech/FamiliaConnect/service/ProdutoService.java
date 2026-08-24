@@ -33,7 +33,7 @@ public class ProdutoService {
 
     public List<Produto> listar(){
 
-        return produtoRepository.findAll();
+        return produtoRepository.findAllByAtivoTrue();
 
     }
 
@@ -77,10 +77,10 @@ public class ProdutoService {
     }
 
     public void deletar(Integer id) {
-        if (!produtoRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("o produto com o id fornecido não foi encontrada");
-        }
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        produtoRepository.deleteById(id);
+        produto.setAtivo(false);
+        produtoRepository.save(produto);
     }
 }

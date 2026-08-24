@@ -31,7 +31,7 @@ public class CategoriaService {
 
     public List<Categoria> listar(){
 
-        return categoriaRepository.findAll();
+        return categoriaRepository.findAllByAtivoTrue();
 
     }
 
@@ -68,10 +68,10 @@ public class CategoriaService {
     }
 
     public void deletar(Integer id) {
-        if (!categoriaRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrada");
-        }
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("categoria não encontrada"));
 
-        categoriaRepository.deleteById(id);
+        categoria.setAtivo(false);
+        categoriaRepository.save(categoria);
     }
 }

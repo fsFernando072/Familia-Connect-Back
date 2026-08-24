@@ -46,7 +46,7 @@ public class CategoriaController {
             summary = "Listar categorias",
             description = "Retorna uma lista das categorias dos produtos cadastradas no sistema"
     )
-    @ApiResponses(value = {
+    @ApiResponses(value =    {
             @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso"),
             @ApiResponse(responseCode = "204", description = "Lista de categorias retornada vazia")
     })
@@ -71,7 +71,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('cadastrar_produtos')")
+    @PreAuthorize("hasAuthority('cadastrar_produto')")
     public ResponseEntity<CategoriaResponseDto> cadastrarCategoria(@RequestBody @Valid CategoriaRequestDto requestDto){
 
         Categoria categoria = CategoriaMapper.toModel(requestDto);
@@ -110,11 +110,11 @@ public class CategoriaController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('editar_categoria')")
     public ResponseEntity<CategoriaResponseDto> atualizarCategoria(
-            @PathVariable Integer idCategoria,
+            @PathVariable Integer id,
             @RequestBody @Valid CategoriaRequestDto requestDto
     ) {
 
-        Categoria categoria = categoriaService.atualizar(idCategoria, CategoriaMapper.toModel(requestDto));
+        Categoria categoria = categoriaService.atualizar(id, CategoriaMapper.toModel(requestDto));
 
         CategoriaResponseDto responseDto = CategoriaMapper.toResponse(categoria);
 

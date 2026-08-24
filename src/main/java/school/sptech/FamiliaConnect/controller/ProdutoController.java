@@ -68,7 +68,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Categoria do produto não encontrada pelo ID")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('cadastrar_produtos')")
+    @PreAuthorize("hasAuthority('cadastrar_produto')")
     public ResponseEntity<ProdutoResponseDto> cadastrarProduto(@RequestBody @Valid ProdutoRequestDto requestDto){
 
         Produto produtoCadastrado = produtoService.salvar(ProdutoMapper.toModel(requestDto));
@@ -105,11 +105,11 @@ public class ProdutoController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('editar_produto')")
     public ResponseEntity<ProdutoResponseDto> atualizarProduto(
-            @PathVariable Integer idCategoria,
+            @PathVariable Integer id,
             @RequestBody @Valid ProdutoRequestDto requestDto
     ) {
 
-        Produto produto = produtoService.atualizar(idCategoria, ProdutoMapper.toModel(requestDto));
+        Produto produto = produtoService.atualizar(id, ProdutoMapper.toModel(requestDto));
 
         ProdutoResponseDto responseDto = ProdutoMapper.toResponse(produto);
 

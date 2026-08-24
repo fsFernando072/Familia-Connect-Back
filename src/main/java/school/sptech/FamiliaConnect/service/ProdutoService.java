@@ -61,18 +61,17 @@ public class ProdutoService {
 
     }
 
-    public Produto atualizar(Integer idCategoria, Produto produto) {
+    public Produto atualizar(Integer id, Produto produto) {
 
-        if (!categoriaRepository.existsById(idCategoria)) {
-            throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrada");
+        if(!produtoRepository.existsById(id)){
+            throw new EntidadeNaoEncontradaException("O produto com o id fornecido não foi encontrado");
         }
 
-        produtoRepository.findByNome(produto.getNome())
-                .ifPresent(produto1 -> {
-                    throw new EntidadeJaCadastradaException("Produto já cadastrado");
-                });
+        if(!categoriaRepository.existsById(produto.getCategoria().getId())){
+            throw new EntidadeNaoEncontradaException("O produto com o id fornecido não foi encontrado");
+        }
 
-        produto.setId(produto.getId());
+        produto.setId(id);
 
         return produtoRepository.save(produto);
     }

@@ -57,14 +57,10 @@ public class CategoriaService {
     }
 
     public Categoria atualizar(Integer id, Categoria categoria) {
+
         if (!categoriaRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrada");
         }
-
-        categoriaRepository.findByNome(categoria.getNome())
-                .ifPresent(categoria1 -> {
-                    throw new EntidadeJaCadastradaException("Categoria já cadastrada");
-                });
 
         categoria.setId(id);
 

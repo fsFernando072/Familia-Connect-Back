@@ -13,6 +13,7 @@ public class Produto {
     private String nome;
     private Integer quantidade;
     private String descricao;
+    private Boolean ativo;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -60,5 +61,13 @@ public class Produto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

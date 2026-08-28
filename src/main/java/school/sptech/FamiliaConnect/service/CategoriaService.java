@@ -5,11 +5,14 @@ import school.sptech.FamiliaConnect.dto.produto.ProdutoRequestDto;
 import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.ProdutoMapper;
+import school.sptech.FamiliaConnect.model.Cargo;
 import school.sptech.FamiliaConnect.model.Categoria;
+import school.sptech.FamiliaConnect.model.Entrega;
 import school.sptech.FamiliaConnect.model.Produto;
 import school.sptech.FamiliaConnect.repository.CategoriaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriaService {
@@ -28,7 +31,7 @@ public class CategoriaService {
 
     public List<Categoria> listar(){
 
-        return categoriaRepository.findAll();
+        return categoriaRepository.findAllByAtivoTrue();
 
     }
 
@@ -39,5 +42,36 @@ public class CategoriaService {
                 });
         return categoriaRepository.save(categoria);
 
+    }
+
+    public Categoria listarPorId(Integer id){
+
+        Optional<Categoria> categoria = categoriaRepository.findById(id);
+
+        if(categoria.isEmpty()){
+            throw new EntidadeNaoEncontradaException("categoria não encontrada pelo id");
+        }
+
+        return categoria.get();
+
+    }
+
+    public Categoria atualizar(Integer id, Categoria categoria) {
+
+        if (!categoriaRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrada");
+        }
+
+        categoria.setId(id);
+
+        return categoriaRepository.save(categoria);
+    }
+
+    public void deletar(Integer id) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("categoria não encontrada"));
+
+        categoria.setAtivo(false);
+        categoriaRepository.save(categoria);
     }
 }

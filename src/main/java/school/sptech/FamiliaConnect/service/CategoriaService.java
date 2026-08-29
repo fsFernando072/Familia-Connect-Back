@@ -36,40 +36,40 @@ public class CategoriaService {
     }
 
     public Categoria salvar(Categoria categoria){
-        categoriaRepository.findByNome(categoria.getNome())
-                .ifPresent(categorias -> {
-                    throw new EntidadeJaCadastradaException("Acesso já cadastrado");
-                });
+        if (categoriaRepository.existsByNome(categoria.getNome())) {
+            throw new EntidadeJaCadastradaException("Categoria já cadastrada");
+        }
+
+        categoria.setAtivo(true);
+
         return categoriaRepository.save(categoria);
 
     }
 
     public Categoria listarPorId(Integer id){
-
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
-
-        if(categoria.isEmpty()){
-            throw new EntidadeNaoEncontradaException("categoria não encontrada pelo id");
-        }
-
-        return categoria.get();
+        return categoriaRepository.findByIdAndAtivoTrue(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada pelo id"));
 
     }
 
     public Categoria atualizar(Integer id, Categoria categoria) {
 
-        if (!categoriaRepository.existsById(id)) {
+        if (!categoriaRepository.existsByIdAndAtivoTrue(id)) {
             throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrada");
         }
 
+        if (categoriaRepository.existsByNomeAndIdNot(categoria.getNome(), id)) {
+            throw new EntidadeJaCadastradaException("Categoria já cadastrada");
+        }
+
         categoria.setId(id);
+        categoria.setAtivo(true);
 
         return categoriaRepository.save(categoria);
     }
 
     public void deletar(Integer id) {
-        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("categoria não encontrada"));
+        Categoria categoria = listarPorId(id);
 
         categoria.setAtivo(false);
         categoriaRepository.save(categoria);

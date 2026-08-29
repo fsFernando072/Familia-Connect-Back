@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
-    Optional<Produto> findByNome(String nome);
+    Optional<Produto> findByIdAndAtivoTrue(Integer id);
+    Boolean existsByNome(String nome);
+    Boolean existsByNomeAndIdNot(String nome, Integer id);
+    Boolean existsByIdAndAtivoTrue(Integer id);
 
     List<Produto> findAllByAtivoTrue();
 }

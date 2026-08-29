@@ -39,10 +39,14 @@ public class ProdutoService {
 
     public Produto salvar(Produto produto){
 
-        Categoria categoria = categoriaRepository.findById(produto.getCategoria().getId())
+        Categoria categoria = categoriaRepository.findByIdAndAtivoTrue(produto.getCategoria().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria com o id não foi encontrada"));
 
+        if (produtoRepository.existsByNome(produto.getNome())) {
+            throw new EntidadeJaCadastradaException("Produto já cadastrado");
+        }
 
+        produto.setAtivo(true);
         produto.setCategoria(categoria);
 
         return produtoRepository.save(produto);
@@ -51,34 +55,33 @@ public class ProdutoService {
 
     public Produto listarPorId(Integer id){
 
-        Optional<Produto> produto = produtoRepository.findById(id);
-
-        if(produto.isEmpty()){
-            throw new EntidadeNaoEncontradaException("Produto não encontrada pelo id");
-        }
-
-        return produto.get();
+        return produtoRepository.findByIdAndAtivoTrue(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado pelo id"));
 
     }
 
     public Produto atualizar(Integer id, Produto produto) {
 
-        if(!produtoRepository.existsById(id)){
+        if (!produtoRepository.existsByIdAndAtivoTrue(id)){
             throw new EntidadeNaoEncontradaException("O produto com o id fornecido não foi encontrado");
         }
 
-        if(!categoriaRepository.existsById(produto.getCategoria().getId())){
-            throw new EntidadeNaoEncontradaException("O produto com o id fornecido não foi encontrado");
+        if (!categoriaRepository.existsByIdAndAtivoTrue(produto.getCategoria().getId())){
+            throw new EntidadeNaoEncontradaException("A categoria com o id fornecido não foi encontrado");
+        }
+
+        if (produtoRepository.existsByNomeAndIdNot(produto.getNome(), id)) {
+            throw new EntidadeJaCadastradaException("Produto já cadastrado");
         }
 
         produto.setId(id);
+        produto.setAtivo(true);
 
         return produtoRepository.save(produto);
     }
 
     public void deletar(Integer id) {
-        Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        Produto produto = listarPorId(id);
 
         produto.setAtivo(false);
         produtoRepository.save(produto);

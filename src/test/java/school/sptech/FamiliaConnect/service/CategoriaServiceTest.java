@@ -76,8 +76,8 @@ class CategoriaServiceTest {
 
             categoria.setNome("categoria1");
 
-            Mockito.when(categoriaRepository.findByNome(nome))
-                    .thenReturn(Optional.of(categoria));
+            Mockito.when(categoriaRepository.existsByNome(nome))
+                    .thenReturn(true);
 
             Assertions.assertThrows(
                     EntidadeJaCadastradaException.class,

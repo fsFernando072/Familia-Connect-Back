@@ -82,7 +82,6 @@ public class PessoaService {
         pessoaExistente.setCpf(pessoaAtualizada.getCpf());
         pessoaExistente.setDtNascimento(pessoaAtualizada.getDtNascimento());
         pessoaExistente.setTelefone(pessoaAtualizada.getTelefone());
-        pessoaExistente.setGrauParentesco(pessoaAtualizada.getGrauParentesco());
 
         if (pessoaAtualizada.getProfissao() != null &&
                 pessoaAtualizada.getProfissao().getNome() != null &&

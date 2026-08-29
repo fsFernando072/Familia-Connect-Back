@@ -1,20 +1,11 @@
 package school.sptech.FamiliaConnect.mapper;
 
-import school.sptech.FamiliaConnect.dto.estado.EstadoRequestDto;
 import school.sptech.FamiliaConnect.dto.estado.EstadoResponseDto;
 import school.sptech.FamiliaConnect.model.Estado;
 
 import java.util.List;
 
 public class EstadoMapper {
-
-    public static Estado toModel(EstadoRequestDto dto) {
-        Estado estado = new Estado();
-        estado.setNome(dto.getNome());
-        estado.setSigla(dto.getSigla());
-
-        return estado;
-    }
 
     public static EstadoResponseDto toResponse(Estado estado) {
         EstadoResponseDto dto = new EstadoResponseDto();

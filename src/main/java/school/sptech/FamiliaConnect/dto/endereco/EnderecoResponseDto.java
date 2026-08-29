@@ -21,7 +21,7 @@ public class EnderecoResponseDto {
     private String logradouro;
 
     @Schema(description = "Número do endereço")
-    private Integer numero;
+    private String numero;
 
     @Schema(description = "Complemento do endereço")
     private String complemento;
@@ -99,11 +99,11 @@ public class EnderecoResponseDto {
         this.logradouro = logradouro;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

@@ -71,7 +71,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('cadastrar_produto')")
+    @PreAuthorize("hasAuthority('cadastrar_produtos')")
     public ResponseEntity<CategoriaResponseDto> cadastrarCategoria(@RequestBody @Valid CategoriaRequestDto requestDto){
 
         Categoria categoria = CategoriaMapper.toModel(requestDto);
@@ -90,7 +90,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('listar_categoria')")
+    @PreAuthorize("hasAuthority('listar_categorias')")
     public ResponseEntity<CategoriaResponseDto> listarCategoria(@PathVariable Integer id){
 
         Categoria categoria = categoriaService.listarPorId(id);
@@ -108,7 +108,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada"),
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('editar_categoria')")
+    @PreAuthorize("hasAuthority('editar_categorias')")
     public ResponseEntity<CategoriaResponseDto> atualizarCategoria(
             @PathVariable Integer id,
             @RequestBody @Valid CategoriaRequestDto requestDto
@@ -130,7 +130,7 @@ public class CategoriaController {
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada pelo ID")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('excluir_categoria')")
+    @PreAuthorize("hasAuthority('excluir_categorias')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         categoriaService.deletar(id);
 

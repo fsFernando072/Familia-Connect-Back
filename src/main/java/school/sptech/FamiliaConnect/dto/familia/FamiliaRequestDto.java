@@ -21,16 +21,13 @@ public class FamiliaRequestDto {
 
     @Schema(description = "Endereço da família")
     @NotNull(message = "O endereço é obrigatório")
-    @Valid
     private EnderecoRequestDto endereco;
 
     @Schema(description = "Responsável pela família")
     @NotNull(message = "O responsável é obrigatório")
-    @Valid
     private PessoaRequestDto responsavel;
 
     @Schema(description = "Dependentes da família")
-    @Valid
     private List<PessoaRequestDto> dependentes;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------

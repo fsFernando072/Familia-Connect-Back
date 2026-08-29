@@ -13,9 +13,6 @@ public class ProdutoResponseDto {
     @Schema(description = "Nome do produto")
     private String nome;
 
-    @Schema(description = "Quantidade do produto em estoque")
-    private Integer quantidade;
-
     @Schema(description = "Descrição do produto")
     private String descricao;
 
@@ -53,10 +50,9 @@ public class ProdutoResponseDto {
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public ProdutoResponseDto(Integer id, String nome, Integer quantidade, String descricao, ProdutoCategoria produtoCategoria) {
+    public ProdutoResponseDto(Integer id, String nome, String descricao, ProdutoCategoria produtoCategoria) {
         this.id = id;
         this.nome = nome;
-        this.quantidade = quantidade;
         this.descricao = descricao;
         this.produtoCategoria = produtoCategoria;
     }
@@ -77,14 +73,6 @@ public class ProdutoResponseDto {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
     }
 
     public String getDescricao() {

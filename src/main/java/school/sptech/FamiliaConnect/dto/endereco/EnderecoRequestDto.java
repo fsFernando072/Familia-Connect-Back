@@ -24,9 +24,8 @@ public class EnderecoRequestDto {
     private String logradouro;
 
     @Schema(description = "Número do endereço")
-    @NotNull(message = "Número do endereço é obrigatório")
-    @Positive(message = "Númeto do endereço tem que ser positivo")
-    private Integer numero;
+    @NotBlank(message = "Número do endereço é obrigatório")
+    private String numero;
 
     @Schema(description = "Complemento do endereço")
     private String complemento;
@@ -66,11 +65,11 @@ public class EnderecoRequestDto {
         this.logradouro = logradouro;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

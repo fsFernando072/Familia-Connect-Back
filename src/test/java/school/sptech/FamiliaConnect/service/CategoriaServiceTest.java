@@ -38,10 +38,11 @@ class CategoriaServiceTest {
 
             categoria.setId(1);
             categoria.setNome("categoria1");
+            categoria.setAtivo(true);
 
             categorias.add(categoria);
 
-            Mockito.when(categoriaRepository.findAll())
+            Mockito.when(categoriaRepository.findAllByAtivoTrue())
                     .thenReturn(categorias);
             List<Categoria> resultado = categoriaService.listar();
 

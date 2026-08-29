@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public interface OcrClient {
 
-    @PostMapping(value = "/cesta-basica", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/ocr/cesta-basica", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     List<FamiliaFormResponseDto> getDadosFamilia(@RequestPart("file") MultipartFile fotoFamilia);
 
 }

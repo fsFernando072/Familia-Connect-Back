@@ -1,10 +1,7 @@
 package school.sptech.FamiliaConnect.dto.pessoa;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 import school.sptech.FamiliaConnect.enums.SexoEnum;
 
@@ -30,6 +27,7 @@ public class PessoaRequestDto {
 
     @Schema(description = "Data de nascimento da pessoa")
     @NotNull(message = "Data de nascimento da pessoa é obrigatório")
+    @Past(message = "A data de nascimento deve ser de antes do dia de hoje")
     private LocalDate dataNascimento;
 
     @Schema(description = "Profissão da pessoa")

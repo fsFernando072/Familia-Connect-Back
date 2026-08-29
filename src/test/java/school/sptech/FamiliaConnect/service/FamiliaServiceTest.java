@@ -63,7 +63,7 @@ class FamiliaServiceTest {
         enderecoDto.setCep("08020-000");
         enderecoDto.setBairro("Itaquera");
         enderecoDto.setLogradouro("Rua Macapá");
-        enderecoDto.setNumero(1290);
+        enderecoDto.setNumero("1290");
         enderecoDto.setComplemento("Apartamento 20");
         enderecoDto.setCidade("São Paulo");
         enderecoDto.setEstadoId(1);

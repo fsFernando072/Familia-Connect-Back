@@ -13,9 +13,7 @@ public class EntregaMapper {
 
     public static Entrega toModel(EntregaRequestDto requestDto) {
 
-        Entrega entrega = new Entrega(
-            requestDto.getDataEntrega()
-        );
+        Entrega entrega = new Entrega();
         Pessoa pessoa = new Pessoa();
         pessoa.setId(requestDto.getIdPessoa());
 

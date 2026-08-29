@@ -14,11 +14,6 @@ public class ProdutoRequestDto {
     @NotBlank(message = "Nome do produto é obrigatório")
     private String nome;
 
-    @Schema(description = "Quantidade do produto")
-    @NotNull(message = "Quantidade do produto no estoque é obrigatório")
-    @PositiveOrZero(message = "Quantidade do produto no estoque tem que ser maior ou igual a zero")
-    private Integer quantidade;
-
     @Schema(description = "Descrição do produto")
     @NotBlank(message = "Descrição do produto é obrigatória")
     private String descricao;
@@ -36,14 +31,6 @@ public class ProdutoRequestDto {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
     }
 
     public String getDescricao() {

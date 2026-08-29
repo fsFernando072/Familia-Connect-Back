@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
 public class FuncionarioRequestDto {
@@ -19,6 +20,7 @@ public class FuncionarioRequestDto {
 
     @Schema(description = "Senha do funcionário")
     @NotBlank(message = "Senha do funcionário tem que ser obrigatória")
+    @Size(min = 8)
     private String senha;
 
     @Schema(description = "ID do cargo do funcionário")

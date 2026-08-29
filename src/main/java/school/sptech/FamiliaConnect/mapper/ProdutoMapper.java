@@ -14,7 +14,6 @@ public class ProdutoMapper {
         Produto produto = new Produto();
         produto.setDescricao(dto.getDescricao());
         produto.setNome(dto.getNome());
-        produto.setQuantidade(dto.getQuantidade());
 
         Categoria categoria = new Categoria();
         categoria.setId(dto.getIdCategoria());
@@ -35,7 +34,6 @@ public class ProdutoMapper {
         ProdutoResponseDto produtoResponseDto = new ProdutoResponseDto(
             produto.getId(),
                 produto.getNome(),
-                produto.getQuantidade(),
                 produto.getDescricao(),
                 produtoCategoria
         );

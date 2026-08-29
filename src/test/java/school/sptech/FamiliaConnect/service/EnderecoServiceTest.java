@@ -45,7 +45,7 @@ class EnderecoServiceTest {
             Endereco endereco = new Endereco();
             endereco.setCep("08490-000");
             endereco.setLogradouro("Rua Teste");
-            endereco.setNumero(10);
+            endereco.setNumero("10");
             endereco.setBairro("Itaquera");
             endereco.setCidade("São Paulo");
             endereco.setEstado(estado);

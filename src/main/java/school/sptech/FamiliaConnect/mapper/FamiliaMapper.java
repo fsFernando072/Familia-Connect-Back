@@ -114,7 +114,7 @@ public class FamiliaMapper {
         dependente.setRg(pessoa.getRg());
         dependente.setTelefone(pessoa.getTelefone());
         dependente.setDataNascimento(pessoa.getDtNascimento());
-        dependente.setGrauParentesco(pessoa.getGrauParentesco());
+        dependente.setGrauParentesco(pessoa.getGrauParentesco().getGrau());
         dependente.setSexo(pessoa.getSexo().toString());
 
         if (pessoa.getProfissao() != null) {

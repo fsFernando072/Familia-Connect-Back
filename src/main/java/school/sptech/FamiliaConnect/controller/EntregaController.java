@@ -79,7 +79,8 @@ public class EntregaController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Entrega cadastrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Recurso não encontrado (Pessoa, Funcionário ou Produto)")
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado (Pessoa, Funcionário, Produto ou estoque do mês não cadastrado)"),
+            @ApiResponse(responseCode = "409", description = "Regra de negócio violada (limite de estoque do mês ou família já atendida no mês)")
     })
     @PostMapping
     @PreAuthorize("hasAuthority('cadastrar_entregas')")
@@ -88,6 +89,46 @@ public class EntregaController {
         Entrega entrega = entregaService.salvar(EntregaMapper.toModel(requestDto));
 
         return ResponseEntity.status(201).body(EntregaMapper.toResponse(entrega));
+
+    }
+
+    @Operation(
+            summary = "Atualizar entrega",
+            description = "Atualiza uma entrega pelo ID fornecido"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entrega atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Entrega ou recurso relacionado não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Regra de negócio violada (limite de estoque do mês ou família já atendida no mês)")
+    })
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('editar_entregas')")
+    public ResponseEntity<EntregaResponseDto> atualizarEntrega(
+            @PathVariable Integer id,
+            @RequestBody @Valid EntregaRequestDto requestDto
+    ){
+
+        Entrega entrega = entregaService.atualizar(id, EntregaMapper.toModel(requestDto));
+
+        return ResponseEntity.status(200).body(EntregaMapper.toResponse(entrega));
+
+    }
+
+    @Operation(
+            summary = "Deletar entrega",
+            description = "Deleta uma entrega pelo ID fornecido"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Entrega deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Entrega não encontrada pelo ID")
+    })
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('excluir_entregas')")
+    public ResponseEntity<Void> deletarEntrega(@PathVariable Integer id){
+
+        entregaService.deletar(id);
+
+        return ResponseEntity.status(204).build();
 
     }
 

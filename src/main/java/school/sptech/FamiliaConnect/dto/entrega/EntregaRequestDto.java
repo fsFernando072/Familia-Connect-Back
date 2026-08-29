@@ -15,10 +15,6 @@ public class EntregaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @Schema(description = "Data da entrega")
-    @CreationTimestamp
-    private LocalDate dataEntrega;
-
     @Schema(description = "ID do funcionário responsável pela entrega")
     @NotNull(message = "ID do funcionário tem que ser obrigatório")
     @Positive(message = "ID do funcionário tem que ser positivo")
@@ -35,14 +31,6 @@ public class EntregaRequestDto {
     private Integer idProduto;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
-
-    public LocalDate getDataEntrega() {
-        return dataEntrega;
-    }
-
-    public void setDataEntrega(LocalDate dataEntrega) {
-        this.dataEntrega = dataEntrega;
-    }
 
     public Integer getIdFuncionario() {
         return idFuncionario;

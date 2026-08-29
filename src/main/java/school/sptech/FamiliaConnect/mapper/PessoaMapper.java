@@ -3,6 +3,7 @@ package school.sptech.FamiliaConnect.mapper;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
 import school.sptech.FamiliaConnect.dto.pessoa.PessoaResponseDto;
 import school.sptech.FamiliaConnect.model.Familia;
+import school.sptech.FamiliaConnect.model.GrauParentesco;
 import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.model.Profissao;
 
@@ -18,8 +19,11 @@ public class PessoaMapper {
         pessoa.setCpf(pessoaRequestDto.getCpf());
         pessoa.setDtNascimento(pessoaRequestDto.getDataNascimento());
         pessoa.setResponsavel(pessoaRequestDto.getResponsavel());
-        pessoa.setGrauParentesco(pessoaRequestDto.getGrauParentesco());
         pessoa.setTelefone(pessoaRequestDto.getTelefone());
+
+        GrauParentesco grauParentesco = new GrauParentesco();
+        grauParentesco.setGrau(pessoaRequestDto.getGrauParentesco());
+        pessoa.setGrauParentesco(grauParentesco);
 
         Profissao profissao = new Profissao();
         profissao.setNome(pessoaRequestDto.getProfissao());
@@ -50,7 +54,7 @@ public class PessoaMapper {
         dto.setCpf(pessoa.getCpf());
         dto.setDataNascimento(pessoa.getDtNascimento());
         dto.setResponsavel(pessoa.getResponsavel());
-        dto.setGrauParentesco(pessoa.getGrauParentesco());
+        dto.setGrauParentesco(pessoa.getGrauParentesco().getGrau());
         dto.setTelefone(pessoa.getTelefone());
         dto.setSexo(pessoa.getSexo());
 

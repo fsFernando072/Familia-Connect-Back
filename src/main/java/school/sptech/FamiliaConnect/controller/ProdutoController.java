@@ -68,7 +68,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Categoria do produto não encontrada pelo ID")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('cadastrar_produto')")
+    @PreAuthorize("hasAuthority('cadastrar_produtos')")
     public ResponseEntity<ProdutoResponseDto> cadastrarProduto(@RequestBody @Valid ProdutoRequestDto requestDto){
 
         Produto produtoCadastrado = produtoService.salvar(ProdutoMapper.toModel(requestDto));
@@ -85,7 +85,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "201", description = "Produto encontrado com sucesso")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('listar_produto')")
+    @PreAuthorize("hasAuthority('listar_produtos')")
     public ResponseEntity<ProdutoResponseDto> listarProduto(@PathVariable Integer id){
 
         Produto produto = produtoService.listarPorId(id);
@@ -103,7 +103,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Produto não encontrado"),
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('editar_produto')")
+    @PreAuthorize("hasAuthority('editar_produtos')")
     public ResponseEntity<ProdutoResponseDto> atualizarProduto(
             @PathVariable Integer id,
             @RequestBody @Valid ProdutoRequestDto requestDto
@@ -125,7 +125,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Produto não encontrado pelo ID")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('excluir_produto')")
+    @PreAuthorize("hasAuthority('excluir_produtos')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         produtoService.deletar(id);
 

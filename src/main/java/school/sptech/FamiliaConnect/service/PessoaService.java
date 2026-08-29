@@ -6,6 +6,7 @@ import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.mapper.PessoaMapper;
 import school.sptech.FamiliaConnect.model.Familia;
+import school.sptech.FamiliaConnect.model.GrauParentesco;
 import school.sptech.FamiliaConnect.model.Pessoa;
 import school.sptech.FamiliaConnect.model.Profissao;
 import school.sptech.FamiliaConnect.repository.FamiliaRepository;
@@ -22,13 +23,15 @@ public class PessoaService {
     private final PessoaRepository pessoaRepository;
     private final FamiliaRepository familiaRepository;
     private final ProfissaoService profissaoService;
+    private final GrauParentescoService grauParentescoService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public PessoaService(PessoaRepository pessoaRepository, FamiliaRepository familiaRepository, ProfissaoService profissaoService) {
+    public PessoaService(PessoaRepository pessoaRepository, FamiliaRepository familiaRepository, ProfissaoService profissaoService, GrauParentescoService grauParentescoService) {
         this.pessoaRepository = pessoaRepository;
         this.familiaRepository = familiaRepository;
         this.profissaoService = profissaoService;
+        this.grauParentescoService = grauParentescoService;
     }
 
 
@@ -54,6 +57,9 @@ public class PessoaService {
         } else {
             pessoa.setProfissao(null);
         }
+
+        GrauParentesco grauParentesco = grauParentescoService.listarPorGrau(pessoa.getGrauParentesco());
+        pessoa.setGrauParentesco(grauParentesco);
 
         return pessoaRepository.save(pessoa);
     }
@@ -87,6 +93,9 @@ public class PessoaService {
         } else {
             pessoaExistente.setProfissao(null);
         }
+
+        GrauParentesco grauParentesco = grauParentescoService.listarPorGrau(pessoaAtualizada.getGrauParentesco());
+        pessoaExistente.setGrauParentesco(grauParentesco);
 
         pessoaExistente.setSexo(pessoaAtualizada.getSexo());
 

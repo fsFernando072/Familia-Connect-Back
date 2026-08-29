@@ -1,6 +1,7 @@
 package school.sptech.FamiliaConnect.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -12,6 +13,8 @@ public class Entrega {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @CreationTimestamp
     private LocalDate dataEntrega;
 
     @ManyToOne
@@ -24,10 +27,6 @@ public class Entrega {
     private Produto produto;
 
     // Construtores ----------------------------------------------------------------------------------------------------
-
-    public Entrega(LocalDate dataEntrega) {
-        this.dataEntrega = dataEntrega;
-    }
 
     public Entrega() {
     }

@@ -18,8 +18,10 @@ public class Pessoa {
     private String cpf;
     private LocalDate dtNascimento;
     private Boolean isResponsavel;
-    private String grauParentesco;
     private String telefone;
+
+    @ManyToOne
+    private GrauParentesco grauParentesco;
 
     @ManyToOne
     private Profissao profissao;
@@ -56,11 +58,11 @@ public class Pessoa {
         this.familia = familia;
     }
 
-    public String getGrauParentesco() {
+    public GrauParentesco getGrauParentesco() {
         return grauParentesco;
     }
 
-    public void setGrauParentesco(String grauParentesco) {
+    public void setGrauParentesco(GrauParentesco grauParentesco) {
         this.grauParentesco = grauParentesco;
     }
 

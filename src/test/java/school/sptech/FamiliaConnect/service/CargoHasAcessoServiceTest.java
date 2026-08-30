@@ -9,13 +9,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.model.Acesso;
-import school.sptech.FamiliaConnect.model.Cargo;
-import school.sptech.FamiliaConnect.model.CargoHasAcesso;
-import school.sptech.FamiliaConnect.repository.AcessoRepository;
-import school.sptech.FamiliaConnect.repository.CargoHasAcessoRepository;
-import school.sptech.FamiliaConnect.repository.CargoRepository;
+import school.sptech.FamiliaConnect.application.service.CargoHasAcessoService;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.domain.entity.Acesso;
+import school.sptech.FamiliaConnect.domain.entity.Cargo;
+import school.sptech.FamiliaConnect.domain.entity.CargoHasAcesso;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.AcessoRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoHasAcessoRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
 
 
 import java.util.ArrayList;

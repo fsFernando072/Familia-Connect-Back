@@ -9,10 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
-import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.model.Cargo;
-import school.sptech.FamiliaConnect.repository.CargoRepository;
+import school.sptech.FamiliaConnect.application.service.CargoService;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.domain.entity.Cargo;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
 
 import java.util.ArrayList;
 import java.util.List;

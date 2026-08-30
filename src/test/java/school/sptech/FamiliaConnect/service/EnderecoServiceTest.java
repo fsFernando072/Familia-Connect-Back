@@ -9,12 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.dto.endereco.EnderecoRequestDto;
-import school.sptech.FamiliaConnect.mapper.EnderecoMapper;
-import school.sptech.FamiliaConnect.model.Endereco;
-import school.sptech.FamiliaConnect.model.Estado;
-import school.sptech.FamiliaConnect.repository.EnderecoRepository;
-import school.sptech.FamiliaConnect.repository.EstadoRepository;
+import school.sptech.FamiliaConnect.application.service.EnderecoService;
+import school.sptech.FamiliaConnect.domain.entity.Endereco;
+import school.sptech.FamiliaConnect.domain.entity.Estado;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EnderecoRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EstadoRepository;
 
 import java.util.Optional;
 

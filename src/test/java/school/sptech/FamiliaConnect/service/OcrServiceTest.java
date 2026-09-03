@@ -11,13 +11,14 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
-import school.sptech.FamiliaConnect.client.OcrClient;
-import school.sptech.FamiliaConnect.dto.ocr.EnderecoResponseDto;
-import school.sptech.FamiliaConnect.dto.ocr.FamiliaFormResponseDto;
-import school.sptech.FamiliaConnect.dto.ocr.ResponsavelResponseDto;
-import school.sptech.FamiliaConnect.enums.TipoArquivoEnum;
-import school.sptech.FamiliaConnect.exception.DadosDaFamiliaAusenteException;
-import school.sptech.FamiliaConnect.exception.TipoDeArquivoIncompativelException;
+import school.sptech.FamiliaConnect.application.service.OcrService;
+import school.sptech.FamiliaConnect.infraestructure.web.client.OcrClient;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.ocr.EnderecoResponseDto;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.ocr.FamiliaFormResponseDto;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.ocr.ResponsavelResponseDto;
+import school.sptech.FamiliaConnect.domain.enums.TipoArquivoEnum;
+import school.sptech.FamiliaConnect.domain.exception.DadosDaFamiliaAusenteException;
+import school.sptech.FamiliaConnect.domain.exception.TipoDeArquivoIncompativelException;
 
 import java.util.List;
 

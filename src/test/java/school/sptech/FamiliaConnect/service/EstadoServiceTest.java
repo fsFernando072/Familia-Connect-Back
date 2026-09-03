@@ -9,9 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.model.Estado;
-import school.sptech.FamiliaConnect.repository.EstadoRepository;
+import school.sptech.FamiliaConnect.application.service.EstadoService;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.domain.entity.Estado;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EstadoRepository;
 
 import java.util.ArrayList;
 import java.util.List;

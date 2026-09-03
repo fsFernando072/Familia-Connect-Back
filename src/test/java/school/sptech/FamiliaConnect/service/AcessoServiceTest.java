@@ -9,16 +9,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
-import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.model.Acesso;
-import school.sptech.FamiliaConnect.repository.AcessoRepository;
+import school.sptech.FamiliaConnect.application.service.AcessoService;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.domain.entity.Acesso;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.AcessoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class AcessoServiceTest {

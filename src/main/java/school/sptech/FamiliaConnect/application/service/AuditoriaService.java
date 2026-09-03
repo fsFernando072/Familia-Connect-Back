@@ -1,0 +1,66 @@
+package school.sptech.FamiliaConnect.application.service;
+
+import org.springframework.stereotype.Service;
+import school.sptech.FamiliaConnect.application.ports.in.AuditoriaUseCase;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.domain.entity.Auditoria;
+import school.sptech.FamiliaConnect.domain.entity.Funcionario;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.AuditoriaRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FuncionarioRepository;
+
+import java.util.List;
+
+@Service
+public class AuditoriaService implements AuditoriaUseCase {
+
+    private final AuditoriaRepository auditoriaRepository;
+    private final FuncionarioRepository funcionarioRepository;
+
+    public AuditoriaService(AuditoriaRepository auditoriaRepository,
+                            FuncionarioRepository funcionarioRepository) {
+        this.auditoriaRepository = auditoriaRepository;
+        this.funcionarioRepository = funcionarioRepository;
+    }
+
+    public Auditoria cadastrar(Auditoria auditoria) {
+        Funcionario funcionario = funcionarioRepository.findById(auditoria.getFuncionario().getId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrada"));
+
+
+        auditoria.setFuncionario(funcionario);
+
+        return auditoriaRepository.save(auditoria);
+    }
+
+    public List<Auditoria> listar() {
+        return auditoriaRepository.findAll();
+    }
+
+    public Auditoria buscarPorId(Integer id) {
+        return auditoriaRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada"));
+    }
+
+    public Auditoria atualizar(Integer id, Auditoria auditoria) {
+        if (!auditoriaRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada");
+        }
+
+        Funcionario funcionario = funcionarioRepository.findById(auditoria.getFuncionario().getId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrada"));
+
+
+        auditoria.setId(id);
+        auditoria.setFuncionario(funcionario);
+
+        return auditoriaRepository.save(auditoria);
+    }
+
+    public void deletar(Integer id) {
+        if (!auditoriaRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("A auditoria com o id não foi encontrada");
+        }
+
+        auditoriaRepository.deleteById(id);
+    }
+}

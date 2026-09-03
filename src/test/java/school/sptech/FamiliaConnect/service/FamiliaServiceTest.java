@@ -13,19 +13,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import school.sptech.FamiliaConnect.dto.endereco.EnderecoRequestDto;
-import school.sptech.FamiliaConnect.dto.familia.FamiliaListResponseDto;
-import school.sptech.FamiliaConnect.dto.familia.FamiliaRequestDto;
-import school.sptech.FamiliaConnect.dto.pessoa.PessoaRequestDto;
-import school.sptech.FamiliaConnect.exception.EntidadeNaoEncontradaException;
-import school.sptech.FamiliaConnect.model.Arquivo;
-import school.sptech.FamiliaConnect.model.Endereco;
-import school.sptech.FamiliaConnect.model.Familia;
-import school.sptech.FamiliaConnect.model.Pessoa;
-import school.sptech.FamiliaConnect.repository.EnderecoRepository;
-import school.sptech.FamiliaConnect.repository.EntregaRepository;
-import school.sptech.FamiliaConnect.repository.FamiliaRepository;
-import school.sptech.FamiliaConnect.repository.PessoaRepository;
+import school.sptech.FamiliaConnect.application.service.EnderecoService;
+import school.sptech.FamiliaConnect.application.service.FamiliaService;
+import school.sptech.FamiliaConnect.application.service.PessoaService;
+import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.endereco.EnderecoRequestDto;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.pessoa.PessoaRequestDto;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
+import school.sptech.FamiliaConnect.domain.entity.Arquivo;
+import school.sptech.FamiliaConnect.domain.entity.Endereco;
+import school.sptech.FamiliaConnect.domain.entity.Familia;
+import school.sptech.FamiliaConnect.domain.entity.Pessoa;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EnderecoRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EntregaRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FamiliaRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.PessoaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -53,7 +57,7 @@ class FamiliaServiceTest {
     EntregaRepository entregaRepository;
 
     @Mock
-    ArquivoService arquivoService;
+    ArquivoUseCase arquivoUseCase;
 
     @InjectMocks
     FamiliaService familiaService;
@@ -321,7 +325,7 @@ class FamiliaServiceTest {
 
             familiaService.deletar(id);
 
-            Mockito.verify(arquivoService).deletarPorId(arquivo.getId());
+            Mockito.verify(arquivoUseCase).deletarPorId(arquivo.getId());
             Mockito.verify(pessoaRepository).deleteAll(List.of(responsavel));
             Mockito.verify(familiaRepository).delete(familia);
             Mockito.verify(enderecoRepository).delete(endereco);

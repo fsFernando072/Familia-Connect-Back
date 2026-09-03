@@ -9,13 +9,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.FamiliaConnect.exception.EntidadeJaCadastradaException;
-import school.sptech.FamiliaConnect.model.Categoria;
-import school.sptech.FamiliaConnect.repository.CategoriaRepository;
+import school.sptech.FamiliaConnect.application.service.CategoriaService;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
+import school.sptech.FamiliaConnect.domain.entity.Categoria;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CategoriaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class CategoriaServiceTest {

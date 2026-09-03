@@ -9,8 +9,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class FamiliaConnectApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(FamiliaConnectApplication.class, args);
 	}
-
 }

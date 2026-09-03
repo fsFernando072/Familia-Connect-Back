@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CargoHasAcessoRepository extends JpaRepository<CargoHasAcesso, Integer> {
     List<CargoHasAcesso> findByCargoId(Integer cargoId);
+    Boolean existsByCargoId(Integer cargoId);
+    void deleteByCargoId(Integer cargoId);
 }

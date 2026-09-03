@@ -25,7 +25,7 @@ public class CargoController {
     private final CargoUseCase cargoUseCase;
 
     public CargoController(CargoUseCase cargoUseCase) {
-        this.cargoUseCase = CargoController.this.cargoUseCase;
+        this.cargoUseCase = cargoUseCase;
     }
 
     @Operation(

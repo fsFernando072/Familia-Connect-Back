@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface CargoRepository extends JpaRepository<Cargo, Integer> {
     Optional<Cargo> findByNome(String nome);
+    Optional<Cargo> findByNomeAndIdNot(String nome, Integer id);
 }

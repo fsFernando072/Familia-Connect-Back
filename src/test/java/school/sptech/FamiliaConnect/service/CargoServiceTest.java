@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import school.sptech.FamiliaConnect.application.service.CargoHasAcessoService;
 import school.sptech.FamiliaConnect.application.service.CargoService;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
@@ -24,6 +25,9 @@ class CargoServiceTest {
 
     @Mock
     CargoRepository cargoRepository;
+
+    @Mock
+    CargoHasAcessoService cargoHasAcessoService;
 
     @InjectMocks
     CargoService cargoService;

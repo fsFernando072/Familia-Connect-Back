@@ -1,10 +1,12 @@
 package school.sptech.FamiliaConnect.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import school.sptech.FamiliaConnect.application.ports.in.CargoUseCase;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.domain.entity.Cargo;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoHasAcessoRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.List;
 public class CargoService implements CargoUseCase {
 
     private final CargoRepository cargoRepository;
+    private final CargoHasAcessoService cargoHasAcessoService;
 
-    public CargoService(CargoRepository cargoRepository) {
+    public CargoService(CargoRepository cargoRepository, CargoHasAcessoService cargoHasAcessoService) {
         this.cargoRepository = cargoRepository;
+        this.cargoHasAcessoService = cargoHasAcessoService;
     }
 
     public Cargo cadastrar(Cargo cargo) {
@@ -40,7 +44,7 @@ public class CargoService implements CargoUseCase {
             throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
         }
 
-        cargoRepository.findByNome(cargo.getNome())
+        cargoRepository.findByNomeAndIdNot(cargo.getNome(), id)
                 .ifPresent(cargo1 -> {
                     throw new EntidadeJaCadastradaException("Cargo já cadastrado");
                 });
@@ -50,11 +54,13 @@ public class CargoService implements CargoUseCase {
         return cargoRepository.save(cargo);
     }
 
+    @Transactional
     public void deletar(Integer id) {
         if (!cargoRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
         }
 
+        cargoHasAcessoService.deletarPorCargoId(id);
         cargoRepository.deleteById(id);
     }
 }

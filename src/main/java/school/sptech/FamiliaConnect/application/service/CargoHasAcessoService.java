@@ -1,6 +1,7 @@
 package school.sptech.FamiliaConnect.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import school.sptech.FamiliaConnect.application.ports.in.CargoHasAcessoUseCase;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.domain.entity.Acesso;
@@ -79,6 +80,12 @@ public class CargoHasAcessoService implements CargoHasAcessoUseCase {
         }
 
         cargoHasAcessoRepository.deleteById(id);
+    }
+
+    public void deletarPorCargoId(Integer cargoId) {
+        if (cargoHasAcessoRepository.existsByCargoId(cargoId)) {
+            cargoHasAcessoRepository.deleteByCargoId(cargoId);
+        }
     }
 
 }

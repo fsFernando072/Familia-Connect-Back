@@ -11,11 +11,20 @@ public class CargoResponseDto {
     @Schema(description = "Nome do cargo")
     private String nome;
 
+    @Schema(description = "Descrição do cargo")
+    private String descricao;
+
     public CargoResponseDto() {}
 
     public CargoResponseDto(String nome, Integer id) {
         this.nome = nome;
         this.id = id;
+    }
+
+    public CargoResponseDto(String nome, Integer id, String descricao) {
+        this.nome = nome;
+        this.id = id;
+        this.descricao = descricao;
     }
 
     public Integer getId() {
@@ -32,6 +41,14 @@ public class CargoResponseDto {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
     
 }

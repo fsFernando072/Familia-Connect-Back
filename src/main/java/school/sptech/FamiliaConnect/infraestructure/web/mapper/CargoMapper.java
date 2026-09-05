@@ -11,6 +11,7 @@ public class CargoMapper {
     public static Cargo toModel(CargoRequestDto dto) {
         Cargo cargo = new Cargo();
         cargo.setNome(dto.getNome());
+        cargo.setDescricao(dto.getDescricao());
 
         return cargo;
     }
@@ -19,6 +20,7 @@ public class CargoMapper {
         CargoResponseDto dto = new CargoResponseDto();
         dto.setId(cargo.getId());
         dto.setNome(cargo.getNome());
+        dto.setDescricao(cargo.getDescricao());
 
         return dto;
     }

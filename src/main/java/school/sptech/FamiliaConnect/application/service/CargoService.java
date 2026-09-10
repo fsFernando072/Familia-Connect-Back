@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.application.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.FamiliaConnect.application.ports.in.CargoUseCase;
@@ -8,8 +10,6 @@ import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaExcept
 import school.sptech.FamiliaConnect.domain.entity.Cargo;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoHasAcessoRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
-
-import java.util.List;
 
 @Service
 public class CargoService implements CargoUseCase {
@@ -30,8 +30,10 @@ public class CargoService implements CargoUseCase {
         return cargoRepository.save(cargo);
     }
 
-    public List<Cargo> listar() {
-        return cargoRepository.findAll();
+    public Page<Cargo> listar(String nome, Pageable pageable) {
+        String termoPesquisa = nome != null ? nome : "";
+
+        return cargoRepository.findByNomeContainingIgnoreCase(termoPesquisa, pageable);
     }
 
     public Cargo buscarPorId(Integer id) {

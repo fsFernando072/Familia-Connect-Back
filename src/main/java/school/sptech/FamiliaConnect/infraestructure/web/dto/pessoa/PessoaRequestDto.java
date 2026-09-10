@@ -2,12 +2,22 @@ package school.sptech.FamiliaConnect.infraestructure.web.dto.pessoa;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import jakarta.validation.groups.Default;
 import org.hibernate.validator.constraints.br.CPF;
 import school.sptech.FamiliaConnect.domain.enums.SexoEnum;
 
 import java.time.LocalDate;
 
 public class PessoaRequestDto {
+
+    // Grupos de validação -----------------------------------------------------------------------------------------
+    // Usados para diferenciar quais campos são obrigatórios dependendo do papel da pessoa (responsável ou
+    // dependente). Ambos estendem Default para que as demais validações (nome, data de nascimento, sexo,
+    // grau de parentesco etc.) continuem valendo para os dois casos.
+
+    public interface Responsavel extends Default {}
+
+    public interface Dependente extends Default {}
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
@@ -16,12 +26,12 @@ public class PessoaRequestDto {
     private String nome;
 
     @Schema(description = "RG da pessoa")
-    @NotBlank(message = "RG da pessoa é obrigatório")
+    @NotBlank(message = "RG da pessoa é obrigatório", groups = Responsavel.class)
     @Size(min = 7, max = 9, message = "RG da pessoa tem que ser válido")
     private String rg;
 
     @Schema(description = "CPF da pessoa")
-    @NotBlank(message = "CPF da pessoa é obrigatório")
+    @NotBlank(message = "CPF da pessoa é obrigatório", groups = Responsavel.class)
     @CPF(message = "CPF da pessoa tem que ser válido")
     private String cpf;
 
@@ -42,7 +52,7 @@ public class PessoaRequestDto {
     private Integer idFamilia;
 
     @Schema(description = "Telefone da pessoa")
-    @NotBlank(message = "Telefone da pessoa é obrigatório")
+    @NotBlank(message = "Telefone da pessoa é obrigatório", groups = Responsavel.class)
     @Size(min = 11, max = 11, message = "Telefone da pessoa tem que ser válido")
     private String telefone;
 

@@ -5,6 +5,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +18,6 @@ import school.sptech.FamiliaConnect.infraestructure.web.dto.categoria.CategoriaR
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.CategoriaMapper;
 import school.sptech.FamiliaConnect.domain.entity.Categoria;
 import school.sptech.FamiliaConnect.application.service.CategoriaService;
-
-import java.util.List;
 
 @Tag(name = "Categorias", description = "Operações relacionadas às categorias dos produtos")
 @RestController
@@ -36,7 +38,8 @@ public class CategoriaController {
 
     @Operation(
             summary = "Listar categorias",
-            description = "Retorna uma lista das categorias dos produtos cadastradas no sistema"
+            description = "Retorna uma lista paginada das categorias dos produtos cadastradas no sistema, " +
+                    "com pesquisa opcional pelo nome (case insensitive) e ordenação opcional pelo nome"
     )
     @ApiResponses(value =    {
             @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso"),
@@ -44,15 +47,24 @@ public class CategoriaController {
     })
     @GetMapping
     @PreAuthorize("hasAuthority('listar_categorias')")
-    public ResponseEntity<List<CategoriaResponseDto>> listarCategorias(){
+    public ResponseEntity<Page<CategoriaResponseDto>> listarCategorias(
+            @RequestParam(required = false) String nome,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size,
+            @RequestParam(defaultValue = "asc") String direcao
+    ){
 
-        List<Categoria> categorias = categoriaUseCase.listar();
+        Sort.Direction direcaoOrdenacao = Sort.Direction.fromString(direcao);
+        Sort ordenacao = Sort.by(direcaoOrdenacao, "nome", "id");
+        Pageable pageable = PageRequest.of(page, size, ordenacao);
+
+        Page<Categoria> categorias = categoriaUseCase.listar(nome, pageable);
 
         if(categorias.isEmpty()){
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(CategoriaMapper.toResponseList(categorias));
+        return ResponseEntity.status(200).body(categorias.map(CategoriaMapper::toResponse));
     }
 
     @Operation(

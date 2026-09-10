@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.infraestructure.persistence.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import school.sptech.FamiliaConnect.domain.entity.Categoria;
 
@@ -13,4 +15,6 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
     Boolean existsByIdAndAtivoTrue(Integer id);
 
     List<Categoria> findAllByAtivoTrue();
+
+    Page<Categoria> findByAtivoTrueAndNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

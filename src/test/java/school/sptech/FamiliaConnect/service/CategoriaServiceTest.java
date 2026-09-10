@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import school.sptech.FamiliaConnect.application.service.CategoriaService;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.domain.entity.Categoria;
@@ -30,7 +34,7 @@ class CategoriaServiceTest {
     @DisplayName("Deve retornar as categorias")
     class listar {
         @Test
-        @DisplayName("Deve retornar uma lista com todos os cargos")
+        @DisplayName("Deve retornar uma página com todos os cargos")
         void retornarListaComTodosCategorias(){
             List<Categoria> categorias = new ArrayList<>();
 
@@ -42,9 +46,12 @@ class CategoriaServiceTest {
 
             categorias.add(categoria);
 
-            Mockito.when(categoriaRepository.findAllByAtivoTrue())
-                    .thenReturn(categorias);
-            List<Categoria> resultado = categoriaService.listar();
+            Pageable pageable = PageRequest.of(0, 15);
+            Page<Categoria> page = new PageImpl<>(categorias, pageable, 1);
+
+            Mockito.when(categoriaRepository.findByAtivoTrueAndNomeContainingIgnoreCase("", pageable))
+                    .thenReturn(page);
+            Page<Categoria> resultado = categoriaService.listar(null, pageable);
 
             Assertions.assertIterableEquals(categorias, resultado);
         }

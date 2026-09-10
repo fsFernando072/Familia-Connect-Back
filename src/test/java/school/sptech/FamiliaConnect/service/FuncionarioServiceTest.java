@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,7 +56,7 @@ class FuncionarioServiceTest {
     class listar {
 
         @Test
-        @DisplayName("Deve retornar lista com todos os funcionários")
+        @DisplayName("Deve retornar página com todos os funcionários")
         void retornarListaComTodosFuncionarios() {
             List<Funcionario> funcionarios = new ArrayList<>();
 
@@ -60,23 +64,27 @@ class FuncionarioServiceTest {
             funcionario.setId(1);
             funcionarios.add(funcionario);
 
-            Mockito.when(funcionarioRepository.findAll())
-                    .thenReturn(funcionarios);
+            Pageable pageable = PageRequest.of(0, 15);
+            Page<Funcionario> page = new PageImpl<>(funcionarios, pageable, 1);
 
-            List<Funcionario> resultado = funcionarioService.listar();
+            Mockito.when(funcionarioRepository.findByNomeContainingIgnoreCase("", pageable))
+                    .thenReturn(page);
+
+            Page<Funcionario> resultado = funcionarioService.listar(null, pageable);
 
             Assertions.assertIterableEquals(funcionarios, resultado);
         }
 
         @Test
-        @DisplayName("Deve retornar lista vazia caso não exista nenhum funcionário")
+        @DisplayName("Deve retornar página vazia caso não exista nenhum funcionário")
         void retornarListaVazia() {
-            List<Funcionario> funcionarios = new ArrayList<>();
+            Pageable pageable = PageRequest.of(0, 15);
+            Page<Funcionario> page = Page.empty(pageable);
 
-            Mockito.when(funcionarioRepository.findAll())
-                    .thenReturn(funcionarios);
+            Mockito.when(funcionarioRepository.findByNomeContainingIgnoreCase("", pageable))
+                    .thenReturn(page);
 
-            List<Funcionario> resultado = funcionarioService.listar();
+            Page<Funcionario> resultado = funcionarioService.listar(null, pageable);
 
             Assertions.assertTrue(resultado.isEmpty());
         }

@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
@@ -21,7 +25,6 @@ import school.sptech.FamiliaConnect.domain.entity.Funcionario;
 import school.sptech.FamiliaConnect.application.service.FuncionarioService;
 
 import java.time.Duration;
-import java.util.List;
 
 @Tag(name = "Funcionários", description = "Operações relacionadas aos funcionários")
 @RestController
@@ -47,7 +50,8 @@ public class FuncionarioController {
 
     @Operation(
             summary = "Listar funcionários",
-            description = "Retorna uma lista de todos os funcionários cadastrados no sistema"
+            description = "Retorna uma lista paginada dos funcionários cadastrados no sistema, " +
+                    "com pesquisa opcional pelo nome (case insensitive) e ordenação opcional pelo nome"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de funcionários retornada com sucesso"),
@@ -55,15 +59,24 @@ public class FuncionarioController {
     })
     @GetMapping
     @PreAuthorize("hasAuthority('listar_funcionarios')")
-    public ResponseEntity<List<FuncionarioResponseDto>> listarFuncionarios(){
+    public ResponseEntity<Page<FuncionarioResponseDto>> listarFuncionarios(
+            @RequestParam(required = false) String nome,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size,
+            @RequestParam(defaultValue = "asc") String direcao
+    ){
 
-        List<Funcionario> funcionarios = funcionarioUseCase.listar();
+        Sort.Direction direcaoOrdenacao = Sort.Direction.fromString(direcao);
+        Sort ordenacao = Sort.by(direcaoOrdenacao, "nome", "id");
+        Pageable pageable = PageRequest.of(page, size, ordenacao);
+
+        Page<Funcionario> funcionarios = funcionarioUseCase.listar(nome, pageable);
 
         if(funcionarios.isEmpty()){
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarios));
+        return ResponseEntity.status(200).body(funcionarios.map(FuncionarioMapper::toResponse));
     }
 
     @Operation(

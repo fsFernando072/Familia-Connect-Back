@@ -86,9 +86,11 @@ public class FamiliaService implements FamiliaUseCase {
         return familia;
     }
 
-    public Page<FamiliaListResponseDto> listar(Pageable pageable){
+    public Page<FamiliaListResponseDto> listar(String nomeResponsavel, Pageable pageable){
 
-        return familiaRepository.findAllCustomized(pageable);
+        String termoPesquisa = nomeResponsavel != null ? nomeResponsavel : "";
+
+        return familiaRepository.findAllCustomized(termoPesquisa, pageable);
 
     }
 

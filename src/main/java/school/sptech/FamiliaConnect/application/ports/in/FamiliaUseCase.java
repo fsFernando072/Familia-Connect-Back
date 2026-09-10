@@ -13,7 +13,7 @@ import java.util.List;
 public interface FamiliaUseCase {
 
     Familia salvar(FamiliaRequestDto dto, MultipartFile foto);
-    Page<FamiliaListResponseDto> listar(Pageable pageable);
+    Page<FamiliaListResponseDto> listar(String nomeResponsavel, Pageable pageable);
     Familia listarPorId(Integer id);
     List<Pessoa> listarIntegrantes(Integer id);
     Familia atualizar(Integer idFamilia, FamiliaRequestDto dto, MultipartFile foto);

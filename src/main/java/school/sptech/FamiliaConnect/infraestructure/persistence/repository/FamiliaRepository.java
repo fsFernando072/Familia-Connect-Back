@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.domain.entity.Familia;
 import school.sptech.FamiliaConnect.domain.entity.Pessoa;
@@ -24,8 +25,9 @@ public interface FamiliaRepository extends JpaRepository<Familia, Integer> {
                 INNER JOIN Pessoa p ON
                 p.familia = f
                 WHERE p.isResponsavel = true
+                AND LOWER(p.nome) LIKE LOWER(CONCAT('%', :nomeResponsavel, '%'))
         """)
-    Page<FamiliaListResponseDto> findAllCustomized(Pageable pageable);
+    Page<FamiliaListResponseDto> findAllCustomized(@Param("nomeResponsavel") String nomeResponsavel, Pageable pageable);
 
     @Query("""
         SELECT

@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.infraestructure.persistence.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import school.sptech.FamiliaConnect.domain.entity.Produto;
 
@@ -13,4 +15,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     Boolean existsByIdAndAtivoTrue(Integer id);
 
     List<Produto> findAllByAtivoTrue();
+
+    Page<Produto> findByAtivoTrueAndNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

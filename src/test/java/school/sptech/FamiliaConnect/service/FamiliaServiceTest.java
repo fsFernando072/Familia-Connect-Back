@@ -135,10 +135,10 @@ class FamiliaServiceTest {
             FamiliaListResponseDto item = Mockito.mock(FamiliaListResponseDto.class);
             Page<FamiliaListResponseDto> page = new PageImpl<>(List.of(item), pageable, 1);
 
-            Mockito.when(familiaRepository.findAllCustomized(pageable))
+            Mockito.when(familiaRepository.findAllCustomized("", pageable))
                     .thenReturn(page);
 
-            Page<FamiliaListResponseDto> resultado = familiaService.listar(pageable);
+            Page<FamiliaListResponseDto> resultado = familiaService.listar(null, pageable);
 
             Assertions.assertEquals(1, resultado.getTotalElements());
         }
@@ -149,10 +149,10 @@ class FamiliaServiceTest {
             Pageable pageable = PageRequest.of(0, 10);
             Page<FamiliaListResponseDto> emptyPage = Page.empty(pageable);
 
-            Mockito.when(familiaRepository.findAllCustomized(pageable))
+            Mockito.when(familiaRepository.findAllCustomized("", pageable))
                     .thenReturn(emptyPage);
 
-            Page<FamiliaListResponseDto> resultado = familiaService.listar(pageable);
+            Page<FamiliaListResponseDto> resultado = familiaService.listar(null, pageable);
 
             Assertions.assertTrue(resultado.isEmpty());
         }

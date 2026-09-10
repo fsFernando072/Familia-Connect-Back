@@ -1,7 +1,10 @@
 package school.sptech.FamiliaConnect.infraestructure.web.dto.familia;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.endereco.EnderecoRequestDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.pessoa.PessoaRequestDto;
 
@@ -24,9 +27,13 @@ public class FamiliaRequestDto {
 
     @Schema(description = "Responsável pela família")
     @NotNull(message = "O responsável é obrigatório")
+    @Valid
+    @ConvertGroup(from = Default.class, to = PessoaRequestDto.Responsavel.class)
     private PessoaRequestDto responsavel;
 
     @Schema(description = "Dependentes da família")
+    @Valid
+    @ConvertGroup(from = Default.class, to = PessoaRequestDto.Dependente.class)
     private List<PessoaRequestDto> dependentes;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------

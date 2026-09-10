@@ -69,7 +69,8 @@ public class FamiliaController {
 
     @Operation(
             summary = "Listar famílias",
-            description = "Retorna uma lista com todas as famílias cadastradas no sistema"
+            description = "Retorna uma lista paginada com as famílias cadastradas no sistema, " +
+                    "com pesquisa opcional pelo nome do responsável (case insensitive) e ordenação opcional pelo nome do responsável"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de famílias retornada com sucesso"),
@@ -78,13 +79,16 @@ public class FamiliaController {
     @GetMapping
     @PreAuthorize("hasAuthority('listar_familias')")
     public ResponseEntity<Page<FamiliaListResponseDto>> listarFamilias(
+            @RequestParam(required = false) String nomeResponsavel,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "15") int size,
+            @RequestParam(defaultValue = "asc") String direcao
     ){
-        Sort sort = Sort.by("dataCadastro").descending();
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Sort.Direction direcaoOrdenacao = Sort.Direction.fromString(direcao);
+        Sort ordenacao = Sort.by(direcaoOrdenacao, "nomeResponsavel", "idFamilia");
+        PageRequest pageRequest = PageRequest.of(page, size, ordenacao);
 
-        Page<FamiliaListResponseDto> familias = familiaUseCase.listar(pageRequest);
+        Page<FamiliaListResponseDto> familias = familiaUseCase.listar(nomeResponsavel, pageRequest);
 
         if (familias.isEmpty()) {
             return ResponseEntity.status(204).build();

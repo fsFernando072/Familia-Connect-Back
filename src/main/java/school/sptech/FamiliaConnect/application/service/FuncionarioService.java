@@ -1,6 +1,8 @@
 package school.sptech.FamiliaConnect.application.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +25,6 @@ import school.sptech.FamiliaConnect.domain.entity.Funcionario;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FuncionarioRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,9 +60,11 @@ public class FuncionarioService implements FuncionarioUseCase {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public List<Funcionario> listar(){
+    public Page<Funcionario> listar(String nome, Pageable pageable){
 
-        return funcionarioRepository.findAll();
+        String termoPesquisa = nome != null ? nome : "";
+
+        return funcionarioRepository.findByNomeContainingIgnoreCase(termoPesquisa, pageable);
 
     }
 

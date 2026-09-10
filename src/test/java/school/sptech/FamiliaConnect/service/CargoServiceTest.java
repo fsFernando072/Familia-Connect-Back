@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import school.sptech.FamiliaConnect.application.service.CargoHasAcessoService;
 import school.sptech.FamiliaConnect.application.service.CargoService;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
@@ -71,7 +75,7 @@ class CargoServiceTest {
     @DisplayName("Deve listar os cargos corretamente")
     class listar {
         @Test
-        @DisplayName("Deve retornar uma lista com todos os cargos")
+        @DisplayName("Deve retornar uma página com todos os cargos")
         void retornarListaComTodosCargos(){
             List<Cargo> cargos = new ArrayList<>();
 
@@ -82,23 +86,27 @@ class CargoServiceTest {
 
             cargos.add(cargo);
 
-            Mockito.when(cargoRepository.findAll())
-                    .thenReturn(cargos);
-            List<Cargo> resultado = cargoService.listar();
+            Pageable pageable = PageRequest.of(0, 15);
+            Page<Cargo> page = new PageImpl<>(cargos, pageable, 1);
+
+            Mockito.when(cargoRepository.findByNomeContainingIgnoreCase("", pageable))
+                    .thenReturn(page);
+            Page<Cargo> resultado = cargoService.listar(null, pageable);
 
             Assertions.assertIterableEquals(cargos, resultado);
         }
 
         @Test
-        @DisplayName("Deve retornar uma lista com todos os cargos")
+        @DisplayName("Deve retornar uma página vazia")
         void retornarListaVazia(){
-            List<Cargo> cargos = new ArrayList<>();
+            Pageable pageable = PageRequest.of(0, 15);
+            Page<Cargo> page = Page.empty(pageable);
 
-            Mockito.when(cargoRepository.findAll())
-                    .thenReturn(cargos);
-            List<Cargo> resultado = cargoService.listar();
+            Mockito.when(cargoRepository.findByNomeContainingIgnoreCase("", pageable))
+                    .thenReturn(page);
+            Page<Cargo> resultado = cargoService.listar(null, pageable);
 
-            Assertions.assertIterableEquals(cargos, resultado);
+            Assertions.assertTrue(resultado.isEmpty());
         }
 
 

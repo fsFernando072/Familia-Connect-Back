@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.application.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.application.ports.in.ProdutoUseCase;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
@@ -8,8 +10,6 @@ import school.sptech.FamiliaConnect.domain.entity.Categoria;
 import school.sptech.FamiliaConnect.domain.entity.Produto;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CategoriaRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.ProdutoRepository;
-
-import java.util.List;
 
 @Service
 public class ProdutoService implements ProdutoUseCase {
@@ -28,9 +28,11 @@ public class ProdutoService implements ProdutoUseCase {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public List<Produto> listar(){
+    public Page<Produto> listar(String nome, Pageable pageable){
 
-        return produtoRepository.findAllByAtivoTrue();
+        String termoPesquisa = nome != null ? nome : "";
+
+        return produtoRepository.findByAtivoTrueAndNomeContainingIgnoreCase(termoPesquisa, pageable);
 
     }
 

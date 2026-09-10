@@ -1,13 +1,13 @@
 package school.sptech.FamiliaConnect.application.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.application.ports.in.CategoriaUseCase;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.domain.entity.Categoria;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CategoriaRepository;
-
-import java.util.List;
 
 @Service
 public class CategoriaService implements CategoriaUseCase {
@@ -24,9 +24,11 @@ public class CategoriaService implements CategoriaUseCase {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public List<Categoria> listar(){
+    public Page<Categoria> listar(String nome, Pageable pageable){
 
-        return categoriaRepository.findAllByAtivoTrue();
+        String termoPesquisa = nome != null ? nome : "";
+
+        return categoriaRepository.findByAtivoTrueAndNomeContainingIgnoreCase(termoPesquisa, pageable);
 
     }
 

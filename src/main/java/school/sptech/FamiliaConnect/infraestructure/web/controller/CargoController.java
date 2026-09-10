@@ -5,6 +5,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +18,6 @@ import school.sptech.FamiliaConnect.infraestructure.web.dto.cargo.CargoResponseD
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.CargoMapper;
 import school.sptech.FamiliaConnect.domain.entity.Cargo;
 import school.sptech.FamiliaConnect.application.service.CargoService;
-
-import java.util.List;
 
 @Tag(name = "Cargos", description = "Operações relacionadas aos cargos dos funcionários")
 @RestController
@@ -46,7 +48,8 @@ public class CargoController {
 
     @Operation(
             summary = "Listar cargos",
-            description = "Retorna uma lista com todos os cargos cadastrados no sistema"
+            description = "Retorna uma lista paginada dos cargos cadastrados no sistema, " +
+                    "com pesquisa opcional pelo nome (case insensitive) e ordenação opcional pelo nome"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de cargos retornada com sucesso"),
@@ -54,14 +57,23 @@ public class CargoController {
     })
     @GetMapping
     @PreAuthorize("hasAuthority('listar_cargos')")
-    public ResponseEntity<List<CargoResponseDto>> listar() {
-        List<Cargo> cargos = cargoUseCase.listar();
+    public ResponseEntity<Page<CargoResponseDto>> listar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size,
+            @RequestParam(defaultValue = "asc") String direcao
+    ) {
+        Sort.Direction direcaoOrdenacao = Sort.Direction.fromString(direcao);
+        Sort ordenacao = Sort.by(direcaoOrdenacao, "nome", "id");
+        Pageable pageable = PageRequest.of(page, size, ordenacao);
+
+        Page<Cargo> cargos = cargoUseCase.listar(nome, pageable);
 
         if (cargos.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(CargoMapper.toResponse(cargos));
+        return ResponseEntity.status(200).body(cargos.map(CargoMapper::toResponse));
     }
 
     @Operation(

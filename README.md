@@ -46,21 +46,34 @@ Familia-Connect-Back/
 ├── .github/
 │   └── workflows/          # Pipelines de CI/CD
 ├── src/
-│   └── main/
-│       ├── java/school/sptech/FamiliaConnect/
-│       │   ├── controller/     # Endpoints REST
-│       │   ├── service/        # Regras de negócio
-│       │   ├── repository/     # Acesso ao banco de dados
-│       │   ├── entity/         # Entidades JPA
-│       │   ├── dto/            # Objetos de transferência de dados
-│       │   ├── config/         # Configurações (Security, OpenAPI, etc.)
-│       │   └── exception/      # Tratamento de exceções
-│       └── resources/
-│           └── application.properties
+│   ├── main/
+│   │   ├── java/school/sptech/FamiliaConnect/
+│   │   │   ├── application/
+│   │   │   │   ├── ports/in/      # Interfaces (contratos) dos casos de uso
+│   │   │   │   └── service/       # Regras de negócio
+│   │   │   ├── domain/
+│   │   │   │   ├── entity/        # Entidades de domínio
+│   │   │   │   ├── enums/         # Enumerações
+│   │   │   │   └── exception/     # Exceções de domínio
+│   │   │   └── infraestructure/
+│   │   │       ├── config/            # Configurações (Security, OpenAPI, etc.)
+│   │   │       ├── persistence/       # Repositórios JPA e implementações
+│   │   │       └── web/
+│   │   │           ├── client/        # Clients Feign (ex.: serviço de OCR)
+│   │   │           ├── controller/    # Endpoints REST
+│   │   │           ├── dto/           # Objetos de transferência de dados
+│   │   │           ├── handler/       # Tratamento global de exceções
+│   │   │           └── mapper/        # Conversão entre entidades e DTOs
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/
+│       └── java/school/sptech/FamiliaConnect/service/  # Testes unitários dos services
 ├── Dockerfile
 ├── docker-compose.yml
 └── pom.xml
 ```
+
+> O projeto segue uma arquitetura em camadas inspirada em Clean Architecture/Ports & Adapters: `domain` (regras e entidades), `application` (casos de uso/serviços) e `infraestructure` (web, persistência e configurações).
 
 ---
 
@@ -89,13 +102,43 @@ cd Familia-Connect-Back
 Crie um arquivo `.env` na raiz do projeto com base no exemplo abaixo:
 
 ```env
+# Banco de dados
 DB_URL=jdbc:mysql://localhost:3306/familia_connect
 DB_USERNAME=seu_usuario
 DB_PASSWORD=sua_senha
 DB_TYPE_DDL=update
+
+# Autenticação JWT
+JWT_SECRET=uma_chave_secreta_com_no_minimo_32_caracteres
+
+# Serviço de OCR
+URL_OCR_SERVICE=http://localhost:8081
+
+# Storage de arquivos (opcionais - possuem valores padrão)
+APP_STORAGE_TYPE=local
+APP_STORAGE_LOCAL_PATH=uploads
+APP_STORAGE_S3_BUCKET=familia-connect-gold-bucket
+APP_STORAGE_S3_REGION=us-east-1
 ```
 
+#### 📌 Referência das variáveis
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `DB_URL` | ✅ Sim | — | URL de conexão JDBC com o banco MySQL |
+| `DB_USERNAME` | ✅ Sim | — | Usuário do banco de dados |
+| `DB_PASSWORD` | ✅ Sim | — | Senha do banco de dados |
+| `DB_TYPE_DDL` | ✅ Sim | — | Estratégia do Hibernate para o schema: `create`, `create-drop`, `update` ou `validate` |
+| `JWT_SECRET` | ✅ Sim | — | Chave secreta usada para assinar os tokens JWT (mínimo de 32 caracteres) |
+| `URL_OCR_SERVICE` | ✅ Sim | — | URL do serviço externo de OCR consumido via Feign |
+| `APP_STORAGE_TYPE` | ❌ Não | `local` | Estratégia de armazenamento de arquivos: `local` ou `s3` |
+| `APP_STORAGE_LOCAL_PATH` | ❌ Não | `uploads` | Diretório local usado quando `APP_STORAGE_TYPE=local` |
+| `APP_STORAGE_S3_BUCKET` | ❌ Não | `familia-connect-gold-bucket` | Nome do bucket S3 usado quando `APP_STORAGE_TYPE=s3` |
+| `APP_STORAGE_S3_REGION` | ❌ Não | `us-east-1` | Região da AWS do bucket S3 |
+
 > **Dica:** O valor `DB_TYPE_DDL` pode ser `create`, `create-drop`, `update` ou `validate`. Para o primeiro uso, utilize `create` ou `update`.
+>
+> **Observação:** o `docker-compose.yml` e o `Dockerfile` já repassam `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `DB_TYPE_DDL`, `JWT_SECRET` e `URL_OCR_SERVICE` como variáveis de ambiente do container. Se precisar customizar o storage (`APP_STORAGE_*`), adicione as variáveis correspondentes em ambos os arquivos, ou passe-as com `--env-file .env` / `env_file: .env` no `docker-compose.yml`.
 
 ---
 
@@ -145,14 +188,16 @@ java -jar target/FamiliaConnect-1.0.0.jar
 Com a aplicação rodando, acesse a documentação interativa do Swagger:
 
 ```
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/api/swagger-ui/index.html
 ```
 
 Ou via OpenAPI JSON:
 
 ```
-http://localhost:8080/v3/api-docs
+http://localhost:8080/api/v3/api-docs
 ```
+
+> Todos os endpoints da aplicação (incluindo Swagger) são servidos sob o prefixo `/api`, definido por `spring.mvc.servlet.path` no `application.properties`.
 
 ---
 
@@ -182,6 +227,17 @@ Para rodar os testes automatizados:
 3. Commit suas alterações: `git commit -m 'feat: adiciona minha feature'`
 4. Push para a branch: `git push origin feature/minha-feature`
 5. Abra um Pull Request
+
+---
+
+## 🤖 CI/CD
+
+O workflow em `.github/workflows/pipeline.yml` roda no GitHub Actions:
+
+- **CI** — a cada `push` ou `pull request` para `main`: sobe um serviço MySQL 8.0 no runner e executa `mvn clean test` com as credenciais do banco injetadas via secrets/vars do ambiente `development`.
+- **CD** — disparado manualmente (`workflow_dispatch`, com a versão da imagem como parâmetro): após os testes passarem, builda a imagem Docker e publica no Docker Hub, taggeada com a versão informada e também como `latest`.
+
+> Requer os secrets `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN`, além da variável `DB_TYPE_DDL`, configurados no ambiente `development` do repositório.
 
 ---
 

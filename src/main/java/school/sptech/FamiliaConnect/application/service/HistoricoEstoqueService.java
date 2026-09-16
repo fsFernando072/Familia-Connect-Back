@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.application.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.application.ports.in.HistoricoEstoqueUseCase;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
@@ -8,7 +10,6 @@ import school.sptech.FamiliaConnect.domain.entity.Produto;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.HistoricoEstoqueRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.ProdutoRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,9 +29,11 @@ public class HistoricoEstoqueService implements HistoricoEstoqueUseCase {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public List<HistoricoEstoque> listar() {
+    public Page<HistoricoEstoque> listar(String nomeProduto, Pageable pageable) {
 
-        return historicoEstoqueRepository.findAll();
+        String termoPesquisa = nomeProduto != null ? nomeProduto : "";
+
+        return historicoEstoqueRepository.findByProdutoNomeContainingIgnoreCase(termoPesquisa, pageable);
 
     }
 

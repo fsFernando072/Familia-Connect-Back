@@ -1,5 +1,7 @@
 package school.sptech.FamiliaConnect.infraestructure.persistence.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import school.sptech.FamiliaConnect.domain.entity.HistoricoEstoque;
 
@@ -11,4 +13,6 @@ public interface HistoricoEstoqueRepository extends JpaRepository<HistoricoEstoq
     List<HistoricoEstoque> findByProdutoId(Integer produtoId);
 
     List<HistoricoEstoque> findByProdutoIdAndDataEstoqueBetween(Integer produtoId, LocalDate dataInicio, LocalDate dataFim);
+
+    Page<HistoricoEstoque> findByProdutoNomeContainingIgnoreCase(String nomeProduto, Pageable pageable);
 }

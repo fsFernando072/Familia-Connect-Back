@@ -1,12 +1,12 @@
 package school.sptech.FamiliaConnect.application.ports.in;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import school.sptech.FamiliaConnect.domain.entity.HistoricoEstoque;
-
-import java.util.List;
 
 public interface HistoricoEstoqueUseCase {
 
-    List<HistoricoEstoque> listar();
+    Page<HistoricoEstoque> listar(String nomeProduto, Pageable pageable);
     HistoricoEstoque listarPorId(Integer id);
     HistoricoEstoque salvar(HistoricoEstoque historicoEstoque);
     HistoricoEstoque atualizar(Integer id, HistoricoEstoque historicoEstoque);

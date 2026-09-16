@@ -5,6 +5,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +18,6 @@ import school.sptech.FamiliaConnect.infraestructure.web.dto.historicoEstoque.His
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.HistoricoEstoqueMapper;
 import school.sptech.FamiliaConnect.domain.entity.HistoricoEstoque;
 import school.sptech.FamiliaConnect.application.service.HistoricoEstoqueService;
-
-import java.util.List;
 
 @Tag(name = "Histórico de Estoque", description = "Operações relacionadas ao histórico mensal de estoque dos produtos")
 @RestController
@@ -36,7 +38,8 @@ public class HistoricoEstoqueController {
 
     @Operation(
             summary = "Listar histórico de estoque",
-            description = "Retorna uma lista com todos os registros de estoque cadastrados"
+            description = "Retorna uma lista paginada com os registros de estoque cadastrados, " +
+                    "com pesquisa opcional pelo nome do produto (case insensitive) e ordenação opcional pelo nome do produto"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de histórico de estoque retornada com sucesso"),
@@ -44,15 +47,24 @@ public class HistoricoEstoqueController {
     })
     @GetMapping
     @PreAuthorize("hasAuthority('listar_estoques')")
-    public ResponseEntity<List<HistoricoEstoqueResponseDto>> listar() {
+    public ResponseEntity<Page<HistoricoEstoqueResponseDto>> listar(
+            @RequestParam(required = false) String nomeProduto,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size,
+            @RequestParam(defaultValue = "asc") String direcao
+    ) {
 
-        List<HistoricoEstoque> historicos = historicoEstoqueUseCase.listar();
+        Sort.Direction direcaoOrdenacao = Sort.Direction.fromString(direcao);
+        Sort ordenacao = Sort.by(direcaoOrdenacao, "produto.nome", "id");
+        Pageable pageable = PageRequest.of(page, size, ordenacao);
+
+        Page<HistoricoEstoque> historicos = historicoEstoqueUseCase.listar(nomeProduto, pageable);
 
         if (historicos.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(HistoricoEstoqueMapper.toResponse(historicos));
+        return ResponseEntity.status(200).body(historicos.map(HistoricoEstoqueMapper::toResponse));
 
     }
 

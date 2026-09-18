@@ -1,6 +1,7 @@
 package school.sptech.FamiliaConnect.infraestructure.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +34,12 @@ public class SecurityConfiguracao {
 
     @Autowired
     private AutenticacaoService autenticacaoService;
+
+    // Lista de origins liberadas no CORS, vinda de cors.allowed-origins
+    // (property cors.allowed-origins=${CORS_ALLOWED_ORIGINS:...} no application.properties).
+    // Ex: http://localhost:5173,http://lb-front-123.us-east-1.elb.amazonaws.com
+    @Value("${cors.allowed-origins}")
+    private List<String> allowedOrigins;
 
     // AutenticacaoEntryPoint é registrado como @Component, o Spring injeta automaticamente
     @Autowired
@@ -122,12 +129,10 @@ public class SecurityConfiguracao {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuracao = new CorsConfiguration();
 
-        // Origens permitidas — deve ser explícita quando allowCredentials=true
-        // Em produção: List.of("https://meuapp.com.br")
-        configuracao.setAllowedOrigins(List.of(
-                "http://localhost:5173",  // Vite dev server
-                "http://localhost:3000"   // Create React App (alternativa)
-        ));
+        // Origens permitidas — deve ser explícita quando allowCredentials=true.
+        // Vem de cors.allowed-origins / env CORS_ALLOWED_ORIGINS (injetada pela infra
+        // com o DNS do ALB Front em produção; default localhost para dev local).
+        configuracao.setAllowedOrigins(allowedOrigins);
 
         // Necessário para que o browser envie/receba cookies nas requisições cross-origin
         configuracao.setAllowCredentials(true);

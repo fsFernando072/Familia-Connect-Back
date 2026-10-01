@@ -130,11 +130,11 @@ public class FuncionarioController {
     @PreAuthorize("hasAuthority('editar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> atualizarFuncionario(
             @PathVariable Integer id,
-            @RequestPart(("funcionarioRequestDto")) @Valid FuncionarioRequestDto requestDto,
+            @RequestPart(("funcionarioRequestDto")) @Valid FuncionarioEditarRequestDto requestDto,
             @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
     ){
 
-        Funcionario funcionarioAtualizado = funcionarioUseCase.atualizar(id, FuncionarioMapper.toModel(requestDto), arquivo);
+        Funcionario funcionarioAtualizado = funcionarioUseCase.atualizar(id, FuncionarioMapper.toModelEditar(requestDto), arquivo);
 
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarioAtualizado));
 

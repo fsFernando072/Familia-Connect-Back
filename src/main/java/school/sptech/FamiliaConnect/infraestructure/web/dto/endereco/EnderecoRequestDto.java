@@ -31,7 +31,7 @@ public class EnderecoRequestDto {
     private String numero;
 
     @Schema(description = "Complemento do endereço")
-    @Size(min = 3, max = 45, message = "O tamanho do complemento do endereço deve estar entre 3 e 45")
+    @Size(min = 3, max = 45, message = "O tamanho do complemento do endereço deve estar entre 2 e 45")
     private String complemento;
 
     @Schema(description = "Nome da cidade do endereço")

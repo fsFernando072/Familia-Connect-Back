@@ -2,14 +2,18 @@ package school.sptech.FamiliaConnect.infraestructure.web.dto.cargo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class CargoRequestDto {
 
     @Schema(description = "Nome do cargo")
     @NotBlank(message = "Nome do cargo é obrigatório")
+    @Size(min = 3, max = 45, message = "O tamanho do nome do cargo deve estar entre 3 e 45")
     private String nome;
 
     @Schema(description = "Descrição do cargo")
+    @NotBlank(message = "Descrição do cargo é obrigatória")
+    @Size(min = 3, max = 200, message = "O tamanho da descrição do cargo deve estar entre 3 e 200")
     private String descricao;
 
     public CargoRequestDto() {}

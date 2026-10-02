@@ -70,7 +70,6 @@ public class FamiliaService implements FamiliaUseCase {
         endereco = enderecoService.salvar(endereco);
 
         Familia familia = new Familia();
-        familia.setDataCadastro(dto.getDataCadastro());
         familia.setFoto(resolverFotoFamilia(foto, null));
         familia.setPossuiPrioridade(dto.getPossuiPrioridade());
         familia.setEndereco(endereco);

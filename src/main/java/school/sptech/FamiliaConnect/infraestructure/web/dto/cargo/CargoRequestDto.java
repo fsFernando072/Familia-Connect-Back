@@ -1,7 +1,11 @@
 package school.sptech.FamiliaConnect.infraestructure.web.dto.cargo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 public class CargoRequestDto {
 
@@ -11,6 +15,11 @@ public class CargoRequestDto {
 
     @Schema(description = "Descrição do cargo")
     private String descricao;
+
+    @Schema(description = "Páginas que o cargo acessa e o nível em cada uma (lista vazia = nenhum acesso)")
+    @NotNull(message = "As permissões do cargo são obrigatórias")
+    @Valid
+    private List<CargoPermissaoDto> permissoes;
 
     public CargoRequestDto() {}
 
@@ -37,6 +46,14 @@ public class CargoRequestDto {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public List<CargoPermissaoDto> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<CargoPermissaoDto> permissoes) {
+        this.permissoes = permissoes;
     }
 
 }

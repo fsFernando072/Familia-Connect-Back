@@ -2,6 +2,8 @@ package school.sptech.FamiliaConnect.infraestructure.web.dto.cargo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.List;
+
 @Schema(description = "Dados retornados do cargo")
 public class CargoResponseDto {
 
@@ -13,6 +15,9 @@ public class CargoResponseDto {
 
     @Schema(description = "Descrição do cargo")
     private String descricao;
+
+    @Schema(description = "Páginas que o cargo acessa e o nível em cada uma")
+    private List<CargoPermissaoDto> permissoes;
 
     public CargoResponseDto() {}
 
@@ -51,4 +56,13 @@ public class CargoResponseDto {
         this.descricao = descricao;
     }
     
+
+    public List<CargoPermissaoDto> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<CargoPermissaoDto> permissoes) {
+        this.permissoes = permissoes;
+    }
+
 }

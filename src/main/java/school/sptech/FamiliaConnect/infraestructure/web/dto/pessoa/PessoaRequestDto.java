@@ -55,7 +55,7 @@ public class PessoaRequestDto {
 
     @Schema(description = "Telefone da pessoa")
     @NotBlank(message = "Telefone da pessoa é obrigatório", groups = Responsavel.class)
-    @Size(min = 11, max = 11, message = "Telefone da pessoa tem que ser válido")
+    @Size(min = 10, max = 11, message = "Telefone da pessoa tem que ser válido")
     private String telefone;
 
     @Schema(description = "Se a pessoa é a responsável da família")

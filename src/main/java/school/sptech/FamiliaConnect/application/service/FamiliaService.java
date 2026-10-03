@@ -190,7 +190,9 @@ public class FamiliaService implements FamiliaUseCase {
 
         pessoaRepository.deleteAll(integrantes);
         familiaRepository.delete(familia);
-        arquivoUseCase.deletarPorId(familia.getFoto().getId());
+        if (familia.getFoto() != null) {
+            arquivoUseCase.deletarPorId(familia.getFoto().getId());
+        }
         enderecoRepository.delete(familia.getEndereco());
     }
 

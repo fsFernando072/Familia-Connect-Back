@@ -13,4 +13,8 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     Page<Funcionario> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
+    Boolean existsByCpf(String cpf);
+
+    Boolean existsByCpfAndIdNot(String cpf, Integer id);
+
 }

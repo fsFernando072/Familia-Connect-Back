@@ -26,8 +26,6 @@ public class OcrService implements OcrUseCase {
 
         //todo: colocar um try-catch para tratativa de erros global
         FamiliaFormResponseDto dadosFamilia = ocrClient.getDadosFamilia(fotoFamilia).getFirst();
-        LOGGER.info("Retorno recebido da API externa OCR = {}", dadosFamilia.toString());
-
         dataFamiliaIsNotBlank(dadosFamilia);
 
         return dadosFamilia;

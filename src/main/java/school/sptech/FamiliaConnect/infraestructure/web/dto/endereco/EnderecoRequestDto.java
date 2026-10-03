@@ -27,7 +27,7 @@ public class EnderecoRequestDto {
 
     @Schema(description = "Número do endereço")
     @NotBlank(message = "Número do endereço é obrigatório")
-    @Size(min = 2, max = 20, message = "O tamanho do número do endereço deve estar entre 3 e 20")
+    @Size(min = 1, max = 20, message = "O tamanho do número do endereço deve estar entre 3 e 20")
     private String numero;
 
     @Schema(description = "Complemento do endereço")

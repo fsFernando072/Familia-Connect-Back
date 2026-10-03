@@ -36,7 +36,6 @@ public class FuncionarioMapper {
             funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
-                funcionario.getSenha(),
                 funcionario.getFotoUrl(),
                 funcionarioCargo
         );

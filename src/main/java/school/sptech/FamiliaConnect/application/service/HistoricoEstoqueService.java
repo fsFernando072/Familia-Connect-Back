@@ -62,14 +62,14 @@ public class HistoricoEstoqueService implements HistoricoEstoqueUseCase {
 
     public HistoricoEstoque atualizar(Integer id, HistoricoEstoque historicoEstoque) {
 
-        if (!historicoEstoqueRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("Histórico de estoque não encontrado pelo id");
-        }
+        HistoricoEstoque historicoEstoqueExistente = historicoEstoqueRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Histórico de estoque não encontrado pelo id"));
 
         Produto produto = produtoRepository.findById(historicoEstoque.getProduto().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado pelo id"));
 
         historicoEstoque.setId(id);
+        historicoEstoque.setDataEstoque(historicoEstoqueExistente.getDataEstoque());
         historicoEstoque.setProduto(produto);
 
         return historicoEstoqueRepository.save(historicoEstoque);

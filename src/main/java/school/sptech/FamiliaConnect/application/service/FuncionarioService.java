@@ -133,14 +133,13 @@ public class FuncionarioService implements FuncionarioUseCase {
             return fotoAtual;
         }
 
+        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("funcionarios");
+        Arquivo novo = arquivoUseCase.salvar(ArquivoMapper.toEntity(foto, categoria));
         if (fotoAtual != null) {
             arquivoUseCase.deletarPorId(fotoAtual.getId());
         }
 
-        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("funcionarios");
-        Arquivo arquivo = ArquivoMapper.toEntity(foto, categoria);
-
-        return arquivoUseCase.salvar(arquivo);
+        return novo;
     }
 
     @Transactional

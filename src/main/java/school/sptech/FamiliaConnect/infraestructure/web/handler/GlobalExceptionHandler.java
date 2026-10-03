@@ -14,4 +14,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(409).body(Map.of("status", 409,
                 "message", "Registro em uso ou duplicado. Verifique os vínculos antes de continuar."));
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> argumentoInvalido(IllegalArgumentException e) {
+        return ResponseEntity.status(400).body(Map.of("status", 400,
+                "message", "Argumento inválido. Verifique os argumentos antes de continuar."));
+    }
 }

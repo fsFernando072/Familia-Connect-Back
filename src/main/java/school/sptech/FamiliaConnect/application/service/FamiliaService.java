@@ -114,11 +114,6 @@ public class FamiliaService implements FamiliaUseCase {
         Endereco enderecoAtualizado = enderecoService.atualizar(
                 familiaExistente.getEndereco().getId(), EnderecoMapper.toModel(dto.getEndereco()));
 
-        familiaExistente.setFoto(resolverFotoFamilia(foto, familiaExistente.getFoto()));
-        familiaExistente.setPossuiPrioridade(dto.getPossuiPrioridade());
-        familiaExistente.setEndereco(enderecoAtualizado);
-        familiaExistente = familiaRepository.save(familiaExistente);
-
         List<Pessoa> integrantes = listarIntegrantes(idFamilia);
 
         Pessoa responsavelExistente = integrantes.stream()
@@ -136,6 +131,11 @@ public class FamiliaService implements FamiliaUseCase {
 
         atualizarDependentes(dependentesExistentes, dto.getDependentes(), familiaExistente);
 
+        familiaExistente.setFoto(resolverFotoFamilia(foto, familiaExistente.getFoto()));
+        familiaExistente.setPossuiPrioridade(dto.getPossuiPrioridade());
+        familiaExistente.setEndereco(enderecoAtualizado);
+        familiaExistente = familiaRepository.save(familiaExistente);
+
         return familiaExistente;
     }
 
@@ -143,16 +143,16 @@ public class FamiliaService implements FamiliaUseCase {
 
         List<PessoaRequestDto> dependentes = dependentesDto != null ? dependentesDto : List.of();
 
-        Map<String, Pessoa> dependentesExistentesPorCpf = dependentesExistentes.stream()
-                .filter(pessoa -> pessoa.getCpf() != null && !pessoa.getCpf().isBlank())
-                .collect(Collectors.toMap(Pessoa::getCpf, pessoa -> pessoa));
+        Map<Integer, Pessoa> existentesPorId = dependentesExistentes.stream()
+                .filter(pessoa -> pessoa.getId() != null)
+                .collect(Collectors.toMap(Pessoa::getId, pessoa -> pessoa));
 
         Set<Integer> idsMantidos = new HashSet<>();
 
         for (PessoaRequestDto dependenteDto : dependentes) {
 
-            Pessoa dependenteExistente = dependenteDto.getCpf() != null
-                    ? dependentesExistentesPorCpf.get(dependenteDto.getCpf())
+            Pessoa dependenteExistente = dependenteDto.getId() != null
+                    ? existentesPorId.get(dependenteDto.getId())
                     : null;
 
             if (dependenteExistente != null) {
@@ -202,14 +202,14 @@ public class FamiliaService implements FamiliaUseCase {
             return fotoAtual;
         }
 
+        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("familias");
+
+        Arquivo novo = arquivoUseCase.salvar(ArquivoMapper.toEntity(foto, categoria));
         if (fotoAtual != null) {
             arquivoUseCase.deletarPorId(fotoAtual.getId());
         }
 
-        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("familias");
-        Arquivo arquivo = ArquivoMapper.toEntity(foto, categoria);
-
-        return arquivoUseCase.salvar(arquivo);
+        return novo;
     }
 
     private void salvarDependentes(List<PessoaRequestDto> dependentes, Familia familia) {

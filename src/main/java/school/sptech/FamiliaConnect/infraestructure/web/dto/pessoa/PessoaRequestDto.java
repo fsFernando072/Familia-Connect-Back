@@ -21,6 +21,10 @@ public class PessoaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "Id da pessoa")
+    @Positive(message = "O id deve ser positivo")
+    private Integer id;
+
     @Schema(description = "Nome da pessoa")
     @NotBlank(message = "Nome da pessoa é obrigatório")
     @Size(min = 3, max = 100, message = "O tamanho do nome da pessoa deve estar entre 3 e 100")
@@ -86,6 +90,15 @@ public class PessoaRequestDto {
     }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

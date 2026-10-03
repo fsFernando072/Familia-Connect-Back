@@ -146,7 +146,7 @@ public class FuncionarioService implements FuncionarioUseCase {
     @Transactional
     public void deletar(Integer id) {
         if (!funcionarioRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
+            throw new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrado");
         }
 
         Funcionario funcionario = listarPorId(id);

@@ -52,4 +52,12 @@ public class CargoRequestDto {
         this.descricao = descricao;
     }
 
+    public List<CargoPermissaoDto> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<CargoPermissaoDto> permissoes) {
+        this.permissoes = permissoes;
+    }
+
 }

@@ -13,11 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import school.sptech.FamiliaConnect.application.service.CargoHasAcessoService;
 import school.sptech.FamiliaConnect.application.service.CargoService;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.domain.entity.Cargo;
+import school.sptech.FamiliaConnect.domain.entity.CargoPermissao;
+import school.sptech.FamiliaConnect.domain.enums.NivelAcessoEnum;
+import school.sptech.FamiliaConnect.domain.enums.PaginaEnum;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
 
 import java.util.ArrayList;
@@ -29,9 +31,6 @@ class CargoServiceTest {
 
     @Mock
     CargoRepository cargoRepository;
-
-    @Mock
-    CargoHasAcessoService cargoHasAcessoService;
 
     @InjectMocks
     CargoService cargoService;
@@ -159,22 +158,60 @@ class CargoServiceTest {
 
             Integer id = 1;
 
+            Cargo existente = new Cargo();
+            existente.setId(id);
+            existente.setNome("cargoAntigo");
+
             Cargo cargo = new Cargo();
             cargo.setNome("cargoAtualizado");
 
-            Cargo cargoAtualizado = cargo;
-            cargoAtualizado.setId(id);
-
-            Mockito.when(cargoRepository.existsById(id))
-                    .thenReturn(true);
+            Mockito.when(cargoRepository.findById(id))
+                    .thenReturn(Optional.of(existente));
 
             Mockito.when(cargoRepository.save(Mockito.any(Cargo.class)))
-                    .thenReturn(cargoAtualizado);
+                    .thenAnswer(invocation -> invocation.getArgument(0));
 
             Cargo resultado = cargoService.atualizar(id, cargo);
 
             Assertions.assertEquals(id, resultado.getId());
             Assertions.assertEquals("cargoAtualizado", resultado.getNome());
+        }
+
+        @Test
+        @DisplayName("Deve substituir as permissões: muda o nível, remove o que saiu e inclui o novo")
+        void atualizarPermissoes() {
+
+            Integer id = 1;
+
+            Cargo existente = new Cargo();
+            existente.setId(id);
+            existente.setNome("cargo");
+            existente.getPermissoes().add(new CargoPermissao(existente, PaginaEnum.FAMILIAS, NivelAcessoEnum.ADMINISTRADOR));
+            existente.getPermissoes().add(new CargoPermissao(existente, PaginaEnum.PRODUTOS, NivelAcessoEnum.VISUALIZACAO));
+
+            Cargo cargo = new Cargo();
+            cargo.setNome("cargo");
+            cargo.getPermissoes().add(new CargoPermissao(cargo, PaginaEnum.FAMILIAS, NivelAcessoEnum.VISUALIZACAO));
+            cargo.getPermissoes().add(new CargoPermissao(cargo, PaginaEnum.CATEGORIAS, NivelAcessoEnum.LISTAS_CADASTROS));
+
+            Mockito.when(cargoRepository.findById(id))
+                    .thenReturn(Optional.of(existente));
+
+            Mockito.when(cargoRepository.save(Mockito.any(Cargo.class)))
+                    .thenAnswer(invocation -> invocation.getArgument(0));
+
+            Cargo resultado = cargoService.atualizar(id, cargo);
+
+            Assertions.assertEquals(2, resultado.getPermissoes().size());
+
+            CargoPermissao familias = resultado.getPermissoes().stream()
+                    .filter(p -> p.getPagina() == PaginaEnum.FAMILIAS).findFirst().orElseThrow();
+            CargoPermissao categorias = resultado.getPermissoes().stream()
+                    .filter(p -> p.getPagina() == PaginaEnum.CATEGORIAS).findFirst().orElseThrow();
+
+            Assertions.assertEquals(NivelAcessoEnum.VISUALIZACAO, familias.getNivel());
+            Assertions.assertEquals(NivelAcessoEnum.LISTAS_CADASTROS, categorias.getNivel());
+            Assertions.assertTrue(resultado.getPermissoes().stream().noneMatch(p -> p.getPagina() == PaginaEnum.PRODUTOS));
         }
 
         @Test
@@ -186,8 +223,8 @@ class CargoServiceTest {
             Cargo cargo = new Cargo();
             cargo.setNome("cargoAtualizado");
 
-            Mockito.when(cargoRepository.existsById(id))
-                    .thenReturn(false);
+            Mockito.when(cargoRepository.findById(id))
+                    .thenReturn(Optional.empty());
 
             Assertions.assertThrows(
                     EntidadeNaoEncontradaException.class,
@@ -230,4 +267,4 @@ class CargoServiceTest {
             );
         }
     }
-}
+}

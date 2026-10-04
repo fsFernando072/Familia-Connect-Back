@@ -367,8 +367,8 @@ class EntregaServiceTest {
             entregaAtualizada.setPessoa(pessoa);
             entregaAtualizada.setProduto(produto);
 
-            Mockito.when(entregaRepository.existsById(1))
-                    .thenReturn(true);
+            Mockito.when(entregaRepository.findById(1))
+                    .thenReturn(Optional.of(entregaAtualizada));
 
             Mockito.when(funcionarioRepository.findById(1))
                     .thenReturn(Optional.of(funcionario));
@@ -406,8 +406,8 @@ class EntregaServiceTest {
         @DisplayName("Lançar exception ao atualizar entrega inexistente")
         void atualizarEntregaInexistente() {
 
-            Mockito.when(entregaRepository.existsById(1))
-                    .thenReturn(false);
+            Mockito.when(entregaRepository.findById(1))
+                    .thenReturn(Optional.empty());
 
             Entrega dto = new Entrega();
 

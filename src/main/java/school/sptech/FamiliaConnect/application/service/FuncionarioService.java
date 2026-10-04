@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.FamiliaConnect.application.ports.in.FuncionarioUseCase;
+import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.infraestructure.config.GerenciadorTokenJwt;
 import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.funcionario.FuncionarioTokenDto;
@@ -80,11 +81,15 @@ public class FuncionarioService implements FuncionarioUseCase {
 
     }
 
+    @Transactional
     public Funcionario salvar(Funcionario funcionario, MultipartFile foto){
 
         Cargo cargo = cargoRepository.findById(funcionario.getCargo().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Cargo não encontrado pelo id"));
 
+        if (funcionarioRepository.existsByCpf(funcionario.getCpf())) {
+            throw new EntidadeJaCadastradaException("Já existe um funcionário com este cpf");
+        }
 
         funcionario.setCargo(cargo);
         funcionario.setFoto(resolverFotoFuncionario(foto, null));
@@ -96,10 +101,15 @@ public class FuncionarioService implements FuncionarioUseCase {
 
     }
 
+    @Transactional
     public Funcionario atualizar(Integer id, Funcionario funcionario, MultipartFile foto){
 
         Cargo cargo = cargoRepository.findById(funcionario.getCargo().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Cargo não encontrado pelo id"));
+
+        if (funcionarioRepository.existsByCpfAndIdNot(funcionario.getCpf(), id)) {
+            throw new EntidadeJaCadastradaException("Já existe um funcionário com este cpf");
+        }
 
         Funcionario funcionarioExistente = funcionarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id"));
@@ -123,26 +133,27 @@ public class FuncionarioService implements FuncionarioUseCase {
             return fotoAtual;
         }
 
+        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("funcionarios");
+        Arquivo novo = arquivoUseCase.salvar(ArquivoMapper.toEntity(foto, categoria));
         if (fotoAtual != null) {
             arquivoUseCase.deletarPorId(fotoAtual.getId());
         }
 
-        CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("funcionarios");
-        Arquivo arquivo = ArquivoMapper.toEntity(foto, categoria);
-
-        return arquivoUseCase.salvar(arquivo);
+        return novo;
     }
 
     @Transactional
     public void deletar(Integer id) {
         if (!funcionarioRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("O cargo com o id não foi encontrado");
+            throw new EntidadeNaoEncontradaException("O funcionário com o id não foi encontrado");
         }
 
         Funcionario funcionario = listarPorId(id);
 
         funcionarioRepository.deleteById(id);
-        arquivoUseCase.deletarPorId(funcionario.getFoto().getId());
+        if (funcionario.getFoto() != null) {
+            arquivoUseCase.deletarPorId(funcionario.getFoto().getId());
+        }
     }
 
     public FuncionarioTokenDto autenticar(Funcionario usuario) {

@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import school.sptech.FamiliaConnect.domain.entity.Endereco;
 
 public interface EnderecoRepository extends JpaRepository<Endereco, Integer> {
-    public Boolean existsByLogradouroAndNumero(String logradouro, String numero);
+    public Boolean existsByCepAndNumeroAndComplemento(String cep, String numero, String complemento);
+    public Boolean existsByCepAndNumeroAndComplementoAndIdNot(String cep, String numero, String complemento, Integer id);
 }

@@ -16,9 +16,6 @@ public class FuncionarioResponseDto {
     @Schema(description = "CPF do funcionário")
     private String cpf;
 
-    @Schema(description = "Senha do funcionário")
-    private String senha;
-
     @Schema(description = "Endereço de armazenamento da foto do funcionário")
     private String fotoFuncionario;
 
@@ -55,11 +52,10 @@ public class FuncionarioResponseDto {
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FuncionarioResponseDto(Integer id, String nome, String cpf, String senha, String fotoFuncionario, FuncionarioCargo cargo) {
+    public FuncionarioResponseDto(Integer id, String nome, String cpf, String fotoFuncionario, FuncionarioCargo cargo) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.senha = senha;
         this.fotoFuncionario = fotoFuncionario;
         this.cargo = cargo;
     }
@@ -88,14 +84,6 @@ public class FuncionarioResponseDto {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public String getFotoFuncionario() {

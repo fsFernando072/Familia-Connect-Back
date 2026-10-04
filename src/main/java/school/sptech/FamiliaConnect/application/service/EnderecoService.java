@@ -28,13 +28,12 @@ public class EnderecoService implements EnderecoUseCase {
 
     public Endereco salvar(Endereco endereco){
 
-        if (enderecoRepository.existsByLogradouroAndNumero(endereco.getLogradouro(), endereco.getNumero())){
+        if (enderecoRepository.existsByCepAndNumeroAndComplemento(endereco.getCep(), endereco.getNumero(), endereco.getComplemento())){
             throw new EntidadeJaCadastradaException("Entidade Endereço já cadastrada");
         }
 
         Estado estado = estadoRepository.findById(endereco.getEstado().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O estado com o id não foi encontrado"));
-
 
         endereco.setEstado(estado);
 
@@ -42,6 +41,10 @@ public class EnderecoService implements EnderecoUseCase {
     }
 
     public Endereco atualizar(Integer id, Endereco enderecoAtualizado) {
+
+        if (enderecoRepository.existsByCepAndNumeroAndComplementoAndIdNot(enderecoAtualizado.getCep(), enderecoAtualizado.getNumero(), enderecoAtualizado.getComplemento(), id)){
+            throw new EntidadeJaCadastradaException("Entidade Endereço já cadastrada");
+        }
 
         Endereco enderecoExistente = enderecoRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O endereço com o id não foi encontrado"));

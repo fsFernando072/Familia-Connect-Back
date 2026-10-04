@@ -15,13 +15,11 @@ public class FamiliaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
-    @Schema(description = "Data de cadastro da família")
-    private LocalDate dataCadastro;
-
     @Schema(description = "Se a família possui integrante PNE")
     private Boolean possuiPrioridade;
 
     @Schema(description = "Endereço da família")
+    @Valid
     @NotNull(message = "O endereço é obrigatório")
     private EnderecoRequestDto endereco;
 
@@ -37,14 +35,6 @@ public class FamiliaRequestDto {
     private List<PessoaRequestDto> dependentes;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
-
-    public LocalDate getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(LocalDate dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
 
     public Boolean getPossuiPrioridade() {
         return possuiPrioridade;

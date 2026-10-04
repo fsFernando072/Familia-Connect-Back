@@ -1,10 +1,7 @@
 package school.sptech.FamiliaConnect.infraestructure.web.dto.produto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
 public class ProdutoRequestDto {
 
@@ -12,10 +9,12 @@ public class ProdutoRequestDto {
 
     @Schema(description = "Nome do produto")
     @NotBlank(message = "Nome do produto é obrigatório")
+    @Size(min = 3, max = 45, message = "O tamanho do nome do produto deve estar entre 3 e 45")
     private String nome;
 
     @Schema(description = "Descrição do produto")
     @NotBlank(message = "Descrição do produto é obrigatória")
+    @Size(min = 3, max = 100, message = "O tamanho da descrição do produto deve estar entre 3 e 100")
     private String descricao;
 
     @Schema(description = "ID da categoria do produto")

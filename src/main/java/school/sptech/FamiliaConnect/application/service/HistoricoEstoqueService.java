@@ -10,6 +10,7 @@ import school.sptech.FamiliaConnect.domain.entity.Produto;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.HistoricoEstoqueRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.ProdutoRepository;
 
+import java.time.YearMonth;
 import java.util.Optional;
 
 @Service
@@ -29,12 +30,16 @@ public class HistoricoEstoqueService implements HistoricoEstoqueUseCase {
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
-    public Page<HistoricoEstoque> listar(String nomeProduto, Pageable pageable) {
+    public Page<HistoricoEstoque> listar(String nomeProduto, YearMonth mes, Pageable pageable) {
 
         String termoPesquisa = nomeProduto != null ? nomeProduto : "";
 
-        return historicoEstoqueRepository.findByProdutoNomeContainingIgnoreCase(termoPesquisa, pageable);
+        if (mes == null) {
+            return historicoEstoqueRepository.findByProdutoNomeContainingIgnoreCase(termoPesquisa, pageable);
+        }
 
+        return historicoEstoqueRepository.findByProdutoNomeContainingIgnoreCaseAndDataEstoqueBetween(
+                termoPesquisa, mes.atDay(1), mes.atEndOfMonth(), pageable);
     }
 
     public HistoricoEstoque listarPorId(Integer id) {
@@ -85,5 +90,6 @@ public class HistoricoEstoqueService implements HistoricoEstoqueUseCase {
         historicoEstoqueRepository.deleteById(id);
 
     }
+
 
 }

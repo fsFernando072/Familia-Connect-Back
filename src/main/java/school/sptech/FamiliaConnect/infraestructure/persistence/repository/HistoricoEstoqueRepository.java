@@ -15,4 +15,7 @@ public interface HistoricoEstoqueRepository extends JpaRepository<HistoricoEstoq
     List<HistoricoEstoque> findByProdutoIdAndDataEstoqueBetween(Integer produtoId, LocalDate dataInicio, LocalDate dataFim);
 
     Page<HistoricoEstoque> findByProdutoNomeContainingIgnoreCase(String nomeProduto, Pageable pageable);
+
+    Page<HistoricoEstoque> findByProdutoNomeContainingIgnoreCaseAndDataEstoqueBetween(
+            String nomeProduto, LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
 }

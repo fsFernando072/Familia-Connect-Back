@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import school.sptech.FamiliaConnect.infraestructure.web.dto.historicoEstoque.His
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.HistoricoEstoqueMapper;
 import school.sptech.FamiliaConnect.domain.entity.HistoricoEstoque;
 import school.sptech.FamiliaConnect.application.service.HistoricoEstoqueService;
+
+import java.time.YearMonth;
 
 @Tag(name = "Histórico de Estoque", description = "Operações relacionadas ao histórico mensal de estoque dos produtos")
 @RestController
@@ -49,6 +52,7 @@ public class HistoricoEstoqueController {
     @PreAuthorize("hasAuthority('listar_estoques')")
     public ResponseEntity<Page<HistoricoEstoqueResponseDto>> listar(
             @RequestParam(required = false) String nomeProduto,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth mes,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int size,
             @RequestParam(defaultValue = "asc") String direcao
@@ -58,7 +62,7 @@ public class HistoricoEstoqueController {
         Sort ordenacao = Sort.by(direcaoOrdenacao, "produto.nome", "id");
         Pageable pageable = PageRequest.of(page, size, ordenacao);
 
-        Page<HistoricoEstoque> historicos = historicoEstoqueUseCase.listar(nomeProduto, pageable);
+        Page<HistoricoEstoque> historicos = historicoEstoqueUseCase.listar(nomeProduto, mes, pageable);
 
         if (historicos.isEmpty()) {
             return ResponseEntity.status(204).build();

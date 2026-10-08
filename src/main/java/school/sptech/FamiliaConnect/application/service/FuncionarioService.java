@@ -114,12 +114,16 @@ public class FuncionarioService implements FuncionarioUseCase {
         Funcionario funcionarioExistente = funcionarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id"));
 
+        if (funcionario.getSenha() == null || funcionario.getSenha().isEmpty()) {
+            funcionario.setSenha(funcionarioExistente.getSenha());
+        } else {
+            String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+            funcionario.setSenha(senhaCriptografada);
+        }
+
         funcionario.setId(id);
         funcionario.setCargo(cargo);
         funcionario.setFoto(resolverFotoFuncionario(foto, funcionarioExistente.getFoto()));
-        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
-        funcionario.setSenha(senhaCriptografada);
-
         return funcionarioRepository.save(funcionario);
 
     }

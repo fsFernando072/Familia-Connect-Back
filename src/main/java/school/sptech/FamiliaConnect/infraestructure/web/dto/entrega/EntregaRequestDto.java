@@ -1,12 +1,18 @@
 package school.sptech.FamiliaConnect.infraestructure.web.dto.entrega;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 public class EntregaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
+
+    @Schema(description = "Data de entrega")
+    @NotBlank(message = "Data de entrega deve ser obrigatória")
+    private String dataEntrega;
 
     @Schema(description = "ID do funcionário responsável pela entrega")
     @NotNull(message = "ID do funcionário tem que ser obrigatório")
@@ -47,5 +53,9 @@ public class EntregaRequestDto {
 
     public void setIdProduto(Integer idProduto) {
         this.idProduto = idProduto;
+    }
+
+    public String getDataEntrega() {
+        return dataEntrega;
     }
 }

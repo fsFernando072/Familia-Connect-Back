@@ -2,6 +2,7 @@ package school.sptech.FamiliaConnect.infraestructure.web.dto.profissao;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class ProfissaoRequestDto {
 
@@ -9,6 +10,7 @@ public class ProfissaoRequestDto {
 
     @Schema(description = "Nome da profissão")
     @NotBlank(message = "Nome da profissão é obrigatório")
+    @Size(min = 3, max = 80, message = "O tamanho da profissão deve estar entre 3 e 80")
     private String nome;
 
     // Construtores ----------------------------------------------------------------------------------------------------

@@ -90,9 +90,8 @@ public class EntregaService implements EntregaUseCase {
 
     public Entrega atualizar(Integer id, Entrega entrega){
 
-        if(!entregaRepository.existsById(id)){
-            throw new EntidadeNaoEncontradaException("Entrega não encontrada pelo id");
-        }
+        Entrega entregaExistente = entregaRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Entrega não encontrada pelo id"));
 
         Pessoa pessoa = pessoaRepository.findById(entrega.getPessoa().getId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Pessoa não encontrada pelo id"));
@@ -104,6 +103,7 @@ public class EntregaService implements EntregaUseCase {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado pelo id"));
 
         entrega.setId(id);
+        entrega.setDataEntrega(entregaExistente.getDataEntrega());
         entrega.setPessoa(pessoa);
         entrega.setFuncionario(funcionario);
         entrega.setProduto(produto);

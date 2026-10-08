@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.FamiliaConnect.application.service.AutenticacaoService;
 
@@ -25,8 +26,12 @@ public class AutenticacaoProvider implements AuthenticationProvider {
         final String password = authentication.getCredentials().toString();
 
         // Carrega o usuário do banco de dados
-        UserDetails userDetails = this.usuarioAutorizacaoService.loadUserByUsername(username);
-
+        UserDetails userDetails;
+        try {
+            userDetails = usuarioAutorizacaoService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
+            throw new BadCredentialsException("Usuário ou Senha inválidos");
+        }
         // Compara a senha digitada com o hash BCrypt
         if (this.passwordEncoder.matches(password, userDetails.getPassword())) {
             // Sucesso: retorna autenticação

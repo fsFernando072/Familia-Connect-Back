@@ -16,9 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.application.ports.in.FuncionarioUseCase;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.cargo.CargoPermissaoDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.funcionario.*;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.FuncionarioMapper;
 import school.sptech.FamiliaConnect.domain.entity.Funcionario;
@@ -130,11 +132,11 @@ public class FuncionarioController {
     @PreAuthorize("hasAuthority('editar_funcionarios')")
     public ResponseEntity<FuncionarioResponseDto> atualizarFuncionario(
             @PathVariable Integer id,
-            @RequestPart(("funcionarioRequestDto")) @Valid FuncionarioRequestDto requestDto,
+            @RequestPart(("funcionarioRequestDto")) @Valid FuncionarioEditarRequestDto requestDto,
             @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
     ){
 
-        Funcionario funcionarioAtualizado = funcionarioUseCase.atualizar(id, FuncionarioMapper.toModel(requestDto), arquivo);
+        Funcionario funcionarioAtualizado = funcionarioUseCase.atualizar(id, FuncionarioMapper.toModelEditar(requestDto), arquivo);
 
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(funcionarioAtualizado));
 
@@ -155,6 +157,23 @@ public class FuncionarioController {
 
         return ResponseEntity.status(204).build();
 
+    }
+
+    @Operation(
+            summary = "Dados do usuário logado",
+            description = "Retorna o usuário autenticado e as permissões (página + nível) herdadas do cargo, " +
+                    "para o front-end montar menu, rotas e botões"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Permissões do usuário retornadas com sucesso")
+    })
+    @GetMapping("/me")
+    public ResponseEntity<MeuAcessoResponseDto> meuAcesso(@AuthenticationPrincipal FuncionarioDetalhesDto usuario) {
+        var permissoes = usuario.getPermissoes().stream()
+                .map(permissao -> new CargoPermissaoDto(permissao.getPagina(), permissao.getNivel()))
+                .toList();
+
+        return ResponseEntity.ok(new MeuAcessoResponseDto(usuario.getNome(), usuario.getUsername(), permissoes));
     }
 
     @PostMapping("/login")

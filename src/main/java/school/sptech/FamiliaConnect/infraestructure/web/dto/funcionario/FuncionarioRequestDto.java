@@ -11,6 +11,7 @@ public class FuncionarioRequestDto {
 
     @Schema(description = "Nome do funcionário")
     @NotBlank(message = "Nome do funcionário pe obrigatório")
+    @Size(min = 3, max = 100, message = "O tamanho do nome do funcionário deve estar entre 3 e 100")
     private String nome;
 
     @Schema(description = "CPF do funcionário")
@@ -20,7 +21,7 @@ public class FuncionarioRequestDto {
 
     @Schema(description = "Senha do funcionário")
     @NotBlank(message = "Senha do funcionário tem que ser obrigatória")
-    @Size(min = 8)
+    @Size(min = 8, max = 100, message = "O tamanho da senha do funcionário deve estar entre 8 e 100")
     private String senha;
 
     @Schema(description = "ID do cargo do funcionário")

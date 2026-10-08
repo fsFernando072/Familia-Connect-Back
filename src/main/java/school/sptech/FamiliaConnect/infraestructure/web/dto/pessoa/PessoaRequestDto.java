@@ -21,8 +21,13 @@ public class PessoaRequestDto {
 
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
+    @Schema(description = "Id da pessoa")
+    @Positive(message = "O id deve ser positivo")
+    private Integer id;
+
     @Schema(description = "Nome da pessoa")
     @NotBlank(message = "Nome da pessoa é obrigatório")
+    @Size(min = 3, max = 100, message = "O tamanho do nome da pessoa deve estar entre 3 e 100")
     private String nome;
 
     @Schema(description = "RG da pessoa")
@@ -41,6 +46,7 @@ public class PessoaRequestDto {
     private LocalDate dataNascimento;
 
     @Schema(description = "Profissão da pessoa")
+    @Size(min = 3, max = 80, message = "O tamanho da profissão deve estar entre 3 e 80")
     private String profissao;
 
     @Schema(description = "Sexo da pessoa")
@@ -53,7 +59,7 @@ public class PessoaRequestDto {
 
     @Schema(description = "Telefone da pessoa")
     @NotBlank(message = "Telefone da pessoa é obrigatório", groups = Responsavel.class)
-    @Size(min = 11, max = 11, message = "Telefone da pessoa tem que ser válido")
+    @Size(min = 10, max = 11, message = "Telefone da pessoa tem que ser válido")
     private String telefone;
 
     @Schema(description = "Se a pessoa é a responsável da família")
@@ -62,6 +68,7 @@ public class PessoaRequestDto {
 
     @Schema(description = "Grau de parentesco da pessoa")
     @NotBlank(message = "Grau de parentesco da pessoa é obrigatório")
+    @Size(min = 3, max = 80, message = "O tamanho do grau de parentesco deve estar entre 3 e 80")
     private String grauParentesco;
 
     // Construtores ----------------------------------------------------------------------------------------------------
@@ -83,6 +90,15 @@ public class PessoaRequestDto {
     }
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

@@ -25,6 +25,24 @@ public class FuncionarioMapper {
         return funcionario;
     }
 
+    public static Funcionario toModelEditar(FuncionarioEditarRequestDto dto) {
+
+        Funcionario funcionario = new Funcionario(
+                dto.getNome(),
+                dto.getCpf(),
+                dto.getSenha(),
+                null
+        );
+
+        Cargo cargo = new Cargo();
+        cargo.setId(dto.getCargoId());
+
+        funcionario.setCargo(cargo);
+
+        return funcionario;
+    }
+
+
     public static FuncionarioResponseDto toResponse(Funcionario funcionario) {
 
         FuncionarioResponseDto.FuncionarioCargo funcionarioCargo = new FuncionarioResponseDto.FuncionarioCargo(
@@ -36,7 +54,6 @@ public class FuncionarioMapper {
             funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
-                funcionario.getSenha(),
                 funcionario.getFotoUrl(),
                 funcionarioCargo
         );

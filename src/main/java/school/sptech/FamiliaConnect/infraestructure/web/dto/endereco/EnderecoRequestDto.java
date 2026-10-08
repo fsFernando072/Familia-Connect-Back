@@ -12,26 +12,31 @@ public class EnderecoRequestDto {
 
     @Schema(description = "CEP do endereço")
     @NotBlank(message = "CEP do endereço é obrigatório")
-    @Size(min = 8, max = 8, message = "Tem que ter obrigatoriamente 8 caracteres")
+    @Size(min = 8, max = 8, message = "O CEP do endereço deve ter obrigatoriamente 8 caracteres")
     private String cep;
 
     @Schema(description = "Nome do bairro do endereço")
     @NotBlank(message = "Nome do bairro é obrigatório")
+    @Size(min = 3, max = 50, message = "O tamanho do nome do bairro deve estar entre 3 e 50")
     private String bairro;
 
     @Schema(description = "Nome do logradouro do endereço")
     @NotBlank(message = "Nome do logradouro é obrigatório")
+    @Size(min = 3, max = 80, message = "O tamanho do nome do logradouro deve estar entre 3 e 80")
     private String logradouro;
 
     @Schema(description = "Número do endereço")
     @NotBlank(message = "Número do endereço é obrigatório")
+    @Size(min = 1, max = 20, message = "O tamanho do número do endereço deve estar entre 1 e 20")
     private String numero;
 
     @Schema(description = "Complemento do endereço")
+    @Size(min = 3, max = 45, message = "O tamanho do complemento do endereço deve estar entre 3 e 45")
     private String complemento;
 
     @Schema(description = "Nome da cidade do endereço")
     @NotBlank(message = "Nome da cidade é obrigatório")
+    @Size(min = 3, max = 50, message = "O tamanho do nome da cidade deve estar entre 3 e 50")
     private String cidade;
 
     @Schema(description = "ID do estado do endereço")

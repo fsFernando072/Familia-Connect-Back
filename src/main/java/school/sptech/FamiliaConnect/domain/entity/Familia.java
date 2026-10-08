@@ -1,6 +1,7 @@
 package school.sptech.FamiliaConnect.domain.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -12,6 +13,8 @@ public class Familia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @CreationTimestamp
     private LocalDate dataCadastro;
 
     // Referência de verdade ao arquivo da foto (antes era só uma String com o caminho/URL).

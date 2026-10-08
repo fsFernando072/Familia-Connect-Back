@@ -85,7 +85,6 @@ class FamiliaServiceTest {
         dependenteDto.setGrauParentesco("Filha(o)");
 
         FamiliaRequestDto dto = new FamiliaRequestDto();
-        dto.setDataCadastro(LocalDate.now());
         dto.setPossuiPrioridade(false);
         dto.setEndereco(enderecoDto);
         dto.setResponsavel(responsavelDto);

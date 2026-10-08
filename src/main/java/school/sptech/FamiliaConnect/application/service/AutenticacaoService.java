@@ -6,9 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.funcionario.FuncionarioDetalhesDto;
-import school.sptech.FamiliaConnect.domain.entity.CargoHasAcesso;
+import school.sptech.FamiliaConnect.domain.entity.CargoPermissao;
 import school.sptech.FamiliaConnect.domain.entity.Funcionario;
-import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoHasAcessoRepository;
+import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoPermissaoRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FuncionarioRepository;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class AutenticacaoService implements UserDetailsService {
     private FuncionarioRepository funcionarioRepository;
 
     @Autowired
-    private CargoHasAcessoRepository cargoHasAcessoRepository;
+    private CargoPermissaoRepository cargoPermissaoRepository;
 
     // Métodos ---------------------------------------------------------------------------------------------------------
     @Override
@@ -36,8 +36,8 @@ public class AutenticacaoService implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("usuário: %s não encontrado", cpf));
         }
 
-        List<CargoHasAcesso> acessos = cargoHasAcessoRepository.findByCargoId(funcionarioOpt.get().getCargo().getId());
+        List<CargoPermissao> permissoes = cargoPermissaoRepository.findByCargoId(funcionarioOpt.get().getCargo().getId());
 
-        return new FuncionarioDetalhesDto(funcionarioOpt.get(), acessos);
+        return new FuncionarioDetalhesDto(funcionarioOpt.get(), permissoes);
     }
 }

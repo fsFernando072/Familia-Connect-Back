@@ -1,7 +1,5 @@
 package school.sptech.FamiliaConnect.application.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.infraestructure.web.client.OcrClient;
@@ -11,11 +9,12 @@ import school.sptech.FamiliaConnect.domain.exception.DadosDaFamiliaAusenteExcept
 import school.sptech.FamiliaConnect.domain.exception.TipoDeArquivoIncompativelException;
 import school.sptech.FamiliaConnect.application.ports.in.OcrUseCase;
 
+import java.util.List;
+
 @Service
 public class OcrService implements OcrUseCase {
 
     private final OcrClient ocrClient;
-    private final Logger LOGGER = LoggerFactory.getLogger(OcrService.class);
 
     public OcrService(OcrClient ocrClient) {
         this.ocrClient = ocrClient;
@@ -25,8 +24,12 @@ public class OcrService implements OcrUseCase {
         validateFile(fotoFamilia);
 
         //todo: colocar um try-catch para tratativa de erros global
-        FamiliaFormResponseDto dadosFamilia = ocrClient.getDadosFamilia(fotoFamilia).getFirst();
-        LOGGER.info("Retorno recebido da API externa OCR = {}", dadosFamilia.toString());
+        List<FamiliaFormResponseDto> listaFamilia = ocrClient.getDadosFamilia(fotoFamilia);
+        if (listaFamilia.isEmpty()) {
+            throw new DadosDaFamiliaAusenteException("Não foi possível encontrar os dados da familia");
+        }
+
+        FamiliaFormResponseDto dadosFamilia = listaFamilia.getFirst();
 
         dataFamiliaIsNotBlank(dadosFamilia);
 
@@ -40,12 +43,6 @@ public class OcrService implements OcrUseCase {
                     "Erro ao identificar arquivo"
             );
         }
-
-        LOGGER.info(
-                "Iniciando validação de arquivo recebido, nome {}; tipo {}",
-                fotoFamilia.getOriginalFilename(),
-                fotoFamilia.getContentType()
-        );
 
         TipoArquivoEnum.validateEnum(fotoFamilia.getContentType());
     }

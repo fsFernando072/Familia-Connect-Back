@@ -7,6 +7,7 @@ import school.sptech.FamiliaConnect.domain.entity.Funcionario;
 import school.sptech.FamiliaConnect.domain.entity.Pessoa;
 import school.sptech.FamiliaConnect.domain.entity.Produto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class EntregaMapper {
@@ -26,6 +27,7 @@ public class EntregaMapper {
         entrega.setPessoa(pessoa);
         entrega.setFuncionario(funcionario);
         entrega.setProduto(produto);
+        entrega.setDataEntrega(LocalDate.parse(requestDto.getDataEntrega()) );
 
         return entrega;
 

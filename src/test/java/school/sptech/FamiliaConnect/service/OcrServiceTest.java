@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.application.service.OcrService;
+import school.sptech.FamiliaConnect.application.service.ValidadorImagem;
 import school.sptech.FamiliaConnect.infraestructure.web.client.OcrClient;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.ocr.EnderecoResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.ocr.FamiliaFormResponseDto;
@@ -27,6 +28,9 @@ class OcrServiceTest {
 
     @Mock
     OcrClient ocrClient;
+
+    @Mock
+    ValidadorImagem validadorImagem;
 
     @InjectMocks
     OcrService ocrService;

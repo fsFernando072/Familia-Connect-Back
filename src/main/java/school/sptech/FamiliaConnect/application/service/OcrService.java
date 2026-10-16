@@ -15,9 +15,11 @@ import java.util.List;
 public class OcrService implements OcrUseCase {
 
     private final OcrClient ocrClient;
+    private final ValidadorImagem validadorImagem;
 
-    public OcrService(OcrClient ocrClient) {
+    public OcrService(OcrClient ocrClient, ValidadorImagem validadorImagem) {
         this.ocrClient = ocrClient;
+        this.validadorImagem = validadorImagem;
     }
 
     public FamiliaFormResponseDto extractDadosFamilia(MultipartFile fotoFamilia) {
@@ -45,6 +47,7 @@ public class OcrService implements OcrUseCase {
         }
 
         TipoArquivoEnum.validateEnum(fotoFamilia.getContentType());
+        validadorImagem.validarFormularioOcr(fotoFamilia);
     }
 
     private void dataFamiliaIsNotBlank(FamiliaFormResponseDto dadosFamilia) {

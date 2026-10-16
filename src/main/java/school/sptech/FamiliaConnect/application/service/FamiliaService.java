@@ -44,13 +44,11 @@ public class FamiliaService implements FamiliaUseCase {
     private final PessoaService pessoaService;
     private final ArquivoUseCase arquivoUseCase;
     private final CategoriaArquivoService categoriaArquivoService;
+    private final ValidadorImagem validadorImagem;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository,
-                          PessoaRepository pessoaRepository, EntregaRepository entregaRepository,
-                          EnderecoService enderecoService, PessoaService pessoaService,
-                          ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService) {
+    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
         this.pessoaRepository = pessoaRepository;
@@ -59,7 +57,9 @@ public class FamiliaService implements FamiliaUseCase {
         this.pessoaService = pessoaService;
         this.arquivoUseCase = arquivoUseCase;
         this.categoriaArquivoService = categoriaArquivoService;
+        this.validadorImagem = validadorImagem;
     }
+
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
@@ -201,6 +201,8 @@ public class FamiliaService implements FamiliaUseCase {
         if (foto == null || foto.isEmpty()) {
             return fotoAtual;
         }
+
+        validadorImagem.validarAvatar(foto);
 
         CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("familias");
 

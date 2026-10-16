@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.FamiliaConnect.application.service.FuncionarioService;
+import school.sptech.FamiliaConnect.application.service.ValidadorImagem;
 import school.sptech.FamiliaConnect.infraestructure.config.GerenciadorTokenJwt;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.funcionario.FuncionarioTokenDto;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
@@ -47,6 +48,9 @@ class FuncionarioServiceTest {
 
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @Mock
+    ValidadorImagem validadorImagem;
 
     @InjectMocks
     FuncionarioService funcionarioService;

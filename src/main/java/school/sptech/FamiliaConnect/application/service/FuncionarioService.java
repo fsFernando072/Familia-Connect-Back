@@ -40,16 +40,11 @@ public class FuncionarioService implements FuncionarioUseCase {
     private final PasswordEncoder passwordEncoder;
     private final ArquivoUseCase arquivoUseCase;
     private final CategoriaArquivoService categoriaArquivoService;
+    private final ValidadorImagem validadorImagem;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository,
-                              CargoRepository cargoRepository,
-                              GerenciadorTokenJwt gerenciadorTokenJwt,
-                              AuthenticationManager authenticationManager,
-                              PasswordEncoder passwordEncoder,
-                              ArquivoUseCase arquivoUseCase,
-                              CategoriaArquivoService categoriaArquivoService) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository, GerenciadorTokenJwt gerenciadorTokenJwt, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem) {
         this.funcionarioRepository = funcionarioRepository;
         this.cargoRepository = cargoRepository;
         this.gerenciadorTokenJwt = gerenciadorTokenJwt;
@@ -57,7 +52,9 @@ public class FuncionarioService implements FuncionarioUseCase {
         this.passwordEncoder = passwordEncoder;
         this.arquivoUseCase = arquivoUseCase;
         this.categoriaArquivoService = categoriaArquivoService;
+        this.validadorImagem = validadorImagem;
     }
+
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
@@ -136,6 +133,8 @@ public class FuncionarioService implements FuncionarioUseCase {
         if (foto == null || foto.isEmpty()) {
             return fotoAtual;
         }
+
+        validadorImagem.validarAvatar(foto);
 
         CategoriaArquivo categoria = categoriaArquivoService.buscarPorNome("funcionarios");
         Arquivo novo = arquivoUseCase.salvar(ArquivoMapper.toEntity(foto, categoria));

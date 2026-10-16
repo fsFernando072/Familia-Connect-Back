@@ -17,6 +17,7 @@ import school.sptech.FamiliaConnect.application.service.EnderecoService;
 import school.sptech.FamiliaConnect.application.service.FamiliaService;
 import school.sptech.FamiliaConnect.application.service.PessoaService;
 import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
+import school.sptech.FamiliaConnect.application.service.ValidadorImagem;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.endereco.EnderecoRequestDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
@@ -58,6 +59,9 @@ class FamiliaServiceTest {
 
     @Mock
     ArquivoUseCase arquivoUseCase;
+
+    @Mock
+    ValidadorImagem validadorImagem;
 
     @InjectMocks
     FamiliaService familiaService;

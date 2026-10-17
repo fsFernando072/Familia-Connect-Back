@@ -26,6 +26,8 @@ public class Familia {
     @OneToOne
     private Endereco endereco;
 
+    String idCarteirinha;
+
     // Getters e Setters -----------------------------------------------------------------------------------------------
 
     public LocalDate getDataCadastro() {
@@ -71,5 +73,13 @@ public class Familia {
 
     public void setPossuiPrioridade(Boolean possuiPrioridade) {
         this.possuiPrioridade = possuiPrioridade;
+    }
+
+    public String getIdCarteirinha() {
+        return idCarteirinha;
+    }
+
+    public void setIdCarteirinha(String idCarteirinha) {
+        this.idCarteirinha = idCarteirinha;
     }
 }

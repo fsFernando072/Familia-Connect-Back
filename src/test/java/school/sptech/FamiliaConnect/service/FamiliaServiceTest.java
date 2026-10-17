@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import school.sptech.FamiliaConnect.application.service.EnderecoService;
 import school.sptech.FamiliaConnect.application.service.FamiliaService;
+import school.sptech.FamiliaConnect.infraestructure.producer.CarteirinhaProducer;
 import school.sptech.FamiliaConnect.application.service.PessoaService;
 import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
 import school.sptech.FamiliaConnect.application.service.ValidadorImagem;
@@ -62,6 +63,9 @@ class FamiliaServiceTest {
 
     @Mock
     ValidadorImagem validadorImagem;
+
+    @Mock
+    CarteirinhaProducer carteirinhaProducer;
 
     @InjectMocks
     FamiliaService familiaService;

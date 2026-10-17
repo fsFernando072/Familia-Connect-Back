@@ -24,6 +24,8 @@ import school.sptech.FamiliaConnect.infraestructure.persistence.repository.Ender
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EntregaRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FamiliaRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.PessoaRepository;
+import school.sptech.FamiliaConnect.infraestructure.producer.dto.CarteirinhaMensagemDto;
+import school.sptech.FamiliaConnect.infraestructure.producer.CarteirinhaProducer;
 
 import java.util.HashSet;
 import java.util.List;
@@ -45,10 +47,11 @@ public class FamiliaService implements FamiliaUseCase {
     private final ArquivoUseCase arquivoUseCase;
     private final CategoriaArquivoService categoriaArquivoService;
     private final ValidadorImagem validadorImagem;
+    private final CarteirinhaProducer carteirinhaProducer;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem) {
+    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem, CarteirinhaProducer carteirinhaProducer) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
         this.pessoaRepository = pessoaRepository;
@@ -58,6 +61,7 @@ public class FamiliaService implements FamiliaUseCase {
         this.arquivoUseCase = arquivoUseCase;
         this.categoriaArquivoService = categoriaArquivoService;
         this.validadorImagem = validadorImagem;
+        this.carteirinhaProducer = carteirinhaProducer;
     }
 
 
@@ -81,6 +85,12 @@ public class FamiliaService implements FamiliaUseCase {
         pessoaService.salvar(responsavel);
 
         salvarDependentes(dto.getDependentes(), familia);
+
+        carteirinhaProducer.enviar(new CarteirinhaMensagemDto(
+                familia.getId(),
+                responsavel.getNome(),
+                CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
+                responsavel.getTelefone()));
 
         return familia;
     }
@@ -194,6 +204,13 @@ public class FamiliaService implements FamiliaUseCase {
             arquivoUseCase.deletarPorId(familia.getFoto().getId());
         }
         enderecoRepository.delete(familia.getEndereco());
+    }
+
+    public Integer searchByCarteirinha(String idCarteirinha) {
+        Familia familia = familiaRepository.findByIdCarteirinha(idCarteirinha)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com a carteirinha informada não foi encontrada"));
+
+        return familia.getId();
     }
 
     private Arquivo resolverFotoFamilia(MultipartFile foto, Arquivo fotoAtual) {

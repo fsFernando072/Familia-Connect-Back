@@ -18,4 +18,5 @@ public interface FamiliaUseCase {
     List<Pessoa> listarIntegrantes(Integer id);
     Familia atualizar(Integer idFamilia, FamiliaRequestDto dto, MultipartFile foto);
     void deletar(Integer id);
+    Integer searchByCarteirinha(String idCarteirinha);
 }

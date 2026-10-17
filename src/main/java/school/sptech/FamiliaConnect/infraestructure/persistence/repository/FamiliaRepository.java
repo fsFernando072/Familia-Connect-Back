@@ -39,4 +39,8 @@ public interface FamiliaRepository extends JpaRepository<Familia, Integer> {
     """)
     Optional<List<Pessoa>> findByIdFamilia(Integer id);
 
+    Optional<Familia> findByIdCarteirinha(String idCarteirinha);
+
+
+
 }

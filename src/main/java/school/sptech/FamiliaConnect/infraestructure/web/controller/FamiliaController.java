@@ -159,4 +159,10 @@ public class FamiliaController {
 
         return ResponseEntity.status(204).build();
     }
+
+    @GetMapping("/carteirinhas/{idCarteirinha}")
+    public ResponseEntity<Integer> buscarIdCarteirinha(@PathVariable("idCarteirinha") String idCarteirinha) {
+        Integer idFamilia = familiaUseCase.searchByCarteirinha(idCarteirinha);
+        return ResponseEntity.ok(idFamilia);
+    }
 }

@@ -21,6 +21,8 @@ public class Funcionario {
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;
 
+    private Boolean ativo;
+
     // Construtores ----------------------------------------------------------------------------------------------------
 
     public Funcionario(String nome, String cpf, String senha, Arquivo foto) {
@@ -91,5 +93,13 @@ public class Funcionario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

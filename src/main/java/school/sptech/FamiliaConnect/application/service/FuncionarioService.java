@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.FamiliaConnect.application.ports.in.FuncionarioUseCase;
+import school.sptech.FamiliaConnect.domain.entity.*;
 import school.sptech.FamiliaConnect.domain.exception.EntidadeJaCadastradaException;
 import school.sptech.FamiliaConnect.infraestructure.config.GerenciadorTokenJwt;
 import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
@@ -19,10 +20,6 @@ import school.sptech.FamiliaConnect.infraestructure.web.dto.funcionario.Funciona
 import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaException;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.ArquivoMapper;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.FuncionarioMapper;
-import school.sptech.FamiliaConnect.domain.entity.Arquivo;
-import school.sptech.FamiliaConnect.domain.entity.CategoriaArquivo;
-import school.sptech.FamiliaConnect.domain.entity.Cargo;
-import school.sptech.FamiliaConnect.domain.entity.Funcionario;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.CargoRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FuncionarioRepository;
 
@@ -62,7 +59,7 @@ public class FuncionarioService implements FuncionarioUseCase {
 
         String termoPesquisa = nome != null ? nome : "";
 
-        return funcionarioRepository.findByNomeContainingIgnoreCase(termoPesquisa, pageable);
+        return funcionarioRepository.findByAtivoTrueAndNomeContainingIgnoreCase(termoPesquisa, pageable);
 
     }
 
@@ -89,6 +86,7 @@ public class FuncionarioService implements FuncionarioUseCase {
         }
 
         funcionario.setCargo(cargo);
+        funcionario.setAtivo(true);
         funcionario.setFoto(resolverFotoFuncionario(foto, null));
 
         String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
@@ -153,10 +151,8 @@ public class FuncionarioService implements FuncionarioUseCase {
 
         Funcionario funcionario = listarPorId(id);
 
-        funcionarioRepository.deleteById(id);
-        if (funcionario.getFoto() != null) {
-            arquivoUseCase.deletarPorId(funcionario.getFoto().getId());
-        }
+        funcionario.setAtivo(false);
+        funcionarioRepository.save(funcionario);
     }
 
     public FuncionarioTokenDto autenticar(Funcionario usuario) {

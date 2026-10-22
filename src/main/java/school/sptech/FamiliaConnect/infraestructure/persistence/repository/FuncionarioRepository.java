@@ -4,7 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import school.sptech.FamiliaConnect.domain.entity.Funcionario;
+import school.sptech.FamiliaConnect.domain.entity.Produto;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
@@ -17,4 +19,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     Boolean existsByCpfAndIdNot(String cpf, Integer id);
 
+    List<Funcionario> findAllByAtivoTrue();
+
+    Page<Funcionario> findByAtivoTrueAndNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

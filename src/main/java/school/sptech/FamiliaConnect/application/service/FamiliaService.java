@@ -86,11 +86,16 @@ public class FamiliaService implements FamiliaUseCase {
 
         salvarDependentes(dto.getDependentes(), familia);
 
+        //salvar no redis
+
+
         carteirinhaProducer.enviar(new CarteirinhaMensagemDto(
                 familia.getId(),
                 responsavel.getNome(),
                 CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
                 responsavel.getTelefone()));
+
+        //ja vai ficar ouvindo aqui a fila de resposta
 
         return familia;
     }

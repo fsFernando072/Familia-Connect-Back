@@ -26,7 +26,7 @@ public class Familia {
     @OneToOne
     private Endereco endereco;
 
-    String idCarteirinha;
+    private String idCarteirinha;
 
     // Getters e Setters -----------------------------------------------------------------------------------------------
 

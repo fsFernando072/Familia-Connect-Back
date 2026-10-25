@@ -67,6 +67,9 @@ class FamiliaServiceTest {
     @Mock
     CarteirinhaProducer carteirinhaProducer;
 
+    @Mock
+    school.sptech.FamiliaConnect.application.service.RedisService redisService;
+
     @InjectMocks
     FamiliaService familiaService;
 
@@ -124,10 +127,24 @@ class FamiliaServiceTest {
             Mockito.when(pessoaService.salvar(Mockito.any(Pessoa.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
-            Familia resultado = familiaService.salvar(criarFamiliaRequestDto(), null);
+            java.util.UUID correlationId = java.util.UUID.randomUUID();
+            Mockito.when(redisService.createTicketRedis(Mockito.any()))
+                    .thenReturn(new school.sptech.FamiliaConnect.domain.entity.carteirinha.ProcessamentoCarteirinha("PROCESSANDO", correlationId));
 
-            Assertions.assertEquals(1, resultado.getId());
-            Mockito.verify(pessoaService, Mockito.times(2)).salvar(Mockito.any(Pessoa.class));
+            org.springframework.transaction.support.TransactionSynchronizationManager.initSynchronization();
+            try {
+                Familia resultado = familiaService.salvar(criarFamiliaRequestDto(), null).getFamilia();
+
+                Assertions.assertEquals(1, resultado.getId());
+                Mockito.verify(pessoaService, Mockito.times(2)).salvar(Mockito.any(Pessoa.class));
+                Mockito.verify(carteirinhaProducer, Mockito.never()).enviar(Mockito.any(), Mockito.any());
+
+                org.springframework.transaction.support.TransactionSynchronizationManager.getSynchronizations()
+                        .forEach(org.springframework.transaction.support.TransactionSynchronization::afterCommit);
+                Mockito.verify(carteirinhaProducer).enviar(Mockito.any(), Mockito.eq(correlationId));
+            } finally {
+                org.springframework.transaction.support.TransactionSynchronizationManager.clearSynchronization();
+            }
         }
     }
 

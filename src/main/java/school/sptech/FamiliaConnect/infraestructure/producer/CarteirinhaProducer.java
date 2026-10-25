@@ -3,7 +3,8 @@ package school.sptech.FamiliaConnect.infraestructure.producer;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 import school.sptech.FamiliaConnect.infraestructure.config.RabbitMqConfig;
-import school.sptech.FamiliaConnect.infraestructure.config.RabbitMqConfig;
+
+import java.util.UUID;
 import school.sptech.FamiliaConnect.infraestructure.producer.dto.CarteirinhaMensagemDto;
 
 @Component
@@ -15,11 +16,15 @@ public class CarteirinhaProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void enviar(CarteirinhaMensagemDto mensagem) {
+    public void enviar(CarteirinhaMensagemDto mensagem, UUID correlationId) {
         rabbitTemplate.convertAndSend(
                 RabbitMqConfig.EXCHANGE_CARTEIRINHAS,
                 RabbitMqConfig.BINDING_CARTEIRINHAS,
-                mensagem);
+                mensagem,
+                message -> {
+                    message.getMessageProperties().setHeader("correlationIdRedis", correlationId.toString());
+                    return message;
+                });
     }
 
     public static String formatarCpf(String cpf) {

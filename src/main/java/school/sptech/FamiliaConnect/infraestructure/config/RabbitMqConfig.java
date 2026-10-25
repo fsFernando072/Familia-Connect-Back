@@ -16,6 +16,8 @@ public class RabbitMqConfig {
     public static final String EXCHANGE_CARTEIRINHAS = "familia.carteirinhas";
     public static final String BINDING_CARTEIRINHAS = "binding.carteirinhas";
     public static final String QUEUE_CARTEIRINHAS = "queue.carteirinhas";
+    public static final String QUEUE_RESPOSTA_CARTEIRINHAS = "resposta.carteirinhas";
+    public static final String ROUTING_RESPOSTA_CARTEIRINHAS = "routing.resposta";
 
     @Bean
     public DirectExchange carteirinhasExchange() {
@@ -30,6 +32,16 @@ public class RabbitMqConfig {
     @Bean
     public Binding carteirinhasBinding(Queue carteirinhasQueue, DirectExchange carteirinhasExchange) {
         return BindingBuilder.bind(carteirinhasQueue).to(carteirinhasExchange).with(BINDING_CARTEIRINHAS);
+    }
+
+    @Bean
+    public Queue respostaCarteirinhasQueue() {
+        return new Queue(QUEUE_RESPOSTA_CARTEIRINHAS, true);
+    }
+
+    @Bean
+    public Binding respostaCarteirinhasBinding(Queue respostaCarteirinhasQueue, DirectExchange carteirinhasExchange) {
+        return BindingBuilder.bind(respostaCarteirinhasQueue).to(carteirinhasExchange).with(ROUTING_RESPOSTA_CARTEIRINHAS);
     }
 
     @Bean

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.application.ports.in.FamiliaUseCase;
 import school.sptech.FamiliaConnect.domain.entity.FamiliaCarteirinha;
+import school.sptech.FamiliaConnect.domain.entity.carteirinha.StatusCarteirinha;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.carteirinha.StatusCarteirinhaResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.*;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.FamiliaCarteirinhaMapper;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.FamiliaMapper;
@@ -165,5 +167,11 @@ public class FamiliaController {
     public ResponseEntity<Integer> buscarIdCarteirinha(@PathVariable("idCarteirinha") String idCarteirinha) {
         Integer idFamilia = familiaUseCase.searchByCarteirinha(idCarteirinha);
         return ResponseEntity.ok(idFamilia);
+    }
+
+    @GetMapping("/buscar-status-carteirinha/{correlationId}")
+    public ResponseEntity<StatusCarteirinhaResponseDto> buscarStatusCarteirinha(@PathVariable String correlationId) {
+        StatusCarteirinha statusCarteirinha = familiaUseCase.buscarStatusCarteirinha(correlationId);
+        return ResponseEntity.ok(familiaCarteirinhaMapper.toResponse(statusCarteirinha));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.domain.entity.Familia;
 import school.sptech.FamiliaConnect.domain.entity.FamiliaCarteirinha;
 import school.sptech.FamiliaConnect.domain.entity.Pessoa;
+import school.sptech.FamiliaConnect.domain.entity.carteirinha.StatusCarteirinha;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
 
@@ -20,4 +21,5 @@ public interface FamiliaUseCase {
     Familia atualizar(Integer idFamilia, FamiliaRequestDto dto, MultipartFile foto);
     void deletar(Integer id);
     Integer searchByCarteirinha(String idCarteirinha);
+    StatusCarteirinha buscarStatusCarteirinha(String correlationId);
 }

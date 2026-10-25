@@ -4,11 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
 import school.sptech.FamiliaConnect.application.ports.in.FamiliaUseCase;
 import school.sptech.FamiliaConnect.domain.entity.*;
 import school.sptech.FamiliaConnect.domain.entity.carteirinha.ProcessamentoCarteirinha;
+import school.sptech.FamiliaConnect.domain.entity.carteirinha.StatusCarteirinha;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.pessoa.PessoaRequestDto;
@@ -78,21 +81,34 @@ public class FamiliaService implements FamiliaUseCase {
         responsavel.setFamilia(familia);
         responsavel.setResponsavel(true);
         pessoaService.salvar(responsavel);
-
         salvarDependentes(dto.getDependentes(), familia);
 
-        //salvar no redis
-        ProcessamentoCarteirinha dadosCarteirinha = redisService.createTicketRedis(familia.getId(), responsavel.getNome());
-//
-//        carteirinhaProducer.enviar(new CarteirinhaMensagemDto(
-//                familia.getId(),
-//                responsavel.getNome(),
-//                CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
-//                responsavel.getTelefone()));
+        ProcessamentoCarteirinha dadosCarteirinha = redisService.createTicketRedis(responsavel.getNome());
 
-        //ja vai ficar ouvindo aqui a fila de resposta
+        CarteirinhaMensagemDto mensagem = new CarteirinhaMensagemDto(
+                familia.getId(),
+                responsavel.getNome(),
+                CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
+                responsavel.getTelefone());
+        UUID correlationId = dadosCarteirinha.getCorrelationId();
+
+        // publica somente após o commit, para o processador encontrar a família no banco
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                carteirinhaProducer.enviar(mensagem, correlationId);
+            }
+        });
 
         return new FamiliaCarteirinha(familia, dadosCarteirinha);
+    }
+
+    public StatusCarteirinha buscarStatusCarteirinha(String correlationId) {
+        StatusCarteirinha status = redisService.getStatusCarteirinha(UUID.fromString(correlationId));
+        if (status == null) {
+            throw new EntidadeNaoEncontradaException("Status da carteirinha não encontrado para a família com id: " + correlationId);
+        }
+        return status;
     }
 
     public Page<FamiliaListResponseDto> listar(String nomeResponsavel, Pageable pageable){

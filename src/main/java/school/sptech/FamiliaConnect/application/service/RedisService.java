@@ -7,6 +7,8 @@ import school.sptech.FamiliaConnect.domain.entity.carteirinha.ProcessamentoCarte
 import school.sptech.FamiliaConnect.domain.entity.carteirinha.StatusCarteirinha;
 import school.sptech.FamiliaConnect.domain.exception.DadoNaoGeradoException;
 
+import tools.jackson.databind.ObjectMapper;
+
 import java.time.Duration;
 import java.util.UUID;
 
@@ -15,21 +17,39 @@ import java.util.UUID;
 public class RedisService {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
+    private static String prefixTicket = "ticket:";
 
-    public ProcessamentoCarteirinha createTicketRedis(Integer idFamilia, String nomeResponsavel) {
-        UUID correlationId = generateIdRedis(idFamilia, nomeResponsavel);
+    public ProcessamentoCarteirinha createTicketRedis(String nomeResponsavel) {
+        UUID correlationId = UUID.randomUUID();
         if(correlationId == null) throw new DadoNaoGeradoException("Falha ao gerar correlationId do redis");
 
-        String chave = "ticket:"+correlationId;
-        StatusCarteirinha statusCarteirinha = new StatusCarteirinha("PROCESSANDO", "Processamento da carteirinha em andamento");
+        String chave = prefixTicket + correlationId;
+        StatusCarteirinha statusCarteirinha = new StatusCarteirinha("PROCESSANDO", "Processamento da carteirinha em andamento", nomeResponsavel);
 
         redisTemplate.opsForValue().set(chave, statusCarteirinha, Duration.ofMinutes(5));
         return new ProcessamentoCarteirinha(statusCarteirinha.getStatus(), correlationId);
     }
 
-    private UUID generateIdRedis(Integer idFamilia, String nomeResponsavel) {
-        String mergeString = String.valueOf(idFamilia)+nomeResponsavel;
-        return UUID.fromString(mergeString);
+    public void atualizarStatusCarteirinha(UUID correlationId, StatusCarteirinha statusCarteirinha) {
+        String chave = prefixTicket + correlationId;
+
+        // O processador responde só com status e mensagem: mantém o nome que foi guardado ao cadastrar.
+        if (statusCarteirinha.getNomeResponsavel() == null) {
+            Object atual = redisTemplate.opsForValue().get(chave);
+            if (atual != null) {
+                statusCarteirinha.setNomeResponsavel(objectMapper.convertValue(atual, StatusCarteirinha.class).getNomeResponsavel());
+            }
+        }
+
+        redisTemplate.opsForValue().set(chave, statusCarteirinha, Duration.ofMinutes(5));
+    }
+
+    public StatusCarteirinha getStatusCarteirinha(UUID correlationId) {
+        String chave = prefixTicket + correlationId;
+        Object valor = redisTemplate.opsForValue().get(chave);
+        if(valor == null) throw new DadoNaoGeradoException("Falha ao buscar status da carteirinha no redis");
+        return objectMapper.convertValue(valor, StatusCarteirinha.class);
     }
 
 }

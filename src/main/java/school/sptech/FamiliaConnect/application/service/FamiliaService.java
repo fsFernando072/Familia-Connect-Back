@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.application.ports.in.ArquivoUseCase;
 import school.sptech.FamiliaConnect.application.ports.in.FamiliaUseCase;
+import school.sptech.FamiliaConnect.domain.entity.*;
+import school.sptech.FamiliaConnect.domain.entity.carteirinha.ProcessamentoCarteirinha;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.pessoa.PessoaRequestDto;
@@ -14,12 +16,6 @@ import school.sptech.FamiliaConnect.domain.exception.EntidadeNaoEncontradaExcept
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.ArquivoMapper;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.EnderecoMapper;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.PessoaMapper;
-import school.sptech.FamiliaConnect.domain.entity.Arquivo;
-import school.sptech.FamiliaConnect.domain.entity.CategoriaArquivo;
-import school.sptech.FamiliaConnect.domain.entity.Endereco;
-import school.sptech.FamiliaConnect.domain.entity.Entrega;
-import school.sptech.FamiliaConnect.domain.entity.Familia;
-import school.sptech.FamiliaConnect.domain.entity.Pessoa;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EnderecoRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.EntregaRepository;
 import school.sptech.FamiliaConnect.infraestructure.persistence.repository.FamiliaRepository;
@@ -27,10 +23,7 @@ import school.sptech.FamiliaConnect.infraestructure.persistence.repository.Pesso
 import school.sptech.FamiliaConnect.infraestructure.producer.dto.CarteirinhaMensagemDto;
 import school.sptech.FamiliaConnect.infraestructure.producer.CarteirinhaProducer;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,10 +41,11 @@ public class FamiliaService implements FamiliaUseCase {
     private final CategoriaArquivoService categoriaArquivoService;
     private final ValidadorImagem validadorImagem;
     private final CarteirinhaProducer carteirinhaProducer;
+    private final RedisService redisService;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem, CarteirinhaProducer carteirinhaProducer) {
+    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem, CarteirinhaProducer carteirinhaProducer, RedisService redisService) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
         this.pessoaRepository = pessoaRepository;
@@ -62,13 +56,14 @@ public class FamiliaService implements FamiliaUseCase {
         this.categoriaArquivoService = categoriaArquivoService;
         this.validadorImagem = validadorImagem;
         this.carteirinhaProducer = carteirinhaProducer;
+        this.redisService = redisService;
     }
 
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
     @Transactional
-    public Familia salvar(FamiliaRequestDto dto, MultipartFile foto) {
+    public FamiliaCarteirinha salvar(FamiliaRequestDto dto, MultipartFile foto) {
 
         Endereco endereco = EnderecoMapper.toModel(dto.getEndereco());
         endereco = enderecoService.salvar(endereco);
@@ -87,17 +82,17 @@ public class FamiliaService implements FamiliaUseCase {
         salvarDependentes(dto.getDependentes(), familia);
 
         //salvar no redis
-
-
-        carteirinhaProducer.enviar(new CarteirinhaMensagemDto(
-                familia.getId(),
-                responsavel.getNome(),
-                CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
-                responsavel.getTelefone()));
+        ProcessamentoCarteirinha dadosCarteirinha = redisService.createTicketRedis(familia.getId(), responsavel.getNome());
+//
+//        carteirinhaProducer.enviar(new CarteirinhaMensagemDto(
+//                familia.getId(),
+//                responsavel.getNome(),
+//                CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
+//                responsavel.getTelefone()));
 
         //ja vai ficar ouvindo aqui a fila de resposta
 
-        return familia;
+        return new FamiliaCarteirinha(familia, dadosCarteirinha);
     }
 
     public Page<FamiliaListResponseDto> listar(String nomeResponsavel, Pageable pageable){
@@ -249,4 +244,5 @@ public class FamiliaService implements FamiliaUseCase {
             pessoaService.salvar(dependentePessoa);
         }
     }
+
 }

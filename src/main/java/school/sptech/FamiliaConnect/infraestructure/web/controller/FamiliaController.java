@@ -14,10 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.application.ports.in.FamiliaUseCase;
-import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaDetalhesResponseDto;
-import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
-import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
-import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaResponseDto;
+import school.sptech.FamiliaConnect.domain.entity.FamiliaCarteirinha;
+import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.*;
+import school.sptech.FamiliaConnect.infraestructure.web.mapper.FamiliaCarteirinhaMapper;
 import school.sptech.FamiliaConnect.infraestructure.web.mapper.FamiliaMapper;
 import school.sptech.FamiliaConnect.domain.entity.Familia;
 import school.sptech.FamiliaConnect.domain.entity.Pessoa;
@@ -33,11 +32,13 @@ public class FamiliaController {
     // Variáveis de instância ------------------------------------------------------------------------------------------
 
     private final FamiliaUseCase familiaUseCase;
+    private FamiliaCarteirinhaMapper familiaCarteirinhaMapper;
 
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FamiliaController(FamiliaUseCase familiaUseCase) {
+    public FamiliaController(FamiliaUseCase familiaUseCase, FamiliaCarteirinhaMapper familiaCarteirinhaMapper) {
         this.familiaUseCase = familiaUseCase;
+        this.familiaCarteirinhaMapper = familiaCarteirinhaMapper;
     }
 
     // Endpoints -------------------------------------------------------------------------------------------------------
@@ -54,14 +55,14 @@ public class FamiliaController {
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('cadastrar_familias')")
-    public ResponseEntity<FamiliaResponseDto> cadastrarFamilia(
+    public ResponseEntity<FamiliaCarteirinhaResponseDto> cadastrarFamilia(
             @RequestPart("familiaRequestDto") @Valid FamiliaRequestDto familiaRequestDto,
             @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
     ){
 
-        Familia familiaCadastrada = familiaUseCase.salvar(familiaRequestDto, arquivo);
+        FamiliaCarteirinha familiaCadastrada = familiaUseCase.salvar(familiaRequestDto, arquivo);
 
-        FamiliaResponseDto responseDto = FamiliaMapper.toResponse(familiaCadastrada);
+        FamiliaCarteirinhaResponseDto responseDto = familiaCarteirinhaMapper.toResponse(familiaCadastrada);
 
         return ResponseEntity.status(201).body(responseDto);
 

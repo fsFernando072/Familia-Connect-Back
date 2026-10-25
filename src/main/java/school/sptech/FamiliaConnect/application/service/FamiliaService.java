@@ -229,6 +229,15 @@ public class FamiliaService implements FamiliaUseCase {
         return familia.getId();
     }
 
+    public Integer searchByCpfResponsavel(String cpf) {
+        String cpfSomenteDigitos = cpf == null ? "" : cpf.replaceAll("\\D", "");
+
+        Pessoa responsavel = pessoaRepository.findResponsavelByCpf(cpfSomenteDigitos)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Nenhum responsável cadastrado com o CPF informado"));
+
+        return responsavel.getFamilia().getId();
+    }
+
     private Arquivo resolverFotoFamilia(MultipartFile foto, Arquivo fotoAtual) {
 
         if (foto == null || foto.isEmpty()) {

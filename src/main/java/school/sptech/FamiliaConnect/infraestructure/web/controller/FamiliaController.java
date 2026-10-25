@@ -169,6 +169,12 @@ public class FamiliaController {
         return ResponseEntity.ok(idFamilia);
     }
 
+    @GetMapping("/responsaveis/{cpf}")
+    @PreAuthorize("hasAuthority('cadastrar_entregas')")
+    public ResponseEntity<Integer> buscarIdFamiliaPorCpfResponsavel(@PathVariable String cpf) {
+        return ResponseEntity.ok(familiaUseCase.searchByCpfResponsavel(cpf));
+    }
+
     @GetMapping("/buscar-status-carteirinha/{correlationId}")
     public ResponseEntity<StatusCarteirinhaResponseDto> buscarStatusCarteirinha(@PathVariable String correlationId) {
         StatusCarteirinha statusCarteirinha = familiaUseCase.buscarStatusCarteirinha(correlationId);

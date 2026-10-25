@@ -21,5 +21,6 @@ public interface FamiliaUseCase {
     Familia atualizar(Integer idFamilia, FamiliaRequestDto dto, MultipartFile foto);
     void deletar(Integer id);
     Integer searchByCarteirinha(String idCarteirinha);
+    Integer searchByCpfResponsavel(String cpf);
     StatusCarteirinha buscarStatusCarteirinha(String correlationId);
 }

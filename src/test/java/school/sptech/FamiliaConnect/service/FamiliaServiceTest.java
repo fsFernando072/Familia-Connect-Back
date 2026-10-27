@@ -65,10 +65,7 @@ class FamiliaServiceTest {
     ValidadorImagem validadorImagem;
 
     @Mock
-    CarteirinhaProducer carteirinhaProducer;
-
-    @Mock
-    school.sptech.FamiliaConnect.application.service.RedisService redisService;
+    school.sptech.FamiliaConnect.application.service.CarteirinhaService carteirinhaService;
 
     @InjectMocks
     FamiliaService familiaService;
@@ -128,20 +125,20 @@ class FamiliaServiceTest {
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
             java.util.UUID correlationId = java.util.UUID.randomUUID();
-            Mockito.when(redisService.createTicketRedis(Mockito.any()))
+            Mockito.when(carteirinhaService.abrirProcessamento(Mockito.any()))
                     .thenReturn(new school.sptech.FamiliaConnect.domain.entity.carteirinha.ProcessamentoCarteirinha("PROCESSANDO", correlationId));
 
             org.springframework.transaction.support.TransactionSynchronizationManager.initSynchronization();
             try {
-                Familia resultado = familiaService.salvar(criarFamiliaRequestDto(), null).getFamilia();
+                var resultado = familiaService.salvar(criarFamiliaRequestDto(), null);
 
-                Assertions.assertEquals(1, resultado.getId());
+                Assertions.assertEquals(correlationId, resultado.getCorrelationId());
                 Mockito.verify(pessoaService, Mockito.times(2)).salvar(Mockito.any(Pessoa.class));
-                Mockito.verify(carteirinhaProducer, Mockito.never()).enviar(Mockito.any(), Mockito.any());
+                Mockito.verify(carteirinhaService, Mockito.never()).enviarParaProcessamento(Mockito.any(), Mockito.any(), Mockito.any());
 
                 org.springframework.transaction.support.TransactionSynchronizationManager.getSynchronizations()
                         .forEach(org.springframework.transaction.support.TransactionSynchronization::afterCommit);
-                Mockito.verify(carteirinhaProducer).enviar(Mockito.any(), Mockito.eq(correlationId));
+                Mockito.verify(carteirinhaService).enviarParaProcessamento(Mockito.any(), Mockito.eq(1), Mockito.eq(correlationId));
             } finally {
                 org.springframework.transaction.support.TransactionSynchronizationManager.clearSynchronization();
             }

@@ -41,6 +41,8 @@ public interface FamiliaRepository extends JpaRepository<Familia, Integer> {
 
     Optional<Familia> findByIdCarteirinha(String idCarteirinha);
 
+    @Query("SELECT f.idCarteirinha FROM Familia f WHERE f.id = :idFamilia AND f.idCarteirinha IS NOT NULL")
+    Optional<String> findIdCarteirinhaByIdFamilia(@Param("idFamilia") Integer idFamilia);
 
 
 }

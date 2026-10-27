@@ -16,7 +16,7 @@ public class RabbitMqConfig {
     public static final String EXCHANGE_CARTEIRINHAS = "familia.carteirinhas";
     public static final String BINDING_CARTEIRINHAS = "binding.carteirinhas";
     public static final String QUEUE_CARTEIRINHAS = "queue.carteirinhas";
-    public static final String QUEUE_RESPOSTA_CARTEIRINHAS = "resposta.carteirinhas";
+    public static final String QUEUE_RESPOSTA_CARTEIRINHAS = "queue.resposta";
     public static final String ROUTING_RESPOSTA_CARTEIRINHAS = "routing.resposta";
 
     @Bean

@@ -4,9 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.FamiliaConnect.domain.entity.Familia;
-import school.sptech.FamiliaConnect.domain.entity.FamiliaCarteirinha;
 import school.sptech.FamiliaConnect.domain.entity.Pessoa;
-import school.sptech.FamiliaConnect.domain.entity.carteirinha.StatusCarteirinha;
+import school.sptech.FamiliaConnect.domain.entity.carteirinha.ProcessamentoCarteirinha;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaListResponseDto;
 import school.sptech.FamiliaConnect.infraestructure.web.dto.familia.FamiliaRequestDto;
 
@@ -14,13 +13,11 @@ import java.util.List;
 
 public interface FamiliaUseCase {
 
-    FamiliaCarteirinha salvar(FamiliaRequestDto dto, MultipartFile foto);
+    ProcessamentoCarteirinha salvar(FamiliaRequestDto dto, MultipartFile foto);
     Page<FamiliaListResponseDto> listar(String nomeResponsavel, Pageable pageable);
     Familia listarPorId(Integer id);
     List<Pessoa> listarIntegrantes(Integer id);
     Familia atualizar(Integer idFamilia, FamiliaRequestDto dto, MultipartFile foto);
     void deletar(Integer id);
-    Integer searchByCarteirinha(String idCarteirinha);
     Integer searchByCpfResponsavel(String cpf);
-    StatusCarteirinha buscarStatusCarteirinha(String correlationId);
 }

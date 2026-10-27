@@ -43,12 +43,10 @@ public class FamiliaService implements FamiliaUseCase {
     private final ArquivoUseCase arquivoUseCase;
     private final CategoriaArquivoService categoriaArquivoService;
     private final ValidadorImagem validadorImagem;
-    private final CarteirinhaProducer carteirinhaProducer;
-    private final RedisService redisService;
-
+    private final CarteirinhaService carteirinhaService;
     // Construtores ----------------------------------------------------------------------------------------------------
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem, CarteirinhaProducer carteirinhaProducer, RedisService redisService) {
+    public FamiliaService(FamiliaRepository familiaRepository, EnderecoRepository enderecoRepository, PessoaRepository pessoaRepository, EntregaRepository entregaRepository, EnderecoService enderecoService, PessoaService pessoaService, ArquivoUseCase arquivoUseCase, CategoriaArquivoService categoriaArquivoService, ValidadorImagem validadorImagem, CarteirinhaService carteirinhaService) {
         this.familiaRepository = familiaRepository;
         this.enderecoRepository = enderecoRepository;
         this.pessoaRepository = pessoaRepository;
@@ -58,15 +56,14 @@ public class FamiliaService implements FamiliaUseCase {
         this.arquivoUseCase = arquivoUseCase;
         this.categoriaArquivoService = categoriaArquivoService;
         this.validadorImagem = validadorImagem;
-        this.carteirinhaProducer = carteirinhaProducer;
-        this.redisService = redisService;
+        this.carteirinhaService = carteirinhaService;
     }
 
 
     // Funções ---------------------------------------------------------------------------------------------------------
 
     @Transactional
-    public FamiliaCarteirinha salvar(FamiliaRequestDto dto, MultipartFile foto) {
+    public ProcessamentoCarteirinha salvar(FamiliaRequestDto dto, MultipartFile foto) {
 
         Endereco endereco = EnderecoMapper.toModel(dto.getEndereco());
         endereco = enderecoService.salvar(endereco);
@@ -83,32 +80,19 @@ public class FamiliaService implements FamiliaUseCase {
         pessoaService.salvar(responsavel);
         salvarDependentes(dto.getDependentes(), familia);
 
-        ProcessamentoCarteirinha dadosCarteirinha = redisService.createTicketRedis(responsavel.getNome());
 
-        CarteirinhaMensagemDto mensagem = new CarteirinhaMensagemDto(
-                familia.getId(),
-                responsavel.getNome(),
-                CarteirinhaProducer.formatarCpf(responsavel.getCpf()),
-                responsavel.getTelefone());
-        UUID correlationId = dadosCarteirinha.getCorrelationId();
-
-        // publica somente após o commit, para o processador encontrar a família no banco
+        // O ticket é gerado já, para o correlationId ir na resposta; a mensagem só é publicada após o commit,
+        // para o processador encontrar a família no banco.
+        Familia finalFamilia = familia;
+        ProcessamentoCarteirinha dadosCarteirinha = carteirinhaService.abrirProcessamento(responsavel);
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                carteirinhaProducer.enviar(mensagem, correlationId);
+                carteirinhaService.enviarParaProcessamento(responsavel, finalFamilia.getId(), dadosCarteirinha.getCorrelationId());
             }
         });
 
-        return new FamiliaCarteirinha(familia, dadosCarteirinha);
-    }
-
-    public StatusCarteirinha buscarStatusCarteirinha(String correlationId) {
-        StatusCarteirinha status = redisService.getStatusCarteirinha(UUID.fromString(correlationId));
-        if (status == null) {
-            throw new EntidadeNaoEncontradaException("Status da carteirinha não encontrado para a família com id: " + correlationId);
-        }
-        return status;
+        return dadosCarteirinha;
     }
 
     public Page<FamiliaListResponseDto> listar(String nomeResponsavel, Pageable pageable){
@@ -220,13 +204,6 @@ public class FamiliaService implements FamiliaUseCase {
             arquivoUseCase.deletarPorId(familia.getFoto().getId());
         }
         enderecoRepository.delete(familia.getEndereco());
-    }
-
-    public Integer searchByCarteirinha(String idCarteirinha) {
-        Familia familia = familiaRepository.findByIdCarteirinha(idCarteirinha)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("A família com a carteirinha informada não foi encontrada"));
-
-        return familia.getId();
     }
 
     public Integer searchByCpfResponsavel(String cpf) {

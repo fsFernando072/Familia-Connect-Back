@@ -2,13 +2,14 @@ package school.sptech.FamiliaConnect.infraestructure.producer;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
+import school.sptech.FamiliaConnect.application.ports.out.CarteirinhaPortOut;
 import school.sptech.FamiliaConnect.infraestructure.config.RabbitMqConfig;
 
 import java.util.UUID;
 import school.sptech.FamiliaConnect.infraestructure.producer.dto.CarteirinhaMensagemDto;
 
 @Component
-public class CarteirinhaProducer {
+public class CarteirinhaProducer implements CarteirinhaPortOut {
 
     private final RabbitTemplate rabbitTemplate;
 

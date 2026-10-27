@@ -71,7 +71,7 @@ class FuncionarioServiceTest {
             Pageable pageable = PageRequest.of(0, 15);
             Page<Funcionario> page = new PageImpl<>(funcionarios, pageable, 1);
 
-            Mockito.when(funcionarioRepository.findByNomeContainingIgnoreCase("", pageable))
+            Mockito.when(funcionarioRepository.findByAtivoTrueAndNomeContainingIgnoreCase("", pageable))
                     .thenReturn(page);
 
             Page<Funcionario> resultado = funcionarioService.listar(null, pageable);
@@ -85,7 +85,7 @@ class FuncionarioServiceTest {
             Pageable pageable = PageRequest.of(0, 15);
             Page<Funcionario> page = Page.empty(pageable);
 
-            Mockito.when(funcionarioRepository.findByNomeContainingIgnoreCase("", pageable))
+            Mockito.when(funcionarioRepository.findByAtivoTrueAndNomeContainingIgnoreCase("", pageable))
                     .thenReturn(page);
 
             Page<Funcionario> resultado = funcionarioService.listar(null, pageable);

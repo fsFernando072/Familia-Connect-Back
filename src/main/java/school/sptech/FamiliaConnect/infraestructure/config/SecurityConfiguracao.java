@@ -46,6 +46,7 @@ public class SecurityConfiguracao {
     private AutenticacaoEntryPoint autenticacaoJwtEntryPoint;
 
     private static final String[] URLS_PERMITIDAS = {
+            "/integracoes/grafana/paineis/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/swagger-resources",

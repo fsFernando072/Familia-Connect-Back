@@ -118,8 +118,10 @@ public class GrafanaMetricasService {
                 return familias.painel109(dataInicio, dataFim);
             case "110":
                 return familias.painel110();
-            case "111":
-                return familias.painel111();
+            case "112":
+                return familias.painel112(dataInicio, dataFim);
+            case "113":
+                return familias.painel113(dataInicio, dataFim);
             default:
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Painel não encontrado");
         }

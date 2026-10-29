@@ -107,13 +107,50 @@ public interface FamiliaMetricasRepository extends Repository<Familia, Integer> 
     List<Map<String, Object>> painel109(@Param("inicio") Timestamp inicio, @Param("fim") Timestamp fim);
 
     @Query(value = """
-            SELECT COALESCE(NULLIF(TRIM(GROUP_CONCAT( DISTINCT CASE WHEN p.is_responsavel = 1 THEN p.nome END SEPARATOR ', ')), ''), CONCAT('Família #', f.id)) AS 'Família', DATEDIFF(CURDATE(), MAX(e.data_entrega)) AS 'Dias desde a última entrega' FROM familia f LEFT JOIN pessoa p ON p.familia_id=f.id LEFT JOIN entrega e ON e.pessoa_id=p.id GROUP BY f.id HAVING MAX(e.data_entrega) IS NOT NULL ORDER BY 2 DESC LIMIT 10
+            SELECT COALESCE(NULLIF(TRIM(GROUP_CONCAT(DISTINCT CASE WHEN p.is_responsavel = 1 THEN p.nome END SEPARATOR ', ')), ''), CONCAT('Família #', f.id)) AS 'Família',
+                   ROUND(DATEDIFF(CURDATE(), MAX(e.data_entrega)) / 30.44, 1) AS 'Meses sem entrega'
+            FROM familia f
+            LEFT JOIN pessoa p ON p.familia_id = f.id
+            LEFT JOIN entrega e ON e.pessoa_id = p.id
+            GROUP BY f.id
+            HAVING MAX(e.data_entrega) IS NOT NULL
+            ORDER BY MAX(e.data_entrega) ASC, f.id ASC
+            LIMIT 5
             """, nativeQuery = true)
     List<Map<String, Object>> painel110();
 
     @Query(value = """
-            SELECT COALESCE(ROUND(AVG(DATEDIFF(CURDATE(), t.ultima)), 0), 0) AS valor FROM (SELECT MAX(e.data_entrega) AS ultima FROM familia f JOIN pessoa p ON p.familia_id=f.id JOIN entrega e ON e.pessoa_id=p.id GROUP BY f.id) t
+            SELECT f.id AS 'ID',
+                   COALESCE(NULLIF(TRIM(GROUP_CONCAT(DISTINCT CASE WHEN p.is_responsavel = 1 THEN p.nome END SEPARATOR ', ')), ''), CONCAT('Família #', f.id)) AS 'Família',
+                   DATE_FORMAT(MAX(e.data_entrega), '%d/%m/%Y') AS 'Última entrega',
+                   CASE WHEN MAX(e.data_entrega) IS NULL THEN 'Nunca recebeu'
+                        WHEN MAX(CASE WHEN e.data_entrega BETWEEN :inicio AND :fim THEN 1 ELSE 0 END) = 1 THEN 'Atendida no período'
+                        ELSE 'Sem atendimento no período' END AS 'Situação',
+                   CASE WHEN MAX(e.data_entrega) IS NULL THEN NULL
+                        ELSE ROUND(DATEDIFF(CURDATE(), MAX(e.data_entrega)) / 30.44, 1) END AS 'Meses sem entrega'
+            FROM familia f
+            LEFT JOIN pessoa p ON p.familia_id = f.id
+            LEFT JOIN entrega e ON e.pessoa_id = p.id
+            WHERE f.possui_prioridade = 1
+            GROUP BY f.id
+            ORDER BY CASE WHEN MAX(CASE WHEN e.data_entrega BETWEEN :inicio AND :fim THEN 1 ELSE 0 END) = 1 THEN 1 ELSE 0 END ASC,
+                     MAX(e.data_entrega) IS NOT NULL ASC,
+                     MAX(e.data_entrega) ASC,
+                     f.id ASC
             """, nativeQuery = true)
-    List<Map<String, Object>> painel111();
+    List<Map<String, Object>> painel112(@Param("inicio") Timestamp inicio, @Param("fim") Timestamp fim);
+
+    @Query(value = """
+            SELECT COUNT(*) AS valor
+            FROM familia f
+            WHERE f.possui_prioridade = 1
+              AND NOT EXISTS (
+                  SELECT 1 FROM pessoa p
+                  JOIN entrega e ON e.pessoa_id = p.id
+                  WHERE p.familia_id = f.id
+                    AND e.data_entrega BETWEEN :inicio AND :fim
+              )
+            """, nativeQuery = true)
+    List<Map<String, Object>> painel113(@Param("inicio") Timestamp inicio, @Param("fim") Timestamp fim);
 
 }

@@ -13,6 +13,10 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     Optional<Funcionario> findByCpf(String cpf);
 
+    Boolean existsByEmail(String email);
+
+    Boolean existsByEmailAndIdNot(String email, Integer id);
+
     Page<Funcionario> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
     Boolean existsByCpf(String cpf);

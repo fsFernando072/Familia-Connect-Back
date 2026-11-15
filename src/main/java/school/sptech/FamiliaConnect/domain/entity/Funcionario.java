@@ -12,6 +12,10 @@ public class Funcionario {
     private Integer id;
     private String nome;
     private String cpf;
+
+    @Column(nullable = false, unique = true, length = 254)
+    private String email;
+
     private String senha;
 
     @ManyToOne
@@ -85,6 +89,14 @@ public class Funcionario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSenha() {

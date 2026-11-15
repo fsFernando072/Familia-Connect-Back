@@ -85,6 +85,11 @@ public class FuncionarioService implements FuncionarioUseCase {
             throw new EntidadeJaCadastradaException("Já existe um funcionário com este cpf");
         }
 
+        funcionario.setEmail(normalizarEmail(funcionario.getEmail()));
+        if (funcionarioRepository.existsByEmail(funcionario.getEmail())) {
+            throw new EntidadeJaCadastradaException("Já existe um funcionário com este e-mail");
+        }
+
         funcionario.setCargo(cargo);
         funcionario.setAtivo(true);
         funcionario.setFoto(resolverFotoFuncionario(foto, null));
@@ -106,6 +111,11 @@ public class FuncionarioService implements FuncionarioUseCase {
             throw new EntidadeJaCadastradaException("Já existe um funcionário com este cpf");
         }
 
+        funcionario.setEmail(normalizarEmail(funcionario.getEmail()));
+        if (funcionarioRepository.existsByEmailAndIdNot(funcionario.getEmail(), id)) {
+            throw new EntidadeJaCadastradaException("Já existe um funcionário com este e-mail");
+        }
+
         Funcionario funcionarioExistente = funcionarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado pelo id"));
 
@@ -121,6 +131,10 @@ public class FuncionarioService implements FuncionarioUseCase {
         funcionario.setFoto(resolverFotoFuncionario(foto, funcionarioExistente.getFoto()));
         return funcionarioRepository.save(funcionario);
 
+    }
+
+    private String normalizarEmail(String email) {
+        return email == null ? null : email.trim().toLowerCase(java.util.Locale.ROOT);
     }
 
     // Envia a foto recebida para a "parte de arquivos" (ArquivoService), já na categoria FUNCIONARIOS,

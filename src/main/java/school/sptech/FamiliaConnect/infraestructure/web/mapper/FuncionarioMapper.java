@@ -17,6 +17,8 @@ public class FuncionarioMapper {
                 null
         );
 
+        funcionario.setEmail(dto.getEmail().trim().toLowerCase());
+
         Cargo cargo = new Cargo();
         cargo.setId(dto.getCargoId());
 
@@ -33,6 +35,8 @@ public class FuncionarioMapper {
                 dto.getSenha(),
                 null
         );
+
+        funcionario.setEmail(dto.getEmail().trim().toLowerCase());
 
         Cargo cargo = new Cargo();
         cargo.setId(dto.getCargoId());
@@ -51,9 +55,10 @@ public class FuncionarioMapper {
         );
 
         FuncionarioResponseDto funcionarioResponseDto = new FuncionarioResponseDto(
-            funcionario.getId(),
+                funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
+                funcionario.getEmail(),
                 funcionario.getFotoUrl(),
                 funcionarioCargo
         );
